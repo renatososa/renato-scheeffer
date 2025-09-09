@@ -1,60 +1,20 @@
-name: Deploy to GitHub Pages
+name: Deploy Website
 
 on:
   push:
-    branches: [ main ]   # Cambia si tu rama principal no es 'main'
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
+    branches:
+      - main  # o la rama que uses para deploy
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      # Si NO tenés paso de build (sitio estático puro), borrá este bloque de Node y el npm build
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install deps
-        run: |
-          if [ -f package-lock.json ] || [ -f pnpm-lock.yaml ] || [ -f yarn.lock ]; then
-            if [ -f pnpm-lock.yaml ]; then npm i -g pnpm && pnpm i --frozen-lockfile; \
-            elif [ -f yarn.lock ]; then npm i -g yarn && yarn install --frozen-lockfile; \
-            else npm ci; fi
-          fi
-
-      - name: Build site
-        run: |
-          if [ -f package.json ]; then \
-            if npm run | grep -q "build"; then npm run build; fi; \
-          fi
-
-      - name: Upload artifact (carpeta a publicar)
-        uses: actions/upload-pages-artifact@v3
-        with:
-          # Cambiá 'dist' por tu carpeta generada: 'build', 'out', etc.
-          # Si es sitio estático sin build, podés usar '.' (raíz) y añadir un .gitignore apropiado
-          path: ./site
-
   deploy:
-    needs: build
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - uses: actions/checkout@v3
+
+      # Si necesitás compilar o generar archivos antes, agregá aquí los pasos
+
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
