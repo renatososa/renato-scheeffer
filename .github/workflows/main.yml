@@ -46,7 +46,7 @@ jobs:
         with:
           # Cambiá 'dist' por tu carpeta generada: 'build', 'out', etc.
           # Si es sitio estático sin build, podés usar '.' (raíz) y añadir un .gitignore apropiado
-          path: site
+          path: ./site
 
   deploy:
     needs: build
