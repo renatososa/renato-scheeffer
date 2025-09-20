@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Cargar navbar y footer
-    fetch("nav.html")
+    fetch("../../site/nav.html")
     .then(res => res.text())
     .then(data => {
         document.getElementById("navbar-container").innerHTML = data;
@@ -35,8 +35,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         }
     });
-
-    fetch("footer.html")
+    
+    fetch("../../site/footer.html")
     .then(res => res.text())
     .then(data => document.getElementById("footer-container").innerHTML = data);
 
