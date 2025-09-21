@@ -1,25 +1,8 @@
 <!-- Content -->
-<section class="col-12 col-lg-9">
+<section class="col-12 col-lg-12">
   <div class="border rounded-3 bg-white p-3">
-    <h4 class="mb-3">Módulo Técnico 1</h4>
+    <h3 class="mb-3">Módulo Técnico 1</h3>
     <p>Uno de los pilares fundamentales de un proyecto es la correcta documentación de todos los procesos que se desarrollan. En la EFDI (Especialización en Fabricación Digital e Innovación) el entorno de documentación que se propone es una página web pública, utilizando el ecosistema de GitHub. Para poder trabajar sobre la página web y generar al documentación del proyecto es necesario generar en nuestra PC un entorno de trabajo con todas las herramientas instaladas.</p>
-    <h4 class="mb-3">Tabla de contenidos del módulo</h4>
-    <ul>
-      <li>Instalación de las herramientas de trabajo</li>
-      <ul>
-        <li>
-          git
-        </li>
-        <li>
-          GitHub Desktop
-        </li>
-        <li>
-          Visual Studio Code
-        </li>
-      </ul>
-      <li>Creación de la página web con el template</li>
-      <li>Creación de la página web con estilo personalizado</li>
-    </ul>
 
     <h5 class="mb-3">Instalación de las herramientas de trabajo: git</h5>
     <p>El primer software a instalar para trabajar en este módulo es <a href="https://git-scm.com/">git</a>, este software compone un sistema de gestión de versiones el cual nos permite manejar las distintas modificaciones que vamos a realizar sobre nuestro repositorio (documentación) en el transcurso de la especialización.</p>
@@ -86,8 +69,23 @@
       <figcaption class="figure-caption text-center">Figura 10: repositorio template clonado localmente.</figcaption>
     </figure>
 
-    <p>Luego de clonado tendremos en nuestra PC en el directorio que seleccionamos una copia de todos los archivos del repositorio y ya podremos editarlos utilizando VSC. Luego de realizar los primeros cambios sobre el template para que estos se vean reflejados en el repositorio online debemos hacer un <i>commit</i> y un <i>push</i> de estos cambios desde GitHub Desktop</p> <i></i>
-
+    <p>Luego de clonado tendremos en nuestra PC en el directorio que seleccionamos una copia de todos los archivos del repositorio y ya podremos editarlos utilizando VSC. Luego de realizar los primeros cambios sobre el template para que estos se vean reflejados en el repositorio online debemos hacer un <i>commit</i> y un <i>push</i> de estos cambios desde GitHub Desktop</p>
+    <p>Una vez realizado el primer <i>commit</i> en nuestro repositorio online de GitHub se comienzan a ejecutar las acciones estipuladas en el archivo <i>main.yml</i> donde en resumen, se genera una rama gh-pages y en la misma se hace el build de la página web. En la Figura 11 se puede observar el Work Flow generado a partir del primer <i>Commit</i> realizado. El <i>tic</i> en verde nos indica que todas las acciones se realizaron correctamente.</p>
+    <figure class="figure">
+      <img src="img/work_flow.jpg" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 11: Actions del repositorio.</figcaption>
+    </figure>
+    <p>Una vez que las acciones fueron ejecutadas debemos configurar en GitHub la página para que sea visible públicamente y se pueda acceder mediante un enlace. Para esto dentro de repositorio vamos a <i>Settings -> Pages</i> y en <i>Branches</i> seleccionamos <i>gh-pages</i>. Con esto le decimos que la página web será cargada desde la rama <i>gh-pages</i>. En la Figura 12 se observa cómo debería quedar esta configuración. Presionando en <i>save</i> guardamos los cambios y GitHub automaticamente nos genera el link para visualizar nuestra página. </p>  
+    <figure class="figure">
+      <img src="img/gh_pages.jpg" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 12: configuración de Pages.</figcaption>
+    </figure>
+    <p>En mi caso el link generado es <a href="https://renatososa.github.io/renato-sosa/">https://renatososa.github.io/renato-sosa/</a> en la Figura 13 se puede observar mi template de la página web del EFDI ya con algunos de mis datos cargados.</p>
+    <figure class="figure">
+      <img src="img/mi_template.jpg" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 13: te página web de la EFDI.</figcaption>
+    </figure>
+    
     <h5 class="mb-3">Creación de la página web con estilo personalizado</h5>
   </div>
 </section>
