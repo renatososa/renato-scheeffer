@@ -36,7 +36,9 @@ header {
     font-size: 1.5rem;
     color: #5f6f7c;
 }
-
+.text-justify {
+    text-align: justify !important; /* '!' es opcional pero asegura que la regla sea aplicada */
+}
 .profile-img {
     max-width: 220px;
     border-radius: 5%;
