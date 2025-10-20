@@ -1,12 +1,230 @@
 <!-- Content -->
-<section class="col-12 col-lg-9">
+<section class="col-12 col-lg-12">
   <div class="border rounded-3 bg-white p-3">
-    <h4 class="mb-3">MT01</h4>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque nihil unde veritatis quia quos, voluptatum alias necessitatibus, labore exercitationem impedit architecto blanditiis quis esse optio officiis nemo similique ea fugiat.</p>
-    <ul>
-      <li>item 1</li>
-      <li>item 2</li>
-      <li>item 3</li>
-    </ul>
+    <h4 class="mb-3">Módulo Técnico 2</h4>
+    <p class="text-justify">
+      En este módulo vimos herramientas de diseño 2D y 3D necesarias para digitalizar nuestro proyecto. Logré entender 
+      cómo las herramientas de lógica CAD (Computer-Aided Design) revolucionaron la forma en la cual se diseñan las cosas, 
+      desde el diseño de casas en arquitectura hasta el diseño de la carrocería de un auto. Un aspecto que me llamó mucho
+      la atención fueron las herramientas de IA aplicadas a softwares CAD donde a traves de lenguaje natural podemos crear 
+      objetos en 2D y 3D.  
+    </p>
+    <p class="text-justify">
+      En particular el ejercicio final de este módulo consistió diseñar un objeto compuesto por al menos dos partes con un 
+      logo estampado o extruido. El logo lo debíamos diseñar de forma vectorial en 2D para facilitar su incorporación al 
+      modelo 3D. Finalmente realizar un material de comunicación en 2D que presente el objeto diseñado.
+    </p>
+    <p class="text-justify">
+      El objeto a diseñar era de libre elección, sin embargo, ya que tenía  claro cuál es el proyecto que quiero desarrollar
+      en la especialización, decidí implementar la carcasa del dispositivo electrónico para el proyecto. Esta carcasa 
+      tiene tres objetivos:
+      <ul>
+        <li>
+          Proteger el circuito electrónico del contacto con la piel, líquidos y golpes.
+        </li>
+        <li>
+          Brindar un aspecto estético agradable y simbólico.
+        </li>
+        <li>
+          Facilitar el desensamble del dispositivo.
+        </li>
+      </ul>
+      En función de esto procedí a diseñar la carcasa en 3D.
+    </p>
+    
+    
+    <h5 class="mb-3">Diseño 3D: diseño de una carcasa para el proyecto</h5>
+    
+    <p class="text-justify">
+      Para el diseño 3D utilicé el software <i> Fusión 360 </i>, el cual ya lo había utilizado anteriormente aunque no lo conocía en profundidad 
+      e ignoraba muchas de las herramientas que posee. El primer paso fue gestionar una licencia de estudiante para poder utilizar
+      el software, la gestioné utilizando el correo institucional de UTEC siguiendo el instructivo que subieron a Moodle.
+    </p>
+    <p class="text-justify">
+      Dado que el objeto 3D que quiero diseñar es una carcasa para "algo", considero que la mejor forma de diseñar la carcasa 
+      es hacerla sobre un modelo 3D de ese "algo". En mi caso ese "algo" es un circuito electrónico, recientemente descubrí 
+      que <i>Fusión 360 </i> tiene herramientas de diseño de circuitos electrónicos y permite generar un modelo 3D del circuito. 
+    </p>
+
+    <h6 class="mb-3">Diseño de la electrónica</h6>
+
+    <p class="text-justify">
+      Dado que ya había trabajado con el software <i>Eagle</i> de Autodesk para el diseño de circuitos y este mismo es el 
+      que está incorporado en <i>Fusión 360</i>, no fue demasiado difícil diseñar los circuitos. En general para diseñar un circuito electrónico 
+      lo primero que debemos hacer es generar un archivo de diseño, vamos a <i>Archivo --> Nuevo diseño de electrónica</i>,
+      el diseño esta compuesto por tres archivos distintos que se crean de forma secuencial. El primero de ellos es el <b> Esquemático </b> donde
+      se incorporan los componentes electrónicos que se van a utilizar y se establecen las relaciones o conexiones que hay entre ellos. 
+      Una vez implementado el esquemático se procede a diseñar la <b> Placa de Circuito Impreso  (PCB)</b> donde se establece la disposición
+      de los componentes sobre la placa y se implementan las conexiones físicas (de cobre) que hay entre cada componente a traves de las distintas 
+      pistas. Una vez que tenemos la PCB diseñada procedemos a implementar el modelo 3D, Fusión 360 lo hace automáticamente, en algunos casos, hay
+      que ajustar la posición exacta de los componentes manualmente. En la Figura 1 se puede observar el diseño de electrónica para uno de los circuitos
+      de mi proyecto.
+    </p>
+
+ 
+    <figure class="figure">
+      <img src="img/circuito electronico.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 1: diseño electrónico circuito <b> micro</b>.</figcaption>
+    </figure>
+
+    <p class="text-justify">
+      Una vez creado el modelo 3D del circuito electrónico tenemos un objeto que podemos importar en nuevos diseños. En la Figura 2 se puede observar 
+      el objeto 3D de la PCB Micro que mencionaba anteriormente. El dispositivo electrónico de este proyecto requiere un arreglo
+      tridimensional de varias PCBs donde cada una cumple una función específica. Las PCB van apiladas una sobre otra e 
+      interconectadas por una PCB lateral como se puede observar en la Figura 3.
+    </p>
+    
+    <figure class="figure">
+      <div class="text-center">
+      <img src="img/micro_PCB.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:50%;">
+      </div>
+      <figcaption class="figure-caption text-center">Figura 2: objeto 3D de la PCB <b> micro</b>.</figcaption>
+    </figure>
+
+    <figure class="figure">
+      <div class="text-center">
+      <img src="img/arreglo_tridim.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:50%;">
+      </div>
+      <figcaption class="figure-caption text-center">Figura 3: arreglo tridimensional de las PCBs conformando toda la electrónica del dispositivo.</figcaption>
+    </figure>
+
+    <h6 class="mb-3">Diseño de la carcasa</h6>
+    <p class="text-justify">
+      Una vez listo el modelo 3D de las PCBs y su disposición tridimencional comencé a diseñar la carcasa del dispositivo.
+      Retomando los objetivos mencionados anteriormente, considerando el primero de ellos "Proteger el circuito electrónico del contacto con al piel, líquidos y golpes."
+      y que la materialización de la carcasa sería a traves de la impresión 3D decidí utilizar el material PLA+ dadas sus propiedades mecánicas con una buena relación entre
+      rigidez y flexibilidad que proporcionan una estructura sólida y resistente a ciertos golpes. Así cómo cierta resistencia al contacto con los líquidos. En una relación
+      de compromiso entre resistencia y peso decidí utilizar un espesor de paredes de 2 mm.
+      
+    </p>
+
+    <p class="text-justify">
+      Considerando el segundo objetivo "Brindar un aspecto estético agradable y simbólico." busque un diseño que sea minimalista con la forma aproximada de un prisma 
+      pero con curvas que simbolicen lo orgánico. Por otro lado la tapa de la carcasa será implementada utilizando acrílico transparente de 3mm el cual dejará ver el interior
+      simbolizando el espíritu Open Source del dispositivo.
+    </p>
+    
+    <p class="text-justify">
+      En la Figura 4 se puede observar la primera parte de la carcasa diseñada, para crear esas paredes primero generé un boceto sobre la superficie de la PCB superior que tienen el mayor tamaño. 
+      Dado que ese boceto fue creado sobre esa superficie tengo las curvas del borde de esa PCB de referencia, con esas referencias diseñé un borde con suficiente espacio para contener a esa PCB y sus componentes
+      y sobre ese borde generé un offset de 3mm para darle el espesor de las paredes. Una vez listo el boceto de la pared simplemente lo <i>Extrui</i> hasta que lograra contener a toda la pila de PCBs y la batería.
+    </p>
+    <figure class="figure">
+      <div class="text-center">
+      <img src="img/paredes.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:50%;">
+      </div>
+      <figcaption class="figure-caption text-center">Figura 4: diseño de las primeras paredes</figcaption>
+    </figure>
+    
+    <p class="text-justify"> 
+      Luego de tener las primeras paredes diseñadas procedí a cerrar la parte con un ancho de 2 mm  y en la
+      parte superior reduje el ancho de las paredes en 0.5 mm en una altura de 3 mm para que la tapa de acrílico de 3 mm de espesor encaje correctamente, esto considerando tolerancias al momento de imprimir en 3D y de cortar con el laser.
+      En la Figura 5 se puede observar la tapa y la carcasa y cómo estas encajan correctamente con una tolerancia de 0.5 mm
+    </p>
+
+    <figure class="figure">
+      <div class="text-center">
+      <img src="img/carcasa y tapa.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:50%;">
+      </div>
+      <figcaption class="figure-caption text-center">Figura 5: en celeste la carcasa y naranja la tapa</figcaption>
+    </figure>
+
+    <p class="text-justify"> 
+      Una vez diseñada la estructura general de la carcasa procedí a diseñar los anclajes de las PCBs y de la tapa, para esto pensé
+      en utilizar tornillos M2 autorroscantes. Sobre la carcasa diseñe superficies de tamaño suficiente para que se logré un buen apoyo y un espesor de 3 mm para que los tornillos queden bien sujetados.
+      En la Figura 6 se pueden observar una vista superior de la carcasa con los apoyos diseñados con los orificios donde irían los tornillos.
+    </p>
+    <figure class="figure">
+      <div class="text-center">
+      <img src="img/apoyos.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:50%;">
+      </div>
+      <figcaption class="figure-caption text-center">Figura 6: carcasa con los distintos apoyos.</figcaption>
+    </figure>
+
+    <h5 class="mb-3">Diseño 2D: diseño de un logo</h5>
+    <p class="text-justify"> 
+      Dado que el dispositivo posee un LED interior que será utilizado para mostrarle al usuario el estado del dispositivos,
+      pensé en aprovechar el efecto que tiene la luz sobre el grabado en el acrílico. Por lo tanto, el logo iría grabado sobre la tapa del dispositivo.
+      Antes de diseñar el logo es necesario pensar en un nombre para el proyecto que aún no tenía ninguno. Para el nombre quería algo que vinculara la naurotecnología y
+      la electrónica pero con un estilo orgánico. Para esto comencé buscando referencias en Pinterest utilizando las KeyWords: "Neurona, Tecnología, Electrónica" y 
+      encontré diseños y nombres muy interesantes entre ellos <b>Neuron</b> que me gustó mucho pero estaba ampliamente utilizado a nivel global así que decidí hacerle una 
+      pequeña modificación de <b>Neuron</b> a <b>Neurion</b> conservando la simbología de la <b>Neur</b>ona y la electrónica/electricidad de <b>ion</b>. Para
+      obtener un logo a partir de este nombre utilicé a la IA ChatGPT con el siguiente prompt: <i> "Quisiera que me generes un logo a partir del nombre Neurion 
+      donde la I sea una neurona y las letras tengan un estilo tecnológico pero orgánico con curvas. Es para un dispositivo de adquisición de señales neuronales." </i> 
+      el resultado obtenido se puede observar en la Figura 7.
+    </p>
+
+    <figure class="figure">
+      <div class="text-center">
+      <img src="img/neurion_logov1.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:50%;">
+      </div>
+      <figcaption class="figure-caption text-center">Figura 7: primera versión del logo.</figcaption>
+    </figure>
+    
+    <p class="text-justify"> 
+      Luego de tener esta primera versión del logo utilicé el software gratuito <i>Inkscape</i> para convertir el mapa de bit a SVG y realizar algunas modificaciones.
+      Para vectorizar el mapa de bit lo primero que hice fue importar la imagen en un documento nuevo de <i> Inkscape</i> y utilizando la herramienta <i>Trayecto->Vectorizar mapa de bits</i> 
+      logré convertir el mapa de bit a un vector. Manipulando los trayectos logré agrandar la primera letra del logo y con una operación booleana de diferencia agregué un orificio simbolizando 
+      el núcleo de la neurona. Finalmente exporté el logo en SVG. En la Figura 8 se puede observar la segunda versión del logo. 
+    </p>
+    
+    <figure class="figure">
+      <div class="text-center">
+      <img src="img/neurion_logov2.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:50%;">
+      </div>
+      <figcaption class="figure-caption text-center">Figura 8: segunda versión del logo.</figcaption>
+    </figure>
+
+    <h5 class="mb-3">Diseño 3D: aplicación del logo, manipulación de apariencia y renderizado</h5>
+    <h6 class="mb-3">Aplicación del logo</h6>
+    <p class="text-justify"> 
+      Ahora que tenemos el logo listo y en SVG lo podemos importar y aplicar sobre el objeto diseñado, como mencionaba anteriormente lo que me gustaría obtener es el logo
+      en un efecto esmerilado sobre la tapa de acrílico. Para esto generé un boceto sobre la superficie de la tapa e importé el logo cómo se puede observar en la Figura 9. 
+      Dado que lo que deseo es una grabado del logo sobre el acrílico y desconozco el mecanismo para generar una cara sobre la superficie de la tapa que esté a la misma altura,
+      lo que hice fué una extrusión negativa (cut) con una profundidad muy pequeña 0.2 mm para que se plasme sobre la tapa el logo. Posteriormente voy a poder manipular la apariencia
+      de la superficie del logo por separado de la del resto de la tapa logrando simular el efecto de esmerilado.
+    </p>
+
+    <figure class="figure">
+      <div class="text-center">
+      <img src="img/boceto_logo.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:50%;">
+      </div>
+      <figcaption class="figure-caption text-center">Figura 9: boceto de la tapa con el logo.</figcaption>
+    </figure>
+
+    <h6 class="mb-3">manipulación de texturas y renderizado</h6>
+    <p class="text-justify"> 
+      Una vez tenemos el diseño 3D del objeto listo para poder simular cómo se vería materializado es necesario aplicarle distintas apariencias a los objetos,
+      como mencionaba anteriormente la carcasa será impresa en 3D con PLA+ y decidí utilizar el color gris grafito opaco. Buscando entre los materiales encontré el EPX82,
+      si bien es una resina epoxi para impresoras de resina consideré que simula muy bien el aspecto del PLA+ opaco. Para la tapa de acrílico le asigné
+      el aspecto de acrílico transparente y a la superficie del logo le asigne la de <i>Cristal esmerilado claro</i> y ajusté la rugosidad hasta obtener el efecto deseado.
+      Una vez que cada superficie tiene su aspecto asignado para ver cómo quedaría materializado es necesario pasar a la herramienta de Renderizar de Fusión 360.
+      Dentro de esta herramienta podemos ajustar distintos parámetros cómo la ubicación de la luz, el formato de la captura, los parámetros intrínsecos de la cámara, la calidad del renderizado, entre otros. 
+      En mi caso solo ajusté el formato de salida, que sea sin fondo y la calidad al máximo. Luego de esperar unos minutos obtenemos el renderizado que se observa en la Figura 10.
+    </p>
+    <figure class="figure">
+      <div class="text-center">
+      <img src="img/renderizado.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:80%;">
+      </div>
+      <figcaption class="figure-caption text-center">Figura 10: renderizado del dispositivo.</figcaption>
+    </figure>
+
+    <h5 class="mb-3">Diseño 2D: diseño de afiche</h5>
+    <p class="text-justify"> 
+      Finalmente para la entrega del módulo nos solicitaron que hagamos un afiche de comunicación para compartir el resultado final del objeto diseñado.
+      Para diseñar este afiche utilicé el software gratuito y online <i>Photopea</i>, esto etapa del proceso fue la que me resultó más difícil. Tengo gran dificultad en tomar decisiones de diseño
+      para que el afiche se vea atractivo y que transmita realmente lo que quiero que transmita. El afiche generado en este etapa es una primera versión y requiere muchos ajustes aún. En la Figura 11 se puede observar el afiche diseñado.
+    </p>
+    <figure class="figure">
+      <div class="text-center">
+      <img src="img/Afiche.jpg" class="img-fluid me-2" alt="Imagen 1" style="max-width:80%;">
+      </div>
+      <figcaption class="figure-caption text-center">Figura 11: afiche del resultado final.</figcaption>
+    </figure>
+    <h5 class="mb-3">Conclusiones</h5>
+    Me gustó mucho este módulo pude profundizar más en herramientas que ya conocía como <i>Fusión 360</i>, integrar herramientas que las utilizaba por separado como <i>Eagle</i> y aprender herramientas completamente nuevas como <i>
+      Inksacape y Photopea
+    </i>.
+    Siento que fue un proceso muy integrador donde pensamos e implementamos el diseño desde la idea inicial hasta la comunicación del resultado final obtenido. 
   </div>
 </section>
