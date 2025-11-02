@@ -115,8 +115,8 @@ function observeActiveHeadings(headings) {
     }
     function syncAccordion(h) {
       // Inferir prefijo (MT/MD) y componer IDs
-      const pref = h.slice(0, 2); // 'MT' o 'MD'
-      const accId = pref === 'MT' ? '#accMT' : '#accMD';
+      const pref = h.slice(0, 2); // 'MT', 'MD' o 'MI'
+      const accId = '#acc'+pref;
       const targetCollapse = '#c' + h; // ej: #cMT01
 
       // Cerrar todos en ambos accordions
