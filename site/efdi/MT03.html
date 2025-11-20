@@ -1,12 +1,155 @@
 <!-- Content -->
-<section class="col-12 col-lg-9">
+<section class="col-12 col-lg-12">
   <div class="border rounded-3 bg-white p-3">
-    <h4 class="mb-3">MT01</h4>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque nihil unde veritatis quia quos, voluptatum alias necessitatibus, labore exercitationem impedit architecto blanditiis quis esse optio officiis nemo similique ea fugiat.</p>
-    <ul>
-      <li>item 1</li>
-      <li>item 2</li>
-      <li>item 3</li>
-    </ul>
+    <h4 class="mb-3">Módulo Técnico 2</h4>
+    <p class="text-justify">
+      En este módulo continuamos viendo herramientas de fabricación digital, en esta ocasión Santi Fuentemilla y Joaquín Vega hicieron una introducción al corte láser (Light Amplification by Stimulated Emission of Radiation). En esencia consiste en generar las instrucciones desde una computadora para que una máquina (cortadora láser) controle el movimiento bidimensional y la potencia de un haz de luz muy concentrado, generando así cortes, grabados o rasterizados con trayectos específicos sobre alguna superficie. Algunas de las tecnologías de corte láser que se utilizan en la actualidad son: 
+      <ul>
+        <li>
+          CO2: consistente en excitar con alta tensión  un tubo cargado principalmente por gas dióxido de carbono (CO2) para convertirlo en plasma y que este emita luz. Ese haz de luz emitido es redirigido por espejos y concentrado por lentes especiales hasta llegar al punto de corte. Suelen ser económicos y se utilizan con una amplia variedad de materiales entre ellos maderas, plásticos, cueros, productos a base de papel, etc. Sin embargo, su longitud de onda y potencia no permiten cortar materiales demasiado gruesos,ni los hacen óptimos para el corte de metales.
+        </li>
+        <li>
+          Neodimio (Nd): utiliza cristales dopados de neodimio que al ser excitados por una corriente eléctrica estos emiten un haz de luz. Estos láseres son más caros y requieren más mantenimiento, poseen una longitud de onda más pequeña lo cual les permite cortar materiales más gruesos y muy utilizados para el corte de metales y cerámicas.
+        </li>
+        <li>
+          Fibra: se amplifica el haz de luz a través de fibras de vidrio especiales, poseen longitudes de onda e intensidades similares a los de Neodimio, pero requieren menos mantenimiento. Son utilizados frecuentemente para el corte de metales y plásticos.
+        </li>
+      </ul>
+    </p>
+    <p class="text-justify">
+      Hay tres tipos bien diferenciados de procesos que se pueden hacer sobre una superficie con la cortadora láser:
+      <ol>
+        <li>
+          Corte: consiste en quemar a través del material, se suelen utilizar velocidad bajas y potencias altas.
+        </li>
+        <li>
+          Grabado o marcado sobre vector: consiste en quemar superficialmente el material principalmente para cambiarle el color, se suelen utilizar velocidades altas y potencias bajas.
+        </li>
+        <li>
+          Rasterizado: se utiliza principalmente para el grabado de imágenes sobre un material, el láser quema el material línea por línea de la imagen ajustando la intensidad y generando así las distintas tonalidades.
+        </li>
+      </ol>
+    </p>
+    <p class="text-justify">
+      Personalmente ya había utilizado equipos de corte láser de CO2 antes pero desconocía la gran variedad de tecnologías y sus distintas aplicaciones. 
+    </p>
+    <p class="text-justify">
+      La consigna para la entrega de esté módulo fue la siguiente:
+      “Diseñar un objeto para ser fabricado en máquina láser.
+    </p>
+    <p class="text-justify">
+      El objeto debe tener como mínimo 3 piezas que lo compongan y ser parametrizable. Las piezas se deben de poder ensamblar mediante encastres (sin la utilización de pegamento o fijaciones externas). El objeto a fabricar, debe de contener las 3 operaciones básicas de la máquina láser (grabado raster, marcado sobre vector y corte sobre vector).  
+      Nota: por cuestiones de tiempo la imagen a rasterizar no debe superar los 5x5 cm.
+      Material a utilizar: Cartón o MDF de 3mm de espesor. 
+      Las piezas deben estar diseñadas en un sólo archivo (formato .dxf), tener en cuenta que la cantidad total de material a utilizar por estudiante será una placa de 600 x 450 mm. 
+      Opcional: El objeto a diseñar debe aplicar en alguna de sus partes, la técnica de curvado de madera (kerf bending).”
+    </p>
+    <p class="text-justify">
+      Pensando en diseñar algo para mi proyecto se me ocurrió diseñar un modelo de packaging para el dispositivo que diseñé en el módulo técnico anterior. Dado que la carcasa diseñada anteriormente era aproximadamente un cubo con cuatro aristas redondeadas pensé en utilizar la técnica de Kerfing para generar esas curvaturas en el packaging. Para la tapa consideré utilizar un mecanismo deslizante haciendo un riel o guía con la técnica de rasterizado (posteriormente entenderán cómo).
+    </p>
+          
+    <h5 class="mb-3">Diseño 3D del objeto.</h5>
+    <p class="text-justify">
+      Cómo mencionaba anteriormente para el diseño del packaging tomé como referencia la forma de la carcas y le di cierta holgura para poder colocar algún material que amortigüe o alguna decoración más estética. Siguiendo el tutorial “Finger Joint Box for Laser Cutting Fusion 360 Tutorial” de What Make Art logré diseñar de forma paramétrica la base del objeto, los parámetros definidos se muestran en la Figura 1.
+    </p>
+    <figure class="figure">
+      <img src="img/MT03/parametros.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 1: parametros para el diseño del packaging.</figcaption>
+    </figure>
+    <p class="text-justify">
+      En función de estos parámetros diseñé la base que se puede observar en la figura 2.
+    </p>
+    <figure class="figure">
+      <img src="img/MT03/boceto_base.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 2: boceto de la base del packaging.</figcaption>
+    </figure>
+    <p class="text-justify">
+      Para el diseño de las paredes pensé en hacerlas en la mínima cantidad posible, en este caso dos, para optimizar la cantidad de pestañas unidas a la base por objeto de tipo pared. En la figura 3 se puede observar una de las paredes diseñadas, para realizar la otra pared simplemente hice una simetría y una operación booleana de tipo diferencia con la otra pared para generar los encajes.
+    </p>
+    <figure class="figure">
+      <img src="img/MT03/pared.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 3: creación de la primera pared de la caja.</figcaption>
+    </figure>
+    <p class="text-justify">
+      Se puede observar que uno de los lados de la pared es más bajo, por ahí es donde ingresará la tapa deslizante. En la figura 4 se puede observar la estructura de la caja completa con la tapa y sus guías.
+    </p>
+    <figure class="figure">
+      <img src="img/MT03/completo.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 4: estructura completa de la caja.</figcaption>
+    </figure>
+    <p class="text-justify">
+      El diseño del kerfing sobre las aristas curvas de la caja lo hice sobre las paredes desplegadas dado que es más fácil de diseñar sobre una superficie plana.
+    </p>
+    <h5 class="mb-3">Despliegue 2D del objeto 3D y diseño del Kerfing.</h5>
+    <p class="text-justify">
+      Una herramienta muy útil de Fusión 360 es la opción <i>Organizar</i> que nos permite disponer varios objetos (que originalmente están en distintas direcciones) sobre un mismo plano y posteriormente proyectarlos sobre un boceto para obtener los trayectos de corte de cada objeto. El primer paso es seleccionar la herramienta en Sólido->Modificar->Organizar y seleccionamos cada una de los componentes que queremos organizar como se puede observar en la Figura 5 se nos genera una “copia” de cada uno de los componentes pero dispuestas sobre el mismo plano.
+    </p>
+    <figure class="figure">
+      <img src="img/MT03/organizar.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 5: caja con sus piezas organizadas sobre un mismo plano.</figcaption>
+    </figure>
+    <p class="text-justify">  
+      Antes de generar las proyecciones para el corte necesitamos diseñar el kerfing sobre las aristas curvas de las paredes, dado que son objetos con superficies curvas podemos utilizar la herramienta de de Sheet Metal o Chapa de Fusion para manipular el objeto como si fuese una lámina metálica que se puede doblar, esto nos permite desdoblarla de forma automática y trabajar sobre ella cómo si fuese una superficie plana, necesario para diseñar e implementar el Kerfing. Una de las dificultades que tuve con esta herramienta es que solo permite desdoblar un componente a la vez y dado que tenía dos caras con curvas tuve que hacer el procedimiento de a una cara. 
+    </p>
+    <p class="text-justify">  
+      En la Figura 6 se puede apreciar cómo queda desdoblada una de las paredes, sobre la superficie de la pared genero un nuevo boceto y en este proceso a diseñar el kerfing parametrizado según el tutorial “Autodesk Fusion 360 Tutorial: Mastering Living Hinges for Laser Cutting” de What Make Art el cual está muy claro.
+    </p>
+    <figure class="figure">
+      <img src="img/MT03/desdoblada.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 6: pared desdoblada.</figcaption>
+    </figure>
+    <p class="text-justify">  
+      En la Figura 7 se puede observar el boceto con el diseño del kerfing ya finalizado. El diseño paramétrico del kerfing me permite ajustar la flexibilidad sin tener que modificar el diseño en sí, solo cambiando el valor de un parámetro. Las líneas azules corresponden al kerfing diseñado.
+    </p>
+    <figure class="figure">
+      <img src="img/MT03/kerfing.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 7: diseño del kerfing sobre una de las pareces.</figcaption>
+    </figure>
+    <p class="text-justify">  
+      Posteriormente para poder observar el kerfing sobre el modelo 3D siguiendo el video tutorial con la herramienta extruir de superficie extruí las líneas del kerfing generando superficies perpendiculares a la pared y luego con la herramien engrosar les di espesor a esas superficies con el valor del ancho del haz del láser aproximadamente 0.127 mm generando así objetos que puedo sustraer de las paredes dejando el diseño del kerfing cómo se puede observar en la figura 8.
+    </p>
+    <figure class="figure">
+      <img src="img/MT03/finalizado.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 8: caja con el kerfing implementado.</figcaption>
+    </figure>
+    <p class="text-justify">  
+      Finalmente una vez que observé que todo quedó correctamente diseñado, exporté en formato DXF el boceto de la Figura 9. Obteniendo así un archivo con todos los trayectos del diseño.
+    </p>
+    <figure class="figure">
+      <img src="img/MT03/boceto_completo.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 9: proyección de los objetos sobre un mismo boceto.</figcaption>
+    </figure>
+
+    <h5 class="mb-3">Ajuste de los trayectos en software vectorial.</h5>
+    <p class="text-justify">
+      Para la manipulación de los trayectos utilicé el software Inkscape ya utilizado en el módulo anterior. Importe el archivo DXF generado anteriormente y procedí a agrupar y asignar los colores simbólicos (corte, grabado y raster) a cada trayecto. También incorporé el logo del dispositivo a la tapa y el grabado de un borde como se puede observar en la Figura 9. Los colores elegidos fueron Negro para rasterizado, Rojo para corte y Verde para grabado.
+    </p>
+    <figure class="figure">
+      <img src="img/MT03/inkscape.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 10: trayectos importados en inkscape.</figcaption>
+    </figure>
+    <p class="text-justify">
+      Posteriormente este archivo será importado en el software CAM  RDWorks.
+    </p>
+    <h5 class="mb-3">Creación del proyecto en el software CAM.</h5>
+    <p class="text-justify">
+      Para generar el archivo que va a interpretar el láser a partir de los trayectos definidos anteriormente utilizamos el software RDWorks V8. Este software será el encargado de transformar los trayectos que diseñamos en comandos de movimiento y potencial del láser para la máquina de corte. 
+    </p>
+    <p class="text-justify">
+      En la Figura 11 se puede observar el archivo ya importado con los colores determinados anteriormente, si observan con atención van a ver que el rasterizado rectangular que se hacía en cada pared anteriormente estaba de color negro pero ahora está de color azúl, este cambio se hizo intencionalmente dado que se buscan rasterizados diferentes, el negro sería solo un quemado para pintar la madera y el otro busca desgastar la madera para generar la guia de 1mm de profundidad para el encaje de la tapa. Dado que se utilizaran velocidades y potencias distintas se les asigna colores distintos. El seteo de la velocidad y potencia de cada operación se realizará posteriormente en función de la máquina láser que se vaya a utilizar en el laboratorio.
+    </p>
+    <figure class="figure">
+      <img src="img/MT03/rdworks.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 11: trayectos importados en RDworks.</figcaption>
+    </figure>
+    <h5 class="mb-3">Pequeña reflexión.</h5>
+    <p class="text-justify">
+      Al igual que en el módulo anterior destaco esta progresión en el hacer y cómo esto me ayudó a fijar mejor los conocimientos,
+      si bien ya había cortado algunas cosas en una máquina laser nunca había hecho el proceso de inicio a fin, desde el diseño 3D 
+      del objeto hasta la generación de los trayectos específicos para el corte. Es la primera vez que utilizo el diseño paramétrico 
+      como tál y considero que va a ser una herramienta que voy a utilizar muchísimo en proyectos futuros. Le doy un cierre a esté módulo 
+      muy satisfecho con los conocimientos y las herramientas adquiridas. Próximamente subiré el resultado obtenido luego de cortar el objeto 
+      junto a todas las dificultades experimentales. 
+    </p>
   </div>
 </section>
