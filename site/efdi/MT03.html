@@ -151,5 +151,62 @@
       muy satisfecho con los conocimientos y las herramientas adquiridas. Próximamente subiré el resultado obtenido luego de cortar el objeto 
       junto a todas las dificultades experimentales. 
     </p>
+
+    <h5 class="mb-3">Visita al LAB-A de Durazno</h5>
+    <p class="text-justify">
+      Continuando con el trabajo realizado anteriormente el día 7/11/2025 concurrimos al LAB-A de la UTEC en el departamento de Durazno. Allá nos recibieron Joaquín y Victoria docentes de la EFDI y Facundo el encargado del LAB-A, Facundo nos hizo una
+      presentación de las distintas tecnologías y herramientas que utilizan en los LAB-A que me pareció muy interesante. La cortadora láser que utilizamos en esta ocasión es una SKL-6090 como se puede observar en la Figura 12. 
+    </p>
+    <figure class="figure">
+      <img src="img/MT03/SKL-6090.jpeg" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 12: Cortadora laser del LAb-A de Durazno.</figcaption>
+    </figure>
+    <p class="text-justify">
+      Sabiendo qué cortadora láser vamos a utilizar procedimos a configurar el RDWorks para este equipo en específico, desde su ubicación del origen y las dimensiones del área de trabajo hasta la potencia y velocidad de movimiento para cada tipo de corte. A continuación se deja una lista con las configuraciones usadas:
+    </p>
+    <ol>
+        <li>
+          Corte: capa de color negro, potencia 30% y velocidad 15 mm/s .
+        </li>
+        <li>
+          Grabado o marcado sobre vector: capa de color rojo, potencia 11% y velocidad 100 mm/s.
+        </li>
+        <li>
+          Rasterizado: capa de color verde, potencia 11% y velocidad 100mm/s.
+        </li>
+      </ol>
+      <p class="text-justify">
+      Se volvemos a observar a la Figura 11 pueden notar que el significado de las capas cambió y esto se debe a que unificamos el criterio del la asignación del color en cada capa en el momento según lo que nos indicaron los docentes. En la Figura 13 pueden observar cómo quedo ahora el diseño cargado en el RDWorks. También pueden notar que existen dos capas que no están listadas,
+      una de color azul y otra de color celeste. Estas capas fueron configuradas para las ranuras de la tapa en las paredes de la caja. Si bien no se puede ver a simple vista están superpuestos dos rectángulos en las ranuras uno asignado con la capa azul y otro con la capa celeste, esto se debe a que para generar la ranura le ordené al laser que haga un rasterizado con movimiento horizontal (azul) y otro con movimiento vertical (celeste)
+      para que se genere una cuadrícula que sea fácil de retirar con un destornillador posteriormente. Dado que necesito que este rasterízado tenga una profundidad de 1 mm aproximadamente y no tenía antecedentes de qué potencia y velocidad debía utilizar lo que hice fue una prueba con tres potencias distintas para determinar cuál se acerca más al resultado buscado, las configuraciones que probé fueron
+      <ol>
+        <li>
+          15% a 100 mm/s
+        </li>
+        <li>
+          20% a 100 mm/s
+        </li>
+        <li>
+          30% a 100 mm/s
+        </li>
+      </ol>
+      Siendo la óptima 20% a 100 mm/s.
+    </p>
+    <figure class="figure">
+      <img src="img/MT03/rdworks_config.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 13: Diseño cargado en el RDWorks con los parámetros ajustados a la cortadora del LAB-A y siguiendo el criterio de colores de los docentes.</figcaption>
+    </figure>
+    <p class="text-justify">
+      Luego de tener todo configurado en el RDWorks exportamos el archivo en GCode y lo cargamos a la cortadora láser con una memoria USB. En el instante que inició a cortar nos dimos cuenta de un problema, la máquina no estaba respetando el orden 
+      de prioridad de las capas que le habíamos asignado y estaba cortando antes de grabar lo cual puede ser un problema si als piezas son muy pequeñas, en mi caso no hubo problema porque las paredes y las tapas eran grandes entonces quedaban sostenidas por la regilla de la cortadora laser. En la Figura 14 se puede observar la caja luego de cortada y armada. El Kerfing funcionó muy bien mucho mejor de lo que esperaba. Las pestañas de encaje quedaron un poco flojas por lo que fue necesario usar cinta para sostenes las partes, esto se puede fijar con pegamento instantáneo.
+    </p>
+    <figure class="figure">
+      <img src="img/MT03/caja_cortada_armada.jpeg" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 14: Caja armada.</figcaption>
+    </figure>
+    <p class="text-justify">
+      A modo de reflexión me pareció una instancia muy enriquecedora la visita al LAB-A, poder experimentar personalmente con la máquina favoreció a fijar los conocimiento que vimos en la teoría y adquirir nuevos. Fué muy motivador y me dejó con muchas ganas de seguir explorando el mundo de la fabricación digital.
+    </p>
+
   </div>
 </section>
