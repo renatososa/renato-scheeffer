@@ -2,85 +2,94 @@
 <section class="col-12 col-lg-12">
   <div class="border rounded-3 bg-white p-3">
     <h4 class="mb-3">Módulo Técnico 5: impresión y escaneo 3D</h4>
-    <h5 class="mb-3">Introducción</h5>
-      <p class="text-justify">
+    <p class="text-justify">
+      En este módulo vimos distintas herramientas la fabricación digital a traves de la impresión 3D. Pude entender que existe una amplia variedad de tecnologías 
+      para la impresión 3D desde el uso de termoplásticos que se funden en un hilo formando las capas de un objeto hasta el uso de polvos que se solidifican. 
+      Cada tecnología tiene sus particularidades y varías en precio, velocidad, nivel de detalles, materiales que se pueden utilizar y tamaño de las piezas.
+      Para la práctica de este módulo vamos a simular la impresión 3D de un objeto prestando especial atención en la configuración de la impresora 3D y la disposición de la pieza en el área de impresión.
+      Sin importar la tecnología que elijamos casi siempre vamos a tener que hacer los siguientes pasos: <b>Obtener un archivo <i>.STL</i> del objeto a fabricar -> Laminarlo con un software de slicer -> Generar el archivo <i>.gcode</i> -> Cargar el archivo en la impresora 3D</b>
+    </p>
+    <figure class="figure">
+      <img src="img/MT05/objeto.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 1: objeto para imprimir en 3D.</figcaption>
+    </figure>
+    <h5 class="mb-3">Práctica</h5>
+    <p class="text-justify">
+      En esta práctica vamos a preparar el archivo de impresión de un objeto en formato <i>.f3d</i> brindado por los docentes el cual se puede observar en la Figura 1 ya cargado en el software <i>Fusión 360</i>. Como mencionaba anteriormente
+      el primer paso es convertir este objeto digital en un archivo <i>.STL</i> y esto nos lo permite hacer <i>Fusion 360 </i>con la herramienta <i>guardar como malla</i> como se muestra en la Figura 2.
+    </p>
+    <figure class="figure">
+      <img src="img/MT05/modelo_fusion360.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 2: herramienta guardar como malla Fusion 360.</figcaption>
+    </figure>
+    
+    <p class="text-justify">
+      Una vez que tenemos el archivo en formato <i>.STL</i> ya podemos importarlos en el software de slicer que vamos a utilizar, en este caso será el <i>IdeaMaker 5.2.4</i>. Una vez importamos el archivo al IdeaMaker debemos escalarlo al 150% según lo solicitado por los docentes
+      y debemos orientarlo para optimizar las propiedades físicas o el aspecto estético del objeto. Dado que es el objeto es una manija con un engranaje seguramente se use para ejercer una fuerza considerable por lo que podríamos priorizar la resistencia del engranaje por sobre al estética.
+      Considerando esto me parece que la mejor opción es orientarlo de forma tal que el eje del engranaje quede normal/perpendicular al plano de la cama de impresión con esto logramos que en cada capa los dientes se formen completamente esto les da mayor definición y mayor resistencia aspectos
+      muy importantes para los engranajes, este caso a diferencia de otros para que el engranaje se rompa la fuerza que se ahe sobre los dientes debe separar las capas de la impresión sobre toda la superficie del engranaje lo cual le da mayor resistencia. Ahora debemos definir si en engranaje va hacia arriba o hacia abajo. 
+      Para esto es importante considerar que las partes del objeto que tengan más de 45° de voladizo o no tengan apoyo van a necesitar soportes (estructuras auxiliares para sostener el material depositado, posteriormente de retiran). con el fin de minimizar el uso de soportes decidí orientar el engranaje hacia abajo.
+      Esto nos lleva a otro problema común en la impresión 3D FDM y es que la primera capa suele deformarse por estar en contacto con una superficie rígida, esto podría ser un problema ya que podría generar una rebaba en los dientes del engranaje, para evitar esto se crearon las estructuras llamadas balsas que son capas de material que se imprimen 
+      debajo del objeto y son más fáciles de despegar. Ahora que tenemos definida la orientación del objeto procedemos a configurar los parámetros del IdeaMaker. En la Figura 3 se puede observar el objeto cargado en el software ya escalado y orientado en la posición de impresión.
+    </p>
+
+    <figure class="figure">
+      <img src="img/MT05/engranaje_idemaker.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 3: objeto posicionado en el slicer.</figcaption>
+    </figure>
+
+    <p class="text-justify">
+      El slicer por default no trae todos los parámetros en la ventana de configuración por loq ue fue necesario agregarlos. En la Figura 4 se puede observar los parámetros de soporte que se agregaron a la ventana para poder modificar su valor.
+      Luego de que tenemos todos los parámetros disponibles procedemos a su configuración, se setearon los valores que se listan a continuación.
+      Generales:
+      <ul>
+        <li>Impresora: RAISER3D pro2 PLUS</li>
+        <li>Material: Premium PLA 1.75mm</li>
+        <li>Calidad: Estandar</li>
+      </ul>
+      Específicos:
+      <ul>
+        <li>Calidad: Altura de capa 0.2. Es una buena relación definición/velocidad</li>
+        <li>Capa: carcasas 2.5 mm</li>
+        <li>Relleno: densidad de relleno 20%. Lo suficiente cómo para darle estructura junto con el grosor de la carcasa.</li>
+        <li>Generar Soporte: solo plataforma táctil</li>
+        <li>Tipo de soporte: Normal. Para este caso donde las superficies con voladizos amplios y de 90° este tipo de soportes funciona bien. En otro caso podría ser de árbol.</li>
+        <li>Soporte ángulo máximo de voladizo: 45°. Es un valor bastante conservador, podría ser mayor.</li>
+        <li>Soporte de desplazamiento horizontal: 0.7 mm. Es la distancia mínima entre el objeto y el soporte que se pueda generar. Es decir, partes del objeto que requieran soporte pero que estén a menos de 0.7 mm de una que no lo requiera no lo tendrán, esto no es un problema porque el material se solidifica rápido y permite hacer estructuras sin apoyo directo. El objetivo de esto es que no se pegue la pared del soporte a la pared del objeto. </li>
+        <li>Soporte horizontal de capaz superiores verticales: 1. Esto determina la distancia que habrá entre la última capa del soporte y el objeto, si queremos que se despegue fácil aumentamos la distancia pero si queremos que se note menos en que había soporte disminuimos esta distancia.</li>
+        <li>Plataforma: Sólo balsa. Cómo mencionaba anteriormente esto es necesario para que la deformación de la primera capa no afecte al objeto.</li>
+      </ul>
+    </p>
+
+
+    <figure class="figure">
+      <img src="img/MT05/engranaje_idemaker.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 4: parámetros de configuración IdeaMaker.</figcaption>
+    </figure>
+
+    <p class="text-justify">
+        En la Figura 5 se puede observar las primeras capas del objeto ya laminado con la configuración anterior. En amarillo se puede observar la balsa, en azul el soporte y en rojo, naranja y verde el engranaje. Finalmente en la 
+        Figura 6 se puede observar todas las capas luego del laminado.
+    </p>
+    <figure class="figure">
+      <img src="img/MT05/engranajes_soportes.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 5: primeras capas del objeto laminado.</figcaption>
+    </figure>
+    <figure class="figure">
+      <img src="img/MT05/engranajes_soportes.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 6: objeto laminado.</figcaption>
+    </figure>
+    <p class="text-justify">
+        Luego de que laminamos el objeto podemos observar la estimación que hace el software del tiempo y la cantidad de material que va a tomar la impresión. Con un total de 2:30 horas y 23.3 g de material. El último paso es guardar este laminado cómo un archivo <i>.gcode</i>, al de este proyecto lo pueden descargar del siguiente <a href="">enlace</a>.
+    </p>
+    <h5 class="mb-3">Conclusiones</h5>
+    <p class="text-justify">
         
-      </p>
-    <h5 class="mb-3">Tarea del módulo</h5>
-      <p class="text-justify">
-        
-      </p>
-      <h6 class="mb-3">Objetivos</h6>
-        <p class="text-justify">
-        
-        </p>
-      <h6 class="mb-3">Metodología</h6>
-        <p class="text-justify">
-        
-        </p>
-        <h7 class="mb-3">Materiales</h7>
-          <p class="text-justify">
-        
-          </p>
-      <h6 class="mb-3">Implementación/simulación</h6>
-        <ul>
-          <li>
-            Sensado de la posición de giro del potenciometro.
-          </li>
-          <li>
-            Conmutación de modo automático/manual con botón pulsador.
-          </li>
-          <li>
-            Video de simulación del sistema funcionando.
-          </li>
-        </ul>
-        <p class="text-justify">
-        
-        </p>
-    <h5 class="mb-3">Control de flujo y sensado de nivel de reservorio de agua</h5>
-      <p class="text-justify">
-        
-      </p>
-      <h6 class="mb-3">Objetivos</h6>
-        <p class="text-justify">
-        
-        </p>
-      <h6 class="mb-3">Metodología</h6>
-        <p class="text-justify">
-        
-        </p>
-        <h7 class="mb-3">Materiales</h7>
-          <p class="text-justify">
-        
-          </p>
-      <h6 class="mb-3">Implementación</h6>
-        <h7 class="mb-3">Comunicación vía BLE</h7>
-        <h7 class="mb-3">Envío de comandos entre Controlador y Actuador</h7>
-        <h7 class="mb-3">Implementación de display</h7>
-        <h7 class="mb-3">Gestión de alimentación</h7>
-        <h7 class="mb-3">Diseño mecánico del sistema</h7>
-          <ul>
-            <li>
-              Modelado de la válvula (llave de paso).
-            </li>
-            <li>
-              Modelado del soporte que une servomotor con la válvula.
-            </li>
-            <li>
-              Modelado del sensor de nivel.
-            </li>
-          </ul>
-        <p class="text-justify">
-        
-        </p>
-      <h5 class="mb-3">Conclusiones</h5>
-        <p class="text-justify">
-        
-        </p>
+    </p>
 
     
     <figure class="figure">
-      <img src="img/MT03/parametros.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <img src="img/MT05/parametros.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
       <figcaption class="figure-caption text-center">Figura 1: parametros para el diseño del packaging.</figcaption>
     </figure>
   </div>

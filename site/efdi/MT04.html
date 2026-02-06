@@ -4,23 +4,46 @@
     <h4 class="mb-3">Módulo Técnico 4</h4>
     <h5 class="mb-3">Introducción</h5>
       <p class="text-justify">
-        
+        En este módulo vimos distintas herramientas de la electrónica y la robótica que pueden ser útiles para nuestro proyecto.
+        En mi caso ya conocía algunas de estas herramientas por mi formación de grado y mi experiencia laboral donde trabajé en diversos proyectos 
+        utilizando sensores, actuadores y microcontroladores.      
       </p>
     <h5 class="mb-3">Tarea del módulo</h5>
       <p class="text-justify">
-        
+        Para cerrar el módulo se nos asignó una tarea con el fin de consolidar los conocimientos impartidos en las clases y hacer un ejercicio práctico de implementación en electrónica. 
+        Elegí el grupo C y la tarea que me tocó fue la de implementar una compuerta controlada por un potenciómetro y un botón.
       </p>
       <h6 class="mb-3">Objetivos</h6>
         <p class="text-justify">
-        
+          <ul>
+            <li> Implementar un sistema electrónico que sea capaz de controlar el movimiento de una compuerta a traves de un servomotor.</li>
+            <li> Implementar un controlador de estados que cambie el movimiento del servomotor de manual a automático utilizando un pulsador.</li>
+          </ul>
         </p>
       <h6 class="mb-3">Metodología</h6>
         <p class="text-justify">
-        
+          Pra implementar este sistema lo primero que vamos a hacer es una simulación utilizando el software online 
+          <a href="https://www.tinkercad.com/">TinkerCAD</a> que nos permite simular circuitos electrónicos de forma sencilla
+          e intuitiva. Este software además de simular los circuitos electrónicos nos permite simular la programación de un sistema embebido cómo por ejemplo el Arduino UNO.
+        </p>
+        <p class="test-justify">
+          Para poder controlar el servomotor debemos generar la señal de PWM correspondiente al ángulo que deseamos que gire, una de las formas de generar esta señal es utilizando un microcontrolador.
+          Para este ejercicio el microcontrolador que voy a utilizar es un Arduino UNO. A este lo podemos programar y utilizando librería y funciones ya implementadas podemos indicarle un ángulo y nos generar el PWM correspondiente de forma automática.
+          Ahora que tenemos una forma de convertir ángulos a PWM es necesario implementar una forma física externa a lo digital para indicarle al Arduino qué ángulo quiero setear y para esto vamos a utilizar un potenciometro
+          donde haciendo uso de las entradas analógicas del Arduino podemos identificar la posición de la perilla del potenciometro en función de la caída de tensión que hay en este. Otra característica para agregar al sistema es que este pueda conmutar 
+          de un modo manual controlado por el potenciometro a un modo automática que se mueva de 0° a 180° cada 5 segundos, para implementar este cambio de modo hacemos uso de un pulsador y la lectura de un pin digital del Arduino que se va a encargar de
+          sensar cuándo es presionado el pulsador. Por último vamos a implementar un señalización del estado actual del sistema a traves de un LED que si el sistema está en modo manual este se queda apagado y si está en modo automático se enciende.
         </p>
         <h7 class="mb-3">Materiales</h7>
           <p class="text-justify">
-        
+            <ol>
+              <li>Arduino UNO</li>
+              <li>Servomotor</li>
+              <li>Potenciometro</li>
+              <li>Pulsador</li>
+              <li>LED</li>
+              <li>Resistencia</li>
+            </ol>
           </p>
       <h6 class="mb-3">Implementación/simulación</h6>
         <ul>
