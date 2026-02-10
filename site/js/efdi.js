@@ -156,7 +156,6 @@ function observeActiveHeadings(headings) {
     
 
     }
-  
     window.addEventListener('hashchange', loadFromHash);
     window.addEventListener('DOMContentLoaded', loadFromHash);
   })();

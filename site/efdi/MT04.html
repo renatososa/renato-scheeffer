@@ -22,20 +22,25 @@
         </p>
       <h6 class="mb-3">Metodología</h6>
         <p class="text-justify">
-          Pra implementar este sistema lo primero que vamos a hacer es una simulación utilizando el software online 
+          Para implementar este sistema lo primero que vamos a hacer es una simulación utilizando el software online 
           <a href="https://www.tinkercad.com/">TinkerCAD</a> que nos permite simular circuitos electrónicos de forma sencilla
           e intuitiva. Este software además de simular los circuitos electrónicos nos permite simular la programación de un sistema embebido cómo por ejemplo el Arduino UNO.
         </p>
-        <p class="test-justify">
+        <p class="text-justify">
           Para poder controlar el servomotor debemos generar la señal de PWM correspondiente al ángulo que deseamos que gire, una de las formas de generar esta señal es utilizando un microcontrolador.
-          Para este ejercicio el microcontrolador que voy a utilizar es un Arduino UNO. A este lo podemos programar y utilizando librería y funciones ya implementadas podemos indicarle un ángulo y nos generar el PWM correspondiente de forma automática.
-          Ahora que tenemos una forma de convertir ángulos a PWM es necesario implementar una forma física externa a lo digital para indicarle al Arduino qué ángulo quiero setear y para esto vamos a utilizar un potenciometro
-          donde haciendo uso de las entradas analógicas del Arduino podemos identificar la posición de la perilla del potenciometro en función de la caída de tensión que hay en este. Otra característica para agregar al sistema es que este pueda conmutar 
-          de un modo manual controlado por el potenciometro a un modo automática que se mueva de 0° a 180° cada 5 segundos, para implementar este cambio de modo hacemos uso de un pulsador y la lectura de un pin digital del Arduino que se va a encargar de
+          Para este ejercicio el microcontrolador que voy a utilizar es un Arduino UNO. A este lo podemos programar y utilizando librerías ya implementadas podemos indicarle un ángulo y nos generar el PWM correspondiente de forma automática.
+          Ahora que tenemos una forma de convertir ángulos a PWM es necesario implementar una forma física externa a lo digital para indicarle al Arduino qué ángulo quiero setear, para esto vamos a utilizar un potenciometro
+          haciendo uso de las entradas analógicas del Arduino podemos identificar la posición de la perilla del mismo en función de la caída de tensión que hay en este. 
+          </p>
+          <p class="text-justify">
+          Otra característica para agregar al sistema es que pueda conmutar 
+          de un modo manual controlado por el potenciometro a un modo automático que se mueva de 0° a 180° cada algunos segundos, para implementar este cambio de modo hacemos uso de un pulsador y la lectura de un pin digital del Arduino que se va a encargar de
           sensar cuándo es presionado el pulsador. Por último vamos a implementar un señalización del estado actual del sistema a traves de un LED que si el sistema está en modo manual este se queda apagado y si está en modo automático se enciende.
         </p>
+        <h6 class="mb-3">Implementación/simulación</h6>
         <h7 class="mb-3">Materiales</h7>
           <p class="text-justify">
+            Los materiales necesarios para implementar este sistema son los siguientes:
             <ol>
               <li>Arduino UNO</li>
               <li>Servomotor</li>
@@ -44,38 +49,145 @@
               <li>LED</li>
               <li>Resistencia</li>
             </ol>
+            En la Figura 1 se puede observar materiales representados en el software de simulación.
           </p>
-      <h6 class="mb-3">Implementación/simulación</h6>
-        <ul>
-          <li>
-            Sensado de la posición de giro del potenciometro.
-          </li>
-          <li>
-            Conmutación de modo automático/manual con botón pulsador.
-          </li>
-          <li>
-            Video de simulación del sistema funcionando.
-          </li>
-        </ul>
-        <p class="text-justify">
+          <figure class="figure">
+      <img src="img/MT04/componentes_E1.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 1: componentes en TinkerCAD.</figcaption>
+    </figure>
+
+    <h7 class="mb-3">Conexiones</h7>
+    <p class="text-justify">
+      Lo primero que debemos hacer para implementar este sistema es interconectar los distintos materiales con el Arduino UNO. Para esto vamos a utilizar una protoboard o placa de prototipado
+      la cual nos facilitará posicionar los componentes y hacer las conexiones. Los pines (puntos de conexión) que vamos a utilizar del Arduino UNO son los siguientes:
+
+      <ol>
+        <li>Pin Digital 2: LED</li>
+        <li>Pin Digital 3: Pulsador</li>
+        <li>Pin Digital 6: PWM servomotor</li>
+        <li>Pin Analógico A5: punto medio potenciometro</li>
+        <li>Pin 5V: alimentación de 5 V</li>
+        <li>Pin GND: alimentación GND</li>
+      </ol>
+      En la Figura 2 se puede observar cómo quedaron conectados todos los componentes.
+    </p>
+    <figure class="figure">
+      <img src="img/MT04/simulacion_E1.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 2: conexión de los componentes.</figcaption>
+    </figure>
+
+    <h7 class="mb-3">Programación</h7>
+
+    <p class="text-justify">
+      Cómo mencionaba anteriormente para poder controlar anteriormente necesitamos programar el Arduino UNO para que interprete la posición del potenciomentro y genera la señal PWM para el servomotor
+      para eso usamos una variante del lenguaje de programación C++ que nos permite darle órdenes al Arduino. A lo primero que vamos a hacer es incluir las librería <a href="https://docs.arduino.cc/libraries/servo/">Servo.h</a> que nos permite 
+      controlar el servomotor de forma sencilla. Lo siguiente es nombrar de forma sencilla los pines que vamos a utilizar en este caso el 2, 3, 6 y A5. Luego declaramos las variables que vamos a utilizar en nuestro código que nos permiten almacenar valores como por ejemplo 
+      potValue para guardar el valor del potenciometro en un instante o state que guarda en que estado estoy actualmente.
+    </p>
+    <p class="text-justify"> 
+      Una vez definidas estas constantes y variables debemos definir la función setup() del Arduino, esta es fundamental ya que se ejecuta cuando se enciende el Arduino UNO y lo configura para que funcione correctamente, por ejemplo le dice al pin 2 usado para el LED que va a 
+      funcionar como una salida y al pin 3 del botón cómo una entrada y así sucesivamente con todos los pines utilizados.
+    </p>
+    <p class="text-justify">
+      Luego de que definimos el setup() vamos a definir el loop() esta es la función donde se define la rutina de nuestro Arduino UNO, es decir, lo que va a hacer de forma repetida hasta que se apague.
+      Acá lo que hacemos es inicialmente poner el pin 2 del LED en alto o bajo en función del estado del sistema (automático o manual), luego medimos el pin 3 del pulsador a ver si fue pulsado, si fue pulsado
+      pongo el estado opuesto si estaba en manual/automático lo paso a automático/manual. Luego en función del estado defino cómo control el servo, si está en automático cuanto la cantidad de ciclos que se ejecutó el loop y se cumplió el tiempo de espera invierto la posición del servomotor y reseteo el contador. Por último definimos un tiempo de espera
+      entre un loop y otro con la variable timeSteps para que no sea instantáneo.
+      Por otro lado, si estoy en el otro caso mido la tensión en A5 la convierto a ángulos con la función map y le digo al servomotor que se mueva a ese ángulo. A continuación se presenta el código implementado.
+    </p>
+      <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+<code class="language-arduino">#include &ltServo.h&gt
+#define servoPin 6
+#define buttonPin 3
+#define potePin A5
+#define ledPin 2
+#define timeDelay 2000 //Milisegundos
+#define timeSteps 100 //milisegundos
+#define numberOfSteps timeDelay/timeSteps
+
+Servo myservo;
+unsigned int stepsCount = 0;
+unsigned int poteValue = 0;
+bool state = false;
+bool servoState = false;
+
+void setup()
+{
+  pinMode(buttonPin, INPUT_PULLUP);
+  pinMode(servoPin, OUTPUT);
+  pinMode(ledPin, OUTPUT);
+  myservo.attach(6);
+}
+
+void loop()
+{
+  digitalWrite(ledPin, state);
+  if(!digitalRead(buttonPin))
+    state = !state;
+  if(state){
+    if(stepsCount>numberOfSteps){
+    myservo.write(servoState*180);
+    stepsCount = 0;
+	servoState = !servoState; 
+    }
+    else
+      stepsCount++;
+  }
+  else{
+    poteValue = analogRead(potePin);
+    myservo.write(map(poteValue, 0, 1024, 0, 180));
+  }
+  
+  delay(timeSteps);
+}
+</code></pre>
+
+<p class="text-justify">
+  A continuación se presenta un video demostrativo del funcionamiento del sistema implementado. La simulación es pública y al pueden acceder desde el siguiente <a href="https://www.tinkercad.com/things/efIiREkvcAs-smooth-blad">enlace</a>.
+</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/4XZ1k4IcIIU?si=828yOqtRIVj4UEe4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         
-        </p>
-    <h5 class="mb-3">Control de flujo y sensado de nivel de reservorio de agua</h5>
-      <p class="text-justify">
-        
+
+
+    <h5 class="mb-3">Aplicación real del sistema: control de flujo y sensado de nivel de reservorio de agua</h5>
+    <p class="text-justify">
+        Para la implementación real del sistema se consideró como una solución a un problema real del control de flujo y sensado de nivel de un tanque de agua que se encuentra en el techo de una casa o un edificio.
+        Esto en principio implica que el sistema que controla la válvula e informa el nivel estén lejos de la válvula y del sensor de nivel. Para esta solución se considera usar una alimentación con baterías para que sea portable y temporalmente independiente
+        de la red eléctrica. Por otro lado, dada la distancia entre el controlador y la comunicación entre los mismos se hará de forma inalámbrica.
       </p>
       <h6 class="mb-3">Objetivos</h6>
         <p class="text-justify">
-        
+          <ul>
+            <li>Implementar un sistema inalámbrico y portable de control de flujo y sensado de nivel de agua en un reservorio.</li>
+          </ul>
         </p>
       <h6 class="mb-3">Metodología</h6>
-        <p class="text-justify">
-        
+      <p class="text-justify">
+        Lo primero a definir es el microcontrolador a utilizar, dado que se necesita comunicación inalámbrica y no se necesitan muchos pines se utilizará el ESP32-C3 mini por su tamaño reducido permitiendo generar un sistema compacto.
+        Luego para la comunicación inalámbrica con este microcontrolador tenemos al menos tres opciones BLE (Bluetooth Low Energy), WiFi local o WiFi conectado a internet. Considerando que el dispositivo será alimentado por baterías y que puede que no se tenga una infraestructura de WiFi ya armada en la casa se decide 
+        usar BLE, por su menor consumo y alcance de 10 a 15 metros. 
         </p>
-        <h7 class="mb-3">Materiales</h7>
-          <p class="text-justify">
-        
-          </p>
+        <p class="text-justify">
+        Dado que queremos controlar el flujo de agua del tanque una forma sencilla sería controlar la posición de una llave de paso de agua convencional diseñando un sistema de engranajes que
+        transmita el movimiento del servomotor a la llave de paso. A su vez, dado que vamos a tener información del nivel de agua del reservorio ya no podemos solo usar un LED, por lo tanto, se utilizará una pantalla OLED de 0.96" para mostrar esta información, el ángulo seteado en el potenciometro y el modo actual del sistema.
+      </p>
+      <h7 class="mb-3">Materiales</h7>
+
+      <p class="text-justify">
+        A los materiales a utilizar los podemos separar en dos, por un lado, el microcontrolador con los actuadores y sensores. Por otro lado, los componentes referidos a la alimentación.
+      </p>
+      <p class="text-justify">
+        <ol>
+          <li>ESP32-C3 super mini: microcontrolador.</li>
+          <li>Servomotor MG996: servomotor de alto torque.</li>
+          <li>Potenciometro.</li>
+          <li>Pantalla OLED 0.96"</li>
+          <li>Llave de paso convencional.</li>
+        </ol>
+      </p>
+      <h7 class="mb-3">Conexiones eléctricas</h7>
+      
+      
       <h6 class="mb-3">Implementación</h6>
         <h7 class="mb-3">Comunicación vía BLE</h7>
         <h7 class="mb-3">Envío de comandos entre Controlador y Actuador</h7>
@@ -108,3 +220,6 @@
     </figure>
   </div>
 </section>
+<script>
+    Prism.highlightElement(document.querySelector('code'));
+</script>
