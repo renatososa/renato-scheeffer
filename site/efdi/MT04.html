@@ -241,43 +241,43 @@ void loop()
       La comunicación entre la pantalla y el ESP32 se hace a traves del protocolo I2C y haciendo uso de la librería <a href="https://github.com/olikraus/u8g2">U8g2lib.h</a>.
     </p>
 
-    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
-    <code class="language-arduino">#include &ltU8g2lib.h>
-    #include &ltWire.h> 
-    // OLED I2C
-    U8G2_SH1106_128X64_NONAME_F_HW_I2C display(U8G2_R0, U8X8_PIN_NONE);
+<pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+<code class="language-arduino">#include &ltU8g2lib.h>
+#include &ltWire.h> 
+// OLED I2C
+U8G2_SH1106_128X64_NONAME_F_HW_I2C display(U8G2_R0, U8X8_PIN_NONE);
 
-    // Pines I2C para ESP32-C3
-    #define OLED_SDA 8
-    #define OLED_SCL 9
-    unsigned long lastOLED = 0; // Variable auxiliar para actualizar display
-    void drawOLED() {
-    display.clearBuffer();
-    float pct = (waterRaw / 4095.0f) * 100.0f;
-    display.setFont(u8g2_font_6x12_tf);
-    if(modo){
-      display.setCursor(1, 12);
-      float remening = (openDelay - (millis() - startTime));
-      display.printf("Automatico: %.1f s", remening/1000);
-    }
-    else
-      display.drawStr(1, 12, "Manual");
-    // Ángulo
-    display.setCursor(1, 28);
-    display.printf("Ang: %3d%c", currentAngle, '°');
+// Pines I2C para ESP32-C3
+#define OLED_SDA 8
+#define OLED_SCL 9
+unsigned long lastOLED = 0; // Variable auxiliar para actualizar display
+void drawOLED() {
+display.clearBuffer();
+float pct = (waterRaw / 4095.0f) * 100.0f;
+display.setFont(u8g2_font_6x12_tf);
+if(modo){
+  display.setCursor(1, 12);
+  float remening = (openDelay - (millis() - startTime));
+  display.printf("Automatico: %.1f s", remening/1000);
+}
+else
+  display.drawStr(1, 12, "Manual");
+// Ángulo
+display.setCursor(1, 28);
+display.printf("Ang: %3d%c", currentAngle, '°');
 
-    // Nivel
-    display.setCursor(1, 42);
-    display.printf("Nivel: %5.1f%%", pct);
+// Nivel
+display.setCursor(1, 42);
+display.printf("Nivel: %5.1f%%", pct);
 
-    // Barra de nivel
-    int barW = 120;
-    int fill = (int)(barW * pct / 100.0);
-    display.drawFrame(1, 48, barW, 14);
-    display.drawBox(2, 49, fill, 12);
+// Barra de nivel
+int barW = 120;
+int fill = (int)(barW * pct / 100.0);
+display.drawFrame(1, 48, barW, 14);
+display.drawBox(2, 49, fill, 12);
 
-    display.sendBuffer();
-    }</code></pre>
+display.sendBuffer();
+}</code></pre>
     
     <p class="text-justify">
     En este código incorporamos la librería de manejo de la pantalla OLED y definimos la función <i>drawOLED()</i> que se encarga de dibujar la interfaz del usuario y actualizar el ángulo y el nivel del agua.
@@ -287,82 +287,83 @@ void loop()
       Cómo se mencionó anteriormente la comunicación entre los módulos será inalámbrica por BLE, el módulo de control se encargará de enviar el valor del ángulo a setearse en el servomotor y recibe el nivel del agua
       sensado por el otro módulo. Para esto es necesario definir funciones de callback encargadas de ejecutar tareas cuando se tiene que enviar o recibir datos.  
     </p>
-    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
-    <code class="language-arduino">#include &ltBLEDevice.h>
-    #include &ltBLEServer.h>
-    #include &ltBLEUtils.h>
-    #include &ltBLE2902.h>
-    // ------------------- paquete de datos -------------------
-    typedef struct __attribute__((packed)) {
-      uint8_t  type;   // 0 = ANGULO, 1 = NIVEL AGUA
-      uint16_t data;   // 0–180 o 0–4095
-    } Message;
+  <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+<code class="language-arduino">#include &ltBLEDevice.h>
+#include &ltBLEServer.h>
+#include &ltBLEUtils.h>
+#include &ltBLE2902.h>
+// ------------------- paquete de datos -------------------
+typedef struct __attribute__((packed)) {
+  uint8_t  type;   // 0 = ANGULO, 1 = NIVEL AGUA
+  uint16_t data;   // 0–180 o 0–4095
+} Message;
 
-    // ------------------- BLE: UUIDs tipo UART -------------------
-    #define SERVICE_UUID           "6E400001-B5A3-F393-E0A9-E50E24DCCA9E" // UART service
-    #define CHARACTERISTIC_UUID_RX "6E400002-B5A3-F393-E0A9-E50E24DCCA9E" // cliente -> servidor
-    #define CHARACTERISTIC_UUID_TX "6E400003-B5A3-F393-E0A9-E50E24DCCA9E" // servidor -> cliente
+// ------------------- BLE: UUIDs tipo UART -------------------
+#define SERVICE_UUID           "6E400001-B5A3-F393-E0A9-E50E24DCCA9E" // UART service
+#define CHARACTERISTIC_UUID_RX "6E400002-B5A3-F393-E0A9-E50E24DCCA9E" // cliente -> servidor
+#define CHARACTERISTIC_UUID_TX "6E400003-B5A3-F393-E0A9-E50E24DCCA9E" // servidor -> cliente
 
-    BLEServer*        pServer         = nullptr;
-    BLECharacteristic* pTxCharacteristic = nullptr; // para notificar ángulo al nodo servo
-    BLECharacteristic* pRxCharacteristic = nullptr; // para recibir nivel de agua
-    bool deviceConnected      = false;
+BLEServer*        pServer         = nullptr;
+BLECharacteristic* pTxCharacteristic = nullptr; // para notificar ángulo al nodo servo
+BLECharacteristic* pRxCharacteristic = nullptr; // para recibir nivel de agua
+bool deviceConnected      = false;
 
-    // ------------------- CALLBACKS BLE -------------------
-    class MyServerCallbacks : public BLEServerCallbacks {
-      void onConnect(BLEServer* pServer) override {
-        deviceConnected = true;
-        Serial.println("Cliente BLE conectado");
-      }
-      void onDisconnect(BLEServer* pServer) override {
-        deviceConnected = false;
-        Serial.println("Cliente BLE desconectado, re-advertising...");
-        display.clearBuffer();
-        display.setFont(u8g2_font_6x12_tf);
-        display.drawStr(20, 28, "Desconectado...");
-        display.drawStr(20, 44, "Buscando...");
-        display.sendBuffer();
-        BLEDevice::startAdvertising();
-      }
-    };
+// ------------------- CALLBACKS BLE -------------------
+class MyServerCallbacks : public BLEServerCallbacks {
+  void onConnect(BLEServer* pServer) override {
+    deviceConnected = true;
+    Serial.println("Cliente BLE conectado");
+  }
+  void onDisconnect(BLEServer* pServer) override {
+    deviceConnected = false;
+    Serial.println("Cliente BLE desconectado, re-advertising...");
+    display.clearBuffer();
+    display.setFont(u8g2_font_6x12_tf);
+    display.drawStr(20, 28, "Desconectado...");
+    display.drawStr(20, 44, "Buscando...");
+    display.sendBuffer();
+    BLEDevice::startAdvertising();
+  }
+};
 
-    class MyRxCallbacks : public BLECharacteristicCallbacks {
-      void onWrite(BLECharacteristic* pCharacteristic) override {
-        std::string rxValue = pCharacteristic->getValue();
-        if (rxValue.size() != sizeof(Message)) {
-          return;
-        }
+class MyRxCallbacks : public BLECharacteristicCallbacks {
+  void onWrite(BLECharacteristic* pCharacteristic) override {
+    std::string rxValue = pCharacteristic->getValue();
+    if (rxValue.size() != sizeof(Message)) {
+      return;
+    }
 
-        Message msg;
-        memcpy(&msg, rxValue.data(), sizeof(Message));
+    Message msg;
+    memcpy(&msg, rxValue.data(), sizeof(Message));
 
-        if (msg.type == 1) {  // NIVEL DE AGUA
-          waterRaw = msg.data;
-          float pct = (waterRaw / 4095.0f) * 100.0f;
-          Serial.printf("Nivel recibido (BLE): raw=%u (%.1f%%)\n", waterRaw, pct);
-        }
-      }
-    };
+    if (msg.type == 1) {  // NIVEL DE AGUA
+      waterRaw = msg.data;
+      float pct = (waterRaw / 4095.0f) * 100.0f;
+      Serial.printf("Nivel recibido (BLE): raw=%u (%.1f%%)\n", waterRaw, pct);
+    }
+  }
+};
 
-    // ------------------- ENVIAR ANGULO POR BLE -------------------
-    void sendAngle(int ang) {
-      if (!deviceConnected || pTxCharacteristic == nullptr) {
-        return; // si no hay cliente conectado, no hacemos nada
-      }
+// ------------------- ENVIAR ANGULO POR BLE -------------------
+void sendAngle(int ang) {
+  if (!deviceConnected || pTxCharacteristic == nullptr) {
+    return; // si no hay cliente conectado, no hacemos nada
+  }
 
-      if (ang < 0)   ang = 0;
-      if (ang > 180) ang = 180;
+  if (ang < 0)   ang = 0;
+  if (ang > 180) ang = 180;
 
-      Message msg;
-      msg.type = 0;      // ANGULO
-      msg.data = ang;
+  Message msg;
+  msg.type = 0;      // ANGULO
+  msg.data = ang;
 
-      pTxCharacteristic->setValue((uint8_t*)&msg, sizeof(msg));
-      pTxCharacteristic->notify();   // notificar al cliente
+  pTxCharacteristic->setValue((uint8_t*)&msg, sizeof(msg));
+  pTxCharacteristic->notify();   // notificar al cliente
 
-      currentAngle = ang;
-      Serial.printf("Ángulo enviado (BLE): %d°\n", ang);
-    }</code></pre>
+  currentAngle = ang;
+  Serial.printf("Ángulo enviado (BLE): %d°\n", ang);
+}</code>
+    </pre>
     <p class="text-justy">
       Se implementa un control de conectividad entre los módulos, cuando se enciende el módulo de control este espera a que el módulo de la válvula se conecte para habilitar el
       display y el ajuste del ángulo. Mientras espera la conexión muestra el mensaje "Conectando..." en el display.
@@ -371,340 +372,348 @@ void loop()
     <p class="text-justify">
       Al igual que en la simulación para controlar el modo usamos un pulsador y para setear el ángulo un potenciómetro. Para esto debemos definir algunas variables previo al <i>setup()</i> para almacenar y gestionar estos datos.
     </p>
-    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
-    <code class="language-arduino">// Potenciómetro
-    #define POT_PIN 3  // AJUSTAR SEGÚN TU HARDWARE
-    int lastAngle = -1;
-    const int THRESH = 2;   // enviar solo si cambia ≥2°
-    int ang = 0;
-    volatile int currentAngle = 0;
-    volatile uint16_t waterRaw = 0;
+  <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+<code class="language-arduino">// Potenciómetro
+#define POT_PIN 3  // AJUSTAR SEGÚN TU HARDWARE
+int lastAngle = -1;
+const int THRESH = 2;   // enviar solo si cambia ≥2°
+int ang = 0;
+volatile int currentAngle = 0;
+volatile uint16_t waterRaw = 0;
 
-    // Control modo
-    #define pinBtnModo 6
-    #define openDelay 5000 //tiempo de apertura/cierre en modo automático en milisegundos
-    #define maxAng 180 //Ángulo máximo de rotación del servomotor en modo automático
-    bool modo = 0;
-    unsigned long int startTime = 0;
-    bool stateServo = 0;</code></pre>
+// Control modo
+#define pinBtnModo 6
+#define openDelay 5000 //tiempo de apertura/cierre en modo automático en milisegundos
+#define maxAng 180 //Ángulo máximo de rotación del servomotor en modo automático
+bool modo = 0;
+unsigned long int startTime = 0;
+bool stateServo = 0;</code>
+</pre>
 
     <h7 class="mb-3">Módulo de control: setup</h7>
     <p class="text-justify">
       Una vez que tenemos definidos todos las variables y funciones necesarias es necesario definir la función <i>setup()</i> del firmware, en esta se inicializar todos los elementos como el servidor BLE,
       el display OLED, el puerto Serial, el pin del botón pulsador, etc.
     </p>
-    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
-    <code class="language-arduino">void setup() {
-      Serial.begin(115200);
-      delay(1500);
-      pinMode(pinBtnModo, INPUT_PULLUP);
-      // I2C + OLED
-      Wire.begin(OLED_SDA, OLED_SCL);
-      display.begin();
-      display.clearBuffer();
-      display.setFont(u8g2_font_6x12_tf);
-      display.drawStr(20, 36, "Iniciando...");
-      display.sendBuffer();
-      delay(500);
+  <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+<code class="language-arduino">void setup() {
+  Serial.begin(115200);
+  delay(1500);
+  pinMode(pinBtnModo, INPUT_PULLUP);
+  // I2C + OLED
+  Wire.begin(OLED_SDA, OLED_SCL);
+  display.begin();
+  display.clearBuffer();
+  display.setFont(u8g2_font_6x12_tf);
+  display.drawStr(20, 36, "Iniciando...");
+  display.sendBuffer();
+  delay(500);
 
-      analogReadResolution(12);
+  analogReadResolution(12);
 
-      // ---- BLE SERVER ----
-      BLEDevice::init("VALVE_CONTROL"); 
-      pServer = BLEDevice::createServer();
-      pServer->setCallbacks(new MyServerCallbacks());
+  // ---- BLE SERVER ----
+  BLEDevice::init("VALVE_CONTROL"); 
+  pServer = BLEDevice::createServer();
+  pServer->setCallbacks(new MyServerCallbacks());
 
-      BLEService* pService = pServer->createService(SERVICE_UUID);
+  BLEService* pService = pServer->createService(SERVICE_UUID);
 
-      // TX: servidor -> cliente (notify) para ÁNGULO
-      pTxCharacteristic = pService->createCharacteristic(
-                            CHARACTERISTIC_UUID_TX,
-                            BLECharacteristic::PROPERTY_NOTIFY
-                          );
-      pTxCharacteristic->addDescriptor(new BLE2902());
+  // TX: servidor -> cliente (notify) para ÁNGULO
+  pTxCharacteristic = pService->createCharacteristic(
+                        CHARACTERISTIC_UUID_TX,
+                        BLECharacteristic::PROPERTY_NOTIFY
+                      );
+  pTxCharacteristic->addDescriptor(new BLE2902());
 
-      // RX: cliente -> servidor (write) para NIVEL AGUA
-      pRxCharacteristic = pService->createCharacteristic(
-                            CHARACTERISTIC_UUID_RX,
-                            BLECharacteristic::PROPERTY_WRITE
-                          );
-      pRxCharacteristic->setCallbacks(new MyRxCallbacks());
+  // RX: cliente -> servidor (write) para NIVEL AGUA
+  pRxCharacteristic = pService->createCharacteristic(
+                        CHARACTERISTIC_UUID_RX,
+                        BLECharacteristic::PROPERTY_WRITE
+                      );
+  pRxCharacteristic->setCallbacks(new MyRxCallbacks());
 
-      pService->start();
+  pService->start();
 
-      BLEAdvertising* pAdvertising = BLEDevice::getAdvertising();
-      pAdvertising->addServiceUUID(SERVICE_UUID);
-      pAdvertising->setScanResponse(true);
-      pAdvertising->setMinPreferred(0x06);
-      pAdvertising->setMinPreferred(0x12);
+  BLEAdvertising* pAdvertising = BLEDevice::getAdvertising();
+  pAdvertising->addServiceUUID(SERVICE_UUID);
+  pAdvertising->setScanResponse(true);
+  pAdvertising->setMinPreferred(0x06);
+  pAdvertising->setMinPreferred(0x12);
 
-      BLEDevice::startAdvertising();
-      Serial.println("BLE listo, esperando cliente...");
-      display.clearBuffer();
-      display.setFont(u8g2_font_6x12_tf);
-      display.drawStr(20, 36, "Conectando...");
-      display.sendBuffer(); 
-    }</code></pre>
+  BLEDevice::startAdvertising();
+  Serial.println("BLE listo, esperando cliente...");
+  display.clearBuffer();
+  display.setFont(u8g2_font_6x12_tf);
+  display.drawStr(20, 36, "Conectando...");
+  display.sendBuffer(); 
+}</code>
+</pre>
     <h7 class="mb-3">Módulo de control: loop</h7>
     <p class="text-justify">
       Por último luego de que está todo inicializado en <i>setup()</i> procedemos a generar la rutina del <i>loop()</i>. Esta será muy similar a la de la simulación, se verifica si se presionó el botón para setear el modo
       y si se está en modo automático se envía el ángulo 0 o maxAng cada openDelay, si se está en modo manual se envía el ángulo seteado por el potenciómetro entre 0 y maxAng si este cambia más de THRESH respecto al valor anterior. Por último se actualiza la información del display cada 200 ms para dar la sensación de fluides sin saturar el microcontrolador.
     </p>
-    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
-    <code class="language-arduino">void loop() {
-      if(!digitalRead(pinBtnModo)) //Chequeo si se presiona el botón
-        modo = !modo;
-      if((millis() - startTime> openDelay)&&modo){ // Entro en modo automático y muevo el servo cada openDelay
-        startTime = millis();
-        stateServo = !stateServo;
-        ang = maxAng*stateServo;
-      }
-      else if(!modo){ //Convierto el 
-        int raw = analogRead(POT_PIN); //Lectura del valor del potenciometro
-        ang = map(raw, 0, 4095, 0, maxAng); //conversión a ángulo
-      }
-      if (lastAngle < 0 || abs(ang - lastAngle) >= THRESH) { //Solo mando al otro módulo si hay una variación de THRESH en el ángulo (evita el ruido)
-        lastAngle = ang;
-        sendAngle(ang);
-      }
+  <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+<code class="language-arduino">void loop() {
+  if(!digitalRead(pinBtnModo)) //Chequeo si se presiona el botón
+    modo = !modo;
+  if((millis() - startTime> openDelay)&&modo){ // Entro en modo automático y muevo el servo cada openDelay
+    startTime = millis();
+    stateServo = !stateServo;
+    ang = maxAng*stateServo;
+  }
+  else if(!modo){ //Convierto el 
+    int raw = analogRead(POT_PIN); //Lectura del valor del potenciometro
+    ang = map(raw, 0, 4095, 0, maxAng); //conversión a ángulo
+  }
+  if (lastAngle < 0 || abs(ang - lastAngle) >= THRESH) { //Solo mando al otro módulo si hay una variación de THRESH en el ángulo (evita el ruido)
+    lastAngle = ang;
+    sendAngle(ang);
+  }
 
-      if ((millis() - lastOLED >= 200)&&deviceConnected) { //Actualizo la información del display OLED cada 200 ms
-        lastOLED = millis();
-        drawOLED();
-      }
+  if ((millis() - lastOLED >= 200)&&deviceConnected) { //Actualizo la información del display OLED cada 200 ms
+    lastOLED = millis();
+    drawOLED();
+  }
 
-      delay(20); //Tiempo de espera mínimo entre cada ciclo
-    }</code></pre>
+  delay(20); //Tiempo de espera mínimo entre cada ciclo
+}</code>
+</pre>
     <p class="text-justify">
       Con esto ya tenemos el software del módulo de control listo ahora pasamos a implementar el del módulo de la válvula.
     </p>
     <h7 class="mb-3">Módulo de la válvula: comunicación BLE</h7>
 
     <p class="tex">Al igual que para el módulo de control necesitamos definir toda la configuración de comunicación por BLE, la funciones de callback, el control de conectividad y el parseo de los datos recibidos.</p>
-    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
-    <code class="language-arduino">#include &ltArduino.h>
-    #include &ltBLEDevice.h>
-    #include &ltBLEClient.h>
-    #include &ltBLEUtils.h>
-    #include &ltBLEScan.h>
-    #include &ltBLEAdvertisedDevice.h>
-    // ------------------- Paquete de datos -------------------
-    typedef struct __attribute__((packed)) {
-      uint8_t  type;  // 0 = ANGULO, 1 = NIVEL AGUA
-      uint16_t data;  // 0–180 o 0–4095 según type
-    } Message;
-    // ------------------- UUIDs (MISMOS QUE EN CONTROL) -------------------
-    #define SERVICE_UUID           "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
-    #define CHARACTERISTIC_UUID_RX "6E400002-B5A3-F393-E0A9-E50E24DCCA9E" // cliente -> servidor (WRITE)
-    #define CHARACTERISTIC_UUID_TX "6E400003-B5A3-F393-E0A9-E50E24DCCA9E" // servidor -> cliente (NOTIFY)
+  <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+<code class="language-arduino">#include &ltArduino.h>
+#include &ltBLEDevice.h>
+#include &ltBLEClient.h>
+#include &ltBLEUtils.h>
+#include &ltBLEScan.h>
+#include &ltBLEAdvertisedDevice.h>
+// ------------------- Paquete de datos -------------------
+typedef struct __attribute__((packed)) {
+  uint8_t  type;  // 0 = ANGULO, 1 = NIVEL AGUA
+  uint16_t data;  // 0–180 o 0–4095 según type
+} Message;
+// ------------------- UUIDs (MISMOS QUE EN CONTROL) -------------------
+#define SERVICE_UUID           "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
+#define CHARACTERISTIC_UUID_RX "6E400002-B5A3-F393-E0A9-E50E24DCCA9E" // cliente -> servidor (WRITE)
+#define CHARACTERISTIC_UUID_TX "6E400003-B5A3-F393-E0A9-E50E24DCCA9E" // servidor -> cliente (NOTIFY)
 
-    // ------------------- VARIABLES BLE -------------------
-    static BLEAddress*          pServerAddress = nullptr;
-    static bool                 deviceConnected = false;
-    static bool                 doScan = true;
+// ------------------- VARIABLES BLE -------------------
+static BLEAddress*          pServerAddress = nullptr;
+static bool                 deviceConnected = false;
+static bool                 doScan = true;
 
-    BLERemoteCharacteristic*    pRemoteTxCharacteristic = nullptr; // para NOTIFY (ángulo)
-    BLERemoteCharacteristic*    pRemoteRxCharacteristic = nullptr; // para WRITE (nivel)
+BLERemoteCharacteristic*    pRemoteTxCharacteristic = nullptr; // para NOTIFY (ángulo)
+BLERemoteCharacteristic*    pRemoteRxCharacteristic = nullptr; // para WRITE (nivel)
 
-    //Frecuencia de comunicación
-    unsigned long lastSend = 0;
-    const unsigned long SEND_INTERVAL = 200; // ms
+//Frecuencia de comunicación
+unsigned long lastSend = 0;
+const unsigned long SEND_INTERVAL = 200; // ms
 
-    // ----------- CALLBACK: Notificación desde el servidor (ángulo) -----------
-    static void notifyCallback(
-      BLERemoteCharacteristic* pBLERemoteCharacteristic,
-      uint8_t* pData,
-      size_t length,
-      bool isNotify
-    ) {
-      if (length != sizeof(Message)) return;
+// ----------- CALLBACK: Notificación desde el servidor (ángulo) -----------
+static void notifyCallback(
+  BLERemoteCharacteristic* pBLERemoteCharacteristic,
+  uint8_t* pData,
+  size_t length,
+  bool isNotify
+) {
+  if (length != sizeof(Message)) return;
 
-      Message msg;
-      memcpy(&msg, pData, sizeof(Message));
+  Message msg;
+  memcpy(&msg, pData, sizeof(Message));
 
-      if (msg.type == 0) {  // ANGULO
-        int ang = msg.data;
-        if (ang < 0)   ang = 0;
-        if (ang > 180) ang = 180;
-        targetAngle = ang;
-        Serial.printf("Ángulo recibido (BLE): %d°\n", ang);
-      }
+  if (msg.type == 0) {  // ANGULO
+    int ang = msg.data;
+    if (ang < 0)   ang = 0;
+    if (ang > 180) ang = 180;
+    targetAngle = ang;
+    Serial.printf("Ángulo recibido (BLE): %d°\n", ang);
+  }
+}
+
+// ----------- CALLBACKS DEL CLIENTE (conexión / desconexión) -----------
+class MyClientCallbacks : public BLEClientCallbacks {
+  void onConnect(BLEClient* pClient) override {
+    Serial.println("Conectado a VALVE_CONTROL");
+    deviceConnected = true;
+  }
+
+  void onDisconnect(BLEClient* pClient) override {
+    Serial.println("Desconectado de VALVE_CONTROL");
+    deviceConnected = false;
+    doScan = true;  // volver a escanear
+  }
+};
+
+// ----------- CALLBACK SCAN: Buscar "VALVE_CONTROL" -----------
+class MyAdvertisedDeviceCallbacks : public BLEAdvertisedDeviceCallbacks {
+  void onResult(BLEAdvertisedDevice advertisedDevice) override {
+    // Buscamos por nombre, tal como se configuró en el servidor
+    String name = advertisedDevice.getName();
+    if (name == "VALVE_CONTROL") {
+      Serial.print("Encontrado servidor: ");
+      Serial.println(name.c_str());
+
+      // Guardamos la dirección y paramos el scan
+      pServerAddress = new BLEAddress(advertisedDevice.getAddress());
+      advertisedDevice.getScan()->stop();
+      doScan = false;
     }
+  }
+};
 
-    // ----------- CALLBACKS DEL CLIENTE (conexión / desconexión) -----------
-    class MyClientCallbacks : public BLEClientCallbacks {
-      void onConnect(BLEClient* pClient) override {
-        Serial.println("Conectado a VALVE_CONTROL");
-        deviceConnected = true;
-      }
+// ----------- CONECTAR AL SERVIDOR VALVE_CONTROL -----------
+bool connectToServer() {
+  if (!pServerAddress) {
+    Serial.println("No tengo direccion del servidor aún");
+    return false;
+  }
 
-      void onDisconnect(BLEClient* pClient) override {
-        Serial.println("Desconectado de VALVE_CONTROL");
-        deviceConnected = false;
-        doScan = true;  // volver a escanear
-      }
-    };
+  Serial.print("Conectando a servidor BLE en: ");
+  Serial.println(pServerAddress->toString().c_str());
 
-    // ----------- CALLBACK SCAN: Buscar "VALVE_CONTROL" -----------
-    class MyAdvertisedDeviceCallbacks : public BLEAdvertisedDeviceCallbacks {
-      void onResult(BLEAdvertisedDevice advertisedDevice) override {
-        // Buscamos por nombre, tal como se configuró en el servidor
-        String name = advertisedDevice.getName();
-        if (name == "VALVE_CONTROL") {
-          Serial.print("Encontrado servidor: ");
-          Serial.println(name.c_str());
+  BLEClient* pClient = BLEDevice::createClient();
+  pClient->setClientCallbacks(new MyClientCallbacks());
 
-          // Guardamos la dirección y paramos el scan
-          pServerAddress = new BLEAddress(advertisedDevice.getAddress());
-          advertisedDevice.getScan()->stop();
-          doScan = false;
-        }
-      }
-    };
+  if (!pClient->connect(*pServerAddress)) {
+    Serial.println("Fallo al conectar :(");
+    return false;
+  }
 
-    // ----------- CONECTAR AL SERVIDOR VALVE_CONTROL -----------
-    bool connectToServer() {
-      if (!pServerAddress) {
-        Serial.println("No tengo direccion del servidor aún");
-        return false;
-      }
+  Serial.println("Conectado, buscando servicio...");
 
-      Serial.print("Conectando a servidor BLE en: ");
-      Serial.println(pServerAddress->toString().c_str());
+  BLERemoteService* pRemoteService = pClient->getService(SERVICE_UUID);
+  if (pRemoteService == nullptr) {
+    Serial.println("No se encontró el servicio UART en el servidor");
+    pClient->disconnect();
+    return false;
+  }
 
-      BLEClient* pClient = BLEDevice::createClient();
-      pClient->setClientCallbacks(new MyClientCallbacks());
+  // Característica TX (servidor -> cliente) : notify (ángulo)
+  pRemoteTxCharacteristic = pRemoteService->getCharacteristic(CHARACTERISTIC_UUID_TX);
+  if (pRemoteTxCharacteristic == nullptr) {
+    Serial.println("No se encontró la característica TX");
+    pClient->disconnect();
+    return false;
+  }
 
-      if (!pClient->connect(*pServerAddress)) {
-        Serial.println("Fallo al conectar :(");
-        return false;
-      }
+  // Característica RX (cliente -> servidor) : write (nivel)
+  pRemoteRxCharacteristic = pRemoteService->getCharacteristic(CHARACTERISTIC_UUID_RX);
+  if (pRemoteRxCharacteristic == nullptr) {
+    Serial.println("No se encontró la característica RX");
+    pClient->disconnect();
+    return false;
+  }
 
-      Serial.println("Conectado, buscando servicio...");
+  // Activar notificaciones de TX (ángulo)
+  if (pRemoteTxCharacteristic->canNotify()) {
+    pRemoteTxCharacteristic->registerForNotify(notifyCallback);
+  }
 
-      BLERemoteService* pRemoteService = pClient->getService(SERVICE_UUID);
-      if (pRemoteService == nullptr) {
-        Serial.println("No se encontró el servicio UART en el servidor");
-        pClient->disconnect();
-        return false;
-      }
+  Serial.println("Servicio y características configurados correctamente");
+  deviceConnected = true;
+  return true;
+}
 
-      // Característica TX (servidor -> cliente) : notify (ángulo)
-      pRemoteTxCharacteristic = pRemoteService->getCharacteristic(CHARACTERISTIC_UUID_TX);
-      if (pRemoteTxCharacteristic == nullptr) {
-        Serial.println("No se encontró la característica TX");
-        pClient->disconnect();
-        return false;
-      }
+// ----------- ENVIAR NIVEL DEL AGUA AL CONTROL -----------
+void sendWaterLevel() {
+  if (!deviceConnected || pRemoteRxCharacteristic == nullptr) return;
 
-      // Característica RX (cliente -> servidor) : write (nivel)
-      pRemoteRxCharacteristic = pRemoteService->getCharacteristic(CHARACTERISTIC_UUID_RX);
-      if (pRemoteRxCharacteristic == nullptr) {
-        Serial.println("No se encontró la característica RX");
-        pClient->disconnect();
-        return false;
-      }
+  uint16_t raw = analogRead(LEVEL_PIN); // 0–4095
 
-      // Activar notificaciones de TX (ángulo)
-      if (pRemoteTxCharacteristic->canNotify()) {
-        pRemoteTxCharacteristic->registerForNotify(notifyCallback);
-      }
+  Message msg;
+  msg.type = 1;    // NIVEL AGUA
+  msg.data = raw;
 
-      Serial.println("Servicio y características configurados correctamente");
-      deviceConnected = true;
-      return true;
-    }
-
-    // ----------- ENVIAR NIVEL DEL AGUA AL CONTROL -----------
-    void sendWaterLevel() {
-      if (!deviceConnected || pRemoteRxCharacteristic == nullptr) return;
-
-      uint16_t raw = analogRead(LEVEL_PIN); // 0–4095
-
-      Message msg;
-      msg.type = 1;    // NIVEL AGUA
-      msg.data = raw;
-
-      pRemoteRxCharacteristic->writeValue((uint8_t*)&msg, sizeof(msg), false);
-      float pct = (raw / 4095.0f) * 100.0f;
-      Serial.printf("Nivel enviado: raw=%u (%.1f%%)\n", raw, pct);
-    }</code></pre>   
+  pRemoteRxCharacteristic->writeValue((uint8_t*)&msg, sizeof(msg), false);
+  float pct = (raw / 4095.0f) * 100.0f;
+  Serial.printf("Nivel enviado: raw=%u (%.1f%%)\n", raw, pct);
+}</code>
+</pre>   
     <h7 class="mb-3">Módulo de la válvula: servomotor y nivel del agua</h7>
     <p class="text-justify">
       En este módulo necesitamos controlar el servomotor, para usamos la librería ESP32Servo.h. El sensado del nivel del agua es igual al sensado de la posición del potenciómetro en el módulo de control, la perilla del potenciómetro iría conectada a una varilla con un flotador en la punta y a medida que el nivel del agua sube gira la perilla del potenciómetro
       y con esto podemos estimar el nivel.
     </p>
-    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
-    <code class="language-arduino">#include &ltESP32Servo.h>
-    #define SERVO_PIN   6   // AJUSTAR PIN DEL SERVO
-    #define LEVEL_PIN   3   // AJUSTAR PIN ADC DEL SENSOR DE NIVEL</code></pre> 
+  <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+<code class="language-arduino">#include &ltESP32Servo.h>
+#define SERVO_PIN   6   // AJUSTAR PIN DEL SERVO
+#define LEVEL_PIN   3   // AJUSTAR PIN ADC DEL SENSOR DE NIVEL
+</code>
+  </pre> 
 
-    <h7 class="mb-3">Módulo de la válvula: setup()</h7>
-    <p class="text-justify">
-      Una vez tenemos definidas todas las funciones y variables a utilizar pasamos inicializar el módulo en la función <i>setup()</i>
-    </p>
+  <h7 class="mb-3">Módulo de la válvula: setup()</h7>
+  <p class="text-justify">
+    Una vez tenemos definidas todas las funciones y variables a utilizar pasamos inicializar el módulo en la función <i>setup()</i>
+  </p>
 
-    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
-    <code class="language-arduino">void setup() {
-      Serial.begin(115200);
-      delay(1500);
+<pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+<code class="language-arduino">void setup() {
+  Serial.begin(115200);
+  delay(1500);
 
-      // Servo
-      valveServo.attach(SERVO_PIN);
-      valveServo.write(0);
+  // Servo
+  valveServo.attach(SERVO_PIN);
+  valveServo.write(0);
 
-      // ADC
-      analogReadResolution(12);
+  // ADC
+  analogReadResolution(12);
 
-      // BLE CLIENT
-      BLEDevice::init("VALVE_SERVO"); // nombre del cliente (solo informativo)
-      
-      BLEScan* pScan = BLEDevice::getScan();
-      pScan->setAdvertisedDeviceCallbacks(new MyAdvertisedDeviceCallbacks());
-      pScan->setInterval(1349);
-      pScan->setWindow(449);
-      pScan->setActiveScan(true);
+  // BLE CLIENT
+  BLEDevice::init("VALVE_SERVO"); // nombre del cliente (solo informativo)
+  
+  BLEScan* pScan = BLEDevice::getScan();
+  pScan->setAdvertisedDeviceCallbacks(new MyAdvertisedDeviceCallbacks());
+  pScan->setInterval(1349);
+  pScan->setWindow(449);
+  pScan->setActiveScan(true);
 
-      Serial.println("Escaneando VALVE_CONTROL...");
-      pScan->start(5, false);  // 5 segundos, no continuar tras callback
+  Serial.println("Escaneando VALVE_CONTROL...");
+  pScan->start(5, false);  // 5 segundos, no continuar tras callback
 
-      // Si lo encuentra, doScan se pone en false y pServerAddress se setea
-      // Intentamos conectar
-      if (pServerAddress != nullptr) {
-        connectToServer();
-      } else {
-        Serial.println("No se encontró VALVE_CONTROL en el primer scan");
-      }
-    }</code></pre> 
+  // Si lo encuentra, doScan se pone en false y pServerAddress se setea
+  // Intentamos conectar
+  if (pServerAddress != nullptr) {
+    connectToServer();
+  } else {
+    Serial.println("No se encontró VALVE_CONTROL en el primer scan");
+  }
+}</code>
+  </pre> 
     <h7 class="mb-3">Módulo de la válvula: loop()</h7>
     <p class="text-justify">
       Finalmente pasamos a definir la rutina del loop del módulo dónde se busca activamente la conexión con le módulo de control, se controla el servomotor en función del ángulo recibido y se envía el nivel de agua sensado.
     </p>
-    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
-    <code class="language-arduino">void loop() {
-      // Si no estamos conectados y necesitamos escanear de nuevo
-      if (!deviceConnected && doScan) {
-        BLEScan* pScan = BLEDevice::getScan();
-        Serial.println("Re-escanenando VALVE_CONTROL...");
-        pScan->start(5, false);
+  <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+<code class="language-arduino">void loop() {
+  // Si no estamos conectados y necesitamos escanear de nuevo
+  if (!deviceConnected && doScan) {
+    BLEScan* pScan = BLEDevice::getScan();
+    Serial.println("Re-escanenando VALVE_CONTROL...");
+    pScan->start(5, false);
 
-        if (pServerAddress != nullptr) {
-          connectToServer();
-        }
-      }
+    if (pServerAddress != nullptr) {
+      connectToServer();
+    }
+  }
 
-      // Mover servo hacia el último ángulo recibido
-      valveServo.write(targetAngle);
+  // Mover servo hacia el último ángulo recibido
+  valveServo.write(targetAngle);
 
-      // Enviar periódicamente el nivel del agua al control
-      unsigned long now = millis();
-      if (deviceConnected && (now - lastSend >= SEND_INTERVAL)) {
-        lastSend = now;
-        sendWaterLevel();
-      }
+  // Enviar periódicamente el nivel del agua al control
+  unsigned long now = millis();
+  if (deviceConnected && (now - lastSend >= SEND_INTERVAL)) {
+    lastSend = now;
+    sendWaterLevel();
+  }
 
-      delay(10);
-    }</code></pre>
+  delay(10);
+}</code>
+  </pre>
 
     <p class="text-justify">
       Con esto tenemos implementados tanto el firmware del módulo de control cómo el de la válvula, el cual nos permite establecer una comunicación entre los módulos y controlar el servomotor de forma remota. El siguiente paso es el diseño de la transmisión del servomotor a la llave de paso, para eso utilizaremos las herramientas de diseño 3D vistas en módulos anteriores.
@@ -735,7 +744,7 @@ void loop()
     
     <h5 class="mb-3">Conclusiones</h5>
     <p class="text-justify">
-      Se logró implementar un sistema capaz de controlar una llave de paso de agua como una solución a un problema real.
+      Se logró implementar un sistema capaz de controlar una llave de paso de agua como una solución a un problema real. Se puede acceder a la repo del proyecto desde el siguiente enlace <a href="https://github.com/renatososa/valveControl">valveControl</a>.
     </p>
   </div>
 </section>
