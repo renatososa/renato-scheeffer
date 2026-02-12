@@ -29,12 +29,12 @@
         <p class="text-justify">
           Para poder controlar el servomotor debemos generar la señal de PWM correspondiente al ángulo que deseamos que gire, una de las formas de generar esta señal es utilizando un microcontrolador.
           Para este ejercicio el microcontrolador que voy a utilizar es un Arduino UNO. A este lo podemos programar y utilizando librerías ya implementadas podemos indicarle un ángulo y nos generar el PWM correspondiente de forma automática.
-          Ahora que tenemos una forma de convertir ángulos a PWM es necesario implementar una forma física externa a lo digital para indicarle al Arduino qué ángulo quiero setear, para esto vamos a utilizar un potenciometro
+          Ahora que tenemos una forma de convertir ángulos a PWM es necesario implementar una forma física externa a lo digital para indicarle al Arduino qué ángulo quiero setear, para esto vamos a utilizar un potenciómetro
           haciendo uso de las entradas analógicas del Arduino podemos identificar la posición de la perilla del mismo en función de la caída de tensión que hay en este. 
           </p>
           <p class="text-justify">
           Otra característica para agregar al sistema es que pueda conmutar 
-          de un modo manual controlado por el potenciometro a un modo automático que se mueva de 0° a 180° cada algunos segundos, para implementar este cambio de modo hacemos uso de un pulsador y la lectura de un pin digital del Arduino que se va a encargar de
+          de un modo manual controlado por el potenciómetro a un modo automático que se mueva de 0° a 180° cada algunos segundos, para implementar este cambio de modo hacemos uso de un pulsador y la lectura de un pin digital del Arduino que se va a encargar de
           sensar cuándo es presionado el pulsador. Por último vamos a implementar un señalización del estado actual del sistema a traves de un LED que si el sistema está en modo manual este se queda apagado y si está en modo automático se enciende.
         </p>
         <h6 class="mb-3">Implementación/simulación</h6>
@@ -44,7 +44,7 @@
             <ol>
               <li>Arduino UNO</li>
               <li>Servomotor</li>
-              <li>Potenciometro</li>
+              <li>Potenciómetro</li>
               <li>Pulsador</li>
               <li>LED</li>
               <li>Resistencia</li>
@@ -65,7 +65,7 @@
         <li>Pin Digital 2: LED</li>
         <li>Pin Digital 3: Pulsador</li>
         <li>Pin Digital 6: PWM servomotor</li>
-        <li>Pin Analógico A5: punto medio potenciometro</li>
+        <li>Pin Analógico A5: punto medio potenciómetro</li>
         <li>Pin 5V: alimentación de 5 V</li>
         <li>Pin GND: alimentación GND</li>
       </ol>
@@ -79,10 +79,10 @@
     <h7 class="mb-3">Programación</h7>
 
     <p class="text-justify">
-      Cómo mencionaba anteriormente para poder controlar anteriormente necesitamos programar el Arduino UNO para que interprete la posición del potenciomentro y genera la señal PWM para el servomotor
+      Cómo mencionaba anteriormente para poder controlar anteriormente necesitamos programar el Arduino UNO para que interprete la posición del potenciómetro y genera la señal PWM para el servomotor
       para eso usamos una variante del lenguaje de programación C++ que nos permite darle órdenes al Arduino. A lo primero que vamos a hacer es incluir las librería <a href="https://docs.arduino.cc/libraries/servo/">Servo.h</a> que nos permite 
       controlar el servomotor de forma sencilla. Lo siguiente es nombrar de forma sencilla los pines que vamos a utilizar en este caso el 2, 3, 6 y A5. Luego declaramos las variables que vamos a utilizar en nuestro código que nos permiten almacenar valores como por ejemplo 
-      potValue para guardar el valor del potenciometro en un instante o state que guarda en que estado estoy actualmente.
+      potValue para guardar el valor del potenciómetro en un instante o state que guarda en que estado estoy actualmente.
     </p>
     <p class="text-justify"> 
       Una vez definidas estas constantes y variables debemos definir la función setup() del Arduino, esta es fundamental ya que se ejecuta cuando se enciende el Arduino UNO y lo configura para que funcione correctamente, por ejemplo le dice al pin 2 usado para el LED que va a 
@@ -169,55 +169,574 @@ void loop()
         </p>
         <p class="text-justify">
         Dado que queremos controlar el flujo de agua del tanque una forma sencilla sería controlar la posición de una llave de paso de agua convencional diseñando un sistema de engranajes que
-        transmita el movimiento del servomotor a la llave de paso. A su vez, dado que vamos a tener información del nivel de agua del reservorio ya no podemos solo usar un LED, por lo tanto, se utilizará una pantalla OLED de 0.96" para mostrar esta información, el ángulo seteado en el potenciometro y el modo actual del sistema.
+        transmita el movimiento del servomotor a la llave de paso. A su vez, dado que vamos a tener información del nivel de agua del reservorio ya no podemos solo usar un LED, por lo tanto, se utilizará una pantalla OLED de 0.96" para mostrar esta información, el ángulo seteado en el potenciómetro y el modo actual del sistema.
       </p>
       <h7 class="mb-3">Materiales</h7>
-
       <p class="text-justify">
-        A los materiales a utilizar los podemos separar en dos, por un lado, el microcontrolador con los actuadores y sensores. Por otro lado, los componentes referidos a la alimentación.
-      </p>
-      <p class="text-justify">
+        Materiales fundamentales del proyecto
         <ol>
-          <li>ESP32-C3 super mini: microcontrolador.</li>
+          <li>2 ESP32-C3 super mini: microcontrolador.</li>
           <li>Servomotor MG996: servomotor de alto torque.</li>
-          <li>Potenciometro.</li>
+          <li>Potenciómetro.</li>
           <li>Pantalla OLED 0.96"</li>
           <li>Llave de paso convencional.</li>
         </ol>
+        En la Figura 3 se puede observar imágenes de los componentes reales.
       </p>
-      <h7 class="mb-3">Conexiones eléctricas</h7>
-      
-      
-      <h6 class="mb-3">Implementación</h6>
-        <h7 class="mb-3">Comunicación vía BLE</h7>
-        <h7 class="mb-3">Envío de comandos entre Controlador y Actuador</h7>
-        <h7 class="mb-3">Implementación de display</h7>
-        <h7 class="mb-3">Gestión de alimentación</h7>
-        <h7 class="mb-3">Diseño mecánico del sistema</h7>
-          <ul>
-            <li>
-              Modelado de la válvula (llave de paso).
-            </li>
-            <li>
-              Modelado del soporte que une servomotor con la válvula.
-            </li>
-            <li>
-              Modelado del sensor de nivel.
-            </li>
-          </ul>
-        <p class="text-justify">
-        
-        </p>
-      <h5 class="mb-3">Conclusiones</h5>
-        <p class="text-justify">
-        
-        </p>
-
-    
-    <figure class="figure">
-      <img src="img/MT03/parametros.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
-      <figcaption class="figure-caption text-center">Figura 1: parametros para el diseño del packaging.</figcaption>
+      <figure class="figure">
+      <img src="img/MT04/micro.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 3: componentes fundamentales para el sistema.</figcaption>
+      </figure>
+      <p class="text-justify">
+        Materiales para las fuentes de alimentación, se pueden intercambiar por otros de mismas características.
+        <ol>
+          <li>Cargador y STEP-UP de 5V.</li>
+          <li>STEP-DOWN LM2596.</li>
+          <li>Portapilas 2S 18650.</li>
+          <li>Batería LiPo 3.7V genérica.</li>
+          <li>2 baterías de LiPo 18650.</li>
+        </ol>
+        En la Figura 4 se puede observar imágenes de los componentes reales.
+      </p>
+      <figure class="figure">
+      <img src="img/MT04/alimentacion.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 4: componentes de las fuentes de alimentación.</figcaption>
     </figure>
+      <h7 class="mb-3">Conexiones eléctricas</h7>
+      <p class="text-justify">
+        Visto todo lo anterior en la construcción del sistema se tendrán dos módulos, uno de control con con un ESP32-C3, una pantalla OLED de 0.96" que informa al usuario, un potenciómetro para ajustar el ángulo manualmente y un botón pulsador para cambiar de modo; y otro módulo de la válvula con un ESP32-C3, el Servomotor MG996 y un potenciómetro para sensar el nivel del agua.
+        Para esquematizar las conexiones de los distintos componentes se utilizó el software gratuito <a href="https://www.kicad.org/">KiCAD</a> en la Figura 5 se muestra el esquema correspondientes al módulo de control. Y en la Figura 6 el esquema del módulo de la válvula.
+      </p>
+      <figure class="figure">
+      <img src="img/MT04/esquema_control.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 5: esquemático del módulo de control.</figcaption>
+    </figure>
+    <figure class="figure">
+      <img src="img/MT04/esquema_valvula.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 6: esquemático del módulo de la válvula.</figcaption>
+    </figure>
+    
+      <h6 class="mb-3">Implementación del Hardware</h6>
+      <h7 class="mb-3">Soldado de los componentes de cada módulo</h7>
+      <p class="text-justify">
+        Para implementar el sistema físico y hacer la conexión de los distintos componentes se utilizaron placas perforadas para prototipado, esta placa permite soldar los componentes y conectarlo con cables soldados. En la Figura 7 y 8 se puede observar los componentes ya soldados del módulo de control y de la válvula respectivamente.
+      </p>
+    <figure class="figure">
+      <img src="img/MT04/soldado_control.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 7: prototipo soldado del módulo de control.</figcaption>
+    </figure>
+    <figure class="figure">
+      <img src="img/MT04/esquema_valvula.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 8: prototipo soldado del módulo de la válvula.</figcaption>
+    </figure>
+
+    <h6 class="mb-3">Implementación del Software</h6>
+    <p class="text-justify">
+      Ahora que tenemos todos los componentes conectados y en su lugar, procedemos a implementar el código de se ejecutará en cada ESP32 para intercambiar información y mostrar al usuario. Parte del algoritmo lo podemos reutilizar de la simulación que se hizo inicialmente en este Módulo, pero el resto debemos implementarlo. Esta sección de la documentación quedará dividida por módulo y por tópico, es decir,
+      una sección para el módulo de control y sub secciones para cada tópico cómo por ejemplo comunicación, sensado y control de la pantalla OLED.
+    </p>
+    <h7 class="mb-3">Módulo de control: gestión de la pantalla</h7>
+    <p class="text-justify">
+      Cómo se mencionaba anteriormente en esta implementación un LED no es suficiente para mostrarle toda la información al usuaria por eso se decidió utilizar una pantalla OLED que nos permite mostrar mayor cantidad de información. 
+      La comunicación entre la pantalla y el ESP32 se hace a traves del protocolo I2C y haciendo uso de la librería <a href="https://github.com/olikraus/u8g2">U8g2lib.h</a>.
+    </p>
+
+    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+    <code class="language-arduino">#include &ltU8g2lib.h>
+    #include &ltWire.h> 
+    // OLED I2C
+    U8G2_SH1106_128X64_NONAME_F_HW_I2C display(U8G2_R0, U8X8_PIN_NONE);
+
+    // Pines I2C para ESP32-C3
+    #define OLED_SDA 8
+    #define OLED_SCL 9
+    unsigned long lastOLED = 0; // Variable auxiliar para actualizar display
+    void drawOLED() {
+    display.clearBuffer();
+    float pct = (waterRaw / 4095.0f) * 100.0f;
+    display.setFont(u8g2_font_6x12_tf);
+    if(modo){
+      display.setCursor(1, 12);
+      float remening = (openDelay - (millis() - startTime));
+      display.printf("Automatico: %.1f s", remening/1000);
+    }
+    else
+      display.drawStr(1, 12, "Manual");
+    // Ángulo
+    display.setCursor(1, 28);
+    display.printf("Ang: %3d%c", currentAngle, '°');
+
+    // Nivel
+    display.setCursor(1, 42);
+    display.printf("Nivel: %5.1f%%", pct);
+
+    // Barra de nivel
+    int barW = 120;
+    int fill = (int)(barW * pct / 100.0);
+    display.drawFrame(1, 48, barW, 14);
+    display.drawBox(2, 49, fill, 12);
+
+    display.sendBuffer();
+    }</code></pre>
+    
+    <p class="text-justify">
+    En este código incorporamos la librería de manejo de la pantalla OLED y definimos la función <i>drawOLED()</i> que se encarga de dibujar la interfaz del usuario y actualizar el ángulo y el nivel del agua.
+    </p>
+    <h7 class="mb-3">Módulo de control: comunicación Bluetooth</h7>
+    <p class="text-justify">
+      Cómo se mencionó anteriormente la comunicación entre los módulos será inalámbrica por BLE, el módulo de control se encargará de enviar el valor del ángulo a setearse en el servomotor y recibe el nivel del agua
+      sensado por el otro módulo. Para esto es necesario definir funciones de callback encargadas de ejecutar tareas cuando se tiene que enviar o recibir datos.  
+    </p>
+    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+    <code class="language-arduino">#include &ltBLEDevice.h>
+    #include &ltBLEServer.h>
+    #include &ltBLEUtils.h>
+    #include &ltBLE2902.h>
+    // ------------------- paquete de datos -------------------
+    typedef struct __attribute__((packed)) {
+      uint8_t  type;   // 0 = ANGULO, 1 = NIVEL AGUA
+      uint16_t data;   // 0–180 o 0–4095
+    } Message;
+
+    // ------------------- BLE: UUIDs tipo UART -------------------
+    #define SERVICE_UUID           "6E400001-B5A3-F393-E0A9-E50E24DCCA9E" // UART service
+    #define CHARACTERISTIC_UUID_RX "6E400002-B5A3-F393-E0A9-E50E24DCCA9E" // cliente -> servidor
+    #define CHARACTERISTIC_UUID_TX "6E400003-B5A3-F393-E0A9-E50E24DCCA9E" // servidor -> cliente
+
+    BLEServer*        pServer         = nullptr;
+    BLECharacteristic* pTxCharacteristic = nullptr; // para notificar ángulo al nodo servo
+    BLECharacteristic* pRxCharacteristic = nullptr; // para recibir nivel de agua
+    bool deviceConnected      = false;
+
+    // ------------------- CALLBACKS BLE -------------------
+    class MyServerCallbacks : public BLEServerCallbacks {
+      void onConnect(BLEServer* pServer) override {
+        deviceConnected = true;
+        Serial.println("Cliente BLE conectado");
+      }
+      void onDisconnect(BLEServer* pServer) override {
+        deviceConnected = false;
+        Serial.println("Cliente BLE desconectado, re-advertising...");
+        display.clearBuffer();
+        display.setFont(u8g2_font_6x12_tf);
+        display.drawStr(20, 28, "Desconectado...");
+        display.drawStr(20, 44, "Buscando...");
+        display.sendBuffer();
+        BLEDevice::startAdvertising();
+      }
+    };
+
+    class MyRxCallbacks : public BLECharacteristicCallbacks {
+      void onWrite(BLECharacteristic* pCharacteristic) override {
+        std::string rxValue = pCharacteristic->getValue();
+        if (rxValue.size() != sizeof(Message)) {
+          return;
+        }
+
+        Message msg;
+        memcpy(&msg, rxValue.data(), sizeof(Message));
+
+        if (msg.type == 1) {  // NIVEL DE AGUA
+          waterRaw = msg.data;
+          float pct = (waterRaw / 4095.0f) * 100.0f;
+          Serial.printf("Nivel recibido (BLE): raw=%u (%.1f%%)\n", waterRaw, pct);
+        }
+      }
+    };
+
+    // ------------------- ENVIAR ANGULO POR BLE -------------------
+    void sendAngle(int ang) {
+      if (!deviceConnected || pTxCharacteristic == nullptr) {
+        return; // si no hay cliente conectado, no hacemos nada
+      }
+
+      if (ang < 0)   ang = 0;
+      if (ang > 180) ang = 180;
+
+      Message msg;
+      msg.type = 0;      // ANGULO
+      msg.data = ang;
+
+      pTxCharacteristic->setValue((uint8_t*)&msg, sizeof(msg));
+      pTxCharacteristic->notify();   // notificar al cliente
+
+      currentAngle = ang;
+      Serial.printf("Ángulo enviado (BLE): %d°\n", ang);
+    }</code></pre>
+    <p class="text-justy">
+      Se implementa un control de conectividad entre los módulos, cuando se enciende el módulo de control este espera a que el módulo de la válvula se conecte para habilitar el
+      display y el ajuste del ángulo. Mientras espera la conexión muestra el mensaje "Conectando..." en el display.
+    </p>
+    <h7 class="mb-3">Módulo de control: modo y seteo del ángulo</h7>
+    <p class="text-justify">
+      Al igual que en la simulación para controlar el modo usamos un pulsador y para setear el ángulo un potenciómetro. Para esto debemos definir algunas variables previo al <i>setup()</i> para almacenar y gestionar estos datos.
+    </p>
+    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+    <code class="language-arduino">// Potenciómetro
+    #define POT_PIN 3  // AJUSTAR SEGÚN TU HARDWARE
+    int lastAngle = -1;
+    const int THRESH = 2;   // enviar solo si cambia ≥2°
+    int ang = 0;
+    volatile int currentAngle = 0;
+    volatile uint16_t waterRaw = 0;
+
+    // Control modo
+    #define pinBtnModo 6
+    #define openDelay 5000 //tiempo de apertura/cierre en modo automático en milisegundos
+    #define maxAng 180 //Ángulo máximo de rotación del servomotor en modo automático
+    bool modo = 0;
+    unsigned long int startTime = 0;
+    bool stateServo = 0;</code></pre>
+
+    <h7 class="mb-3">Módulo de control: setup</h7>
+    <p class="text-justify">
+      Una vez que tenemos definidos todos las variables y funciones necesarias es necesario definir la función <i>setup()</i> del firmware, en esta se inicializar todos los elementos como el servidor BLE,
+      el display OLED, el puerto Serial, el pin del botón pulsador, etc.
+    </p>
+    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+    <code class="language-arduino">void setup() {
+      Serial.begin(115200);
+      delay(1500);
+      pinMode(pinBtnModo, INPUT_PULLUP);
+      // I2C + OLED
+      Wire.begin(OLED_SDA, OLED_SCL);
+      display.begin();
+      display.clearBuffer();
+      display.setFont(u8g2_font_6x12_tf);
+      display.drawStr(20, 36, "Iniciando...");
+      display.sendBuffer();
+      delay(500);
+
+      analogReadResolution(12);
+
+      // ---- BLE SERVER ----
+      BLEDevice::init("VALVE_CONTROL"); 
+      pServer = BLEDevice::createServer();
+      pServer->setCallbacks(new MyServerCallbacks());
+
+      BLEService* pService = pServer->createService(SERVICE_UUID);
+
+      // TX: servidor -> cliente (notify) para ÁNGULO
+      pTxCharacteristic = pService->createCharacteristic(
+                            CHARACTERISTIC_UUID_TX,
+                            BLECharacteristic::PROPERTY_NOTIFY
+                          );
+      pTxCharacteristic->addDescriptor(new BLE2902());
+
+      // RX: cliente -> servidor (write) para NIVEL AGUA
+      pRxCharacteristic = pService->createCharacteristic(
+                            CHARACTERISTIC_UUID_RX,
+                            BLECharacteristic::PROPERTY_WRITE
+                          );
+      pRxCharacteristic->setCallbacks(new MyRxCallbacks());
+
+      pService->start();
+
+      BLEAdvertising* pAdvertising = BLEDevice::getAdvertising();
+      pAdvertising->addServiceUUID(SERVICE_UUID);
+      pAdvertising->setScanResponse(true);
+      pAdvertising->setMinPreferred(0x06);
+      pAdvertising->setMinPreferred(0x12);
+
+      BLEDevice::startAdvertising();
+      Serial.println("BLE listo, esperando cliente...");
+      display.clearBuffer();
+      display.setFont(u8g2_font_6x12_tf);
+      display.drawStr(20, 36, "Conectando...");
+      display.sendBuffer(); 
+    }</code></pre>
+    <h7 class="mb-3">Módulo de control: loop</h7>
+    <p class="text-justify">
+      Por último luego de que está todo inicializado en <i>setup()</i> procedemos a generar la rutina del <i>loop()</i>. Esta será muy similar a la de la simulación, se verifica si se presionó el botón para setear el modo
+      y si se está en modo automático se envía el ángulo 0 o maxAng cada openDelay, si se está en modo manual se envía el ángulo seteado por el potenciómetro entre 0 y maxAng si este cambia más de THRESH respecto al valor anterior. Por último se actualiza la información del display cada 200 ms para dar la sensación de fluides sin saturar el microcontrolador.
+    </p>
+    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+    <code class="language-arduino">void loop() {
+      if(!digitalRead(pinBtnModo)) //Chequeo si se presiona el botón
+        modo = !modo;
+      if((millis() - startTime> openDelay)&&modo){ // Entro en modo automático y muevo el servo cada openDelay
+        startTime = millis();
+        stateServo = !stateServo;
+        ang = maxAng*stateServo;
+      }
+      else if(!modo){ //Convierto el 
+        int raw = analogRead(POT_PIN); //Lectura del valor del potenciometro
+        ang = map(raw, 0, 4095, 0, maxAng); //conversión a ángulo
+      }
+      if (lastAngle < 0 || abs(ang - lastAngle) >= THRESH) { //Solo mando al otro módulo si hay una variación de THRESH en el ángulo (evita el ruido)
+        lastAngle = ang;
+        sendAngle(ang);
+      }
+
+      if ((millis() - lastOLED >= 200)&&deviceConnected) { //Actualizo la información del display OLED cada 200 ms
+        lastOLED = millis();
+        drawOLED();
+      }
+
+      delay(20); //Tiempo de espera mínimo entre cada ciclo
+    }</code></pre>
+    <p class="text-justify">
+      Con esto ya tenemos el software del módulo de control listo ahora pasamos a implementar el del módulo de la válvula.
+    </p>
+    <h7 class="mb-3">Módulo de la válvula: comunicación BLE</h7>
+
+    <p class="tex">Al igual que para el módulo de control necesitamos definir toda la configuración de comunicación por BLE, la funciones de callback, el control de conectividad y el parseo de los datos recibidos.</p>
+    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+    <code class="language-arduino">#include &ltArduino.h>
+    #include &ltBLEDevice.h>
+    #include &ltBLEClient.h>
+    #include &ltBLEUtils.h>
+    #include &ltBLEScan.h>
+    #include &ltBLEAdvertisedDevice.h>
+    // ------------------- Paquete de datos -------------------
+    typedef struct __attribute__((packed)) {
+      uint8_t  type;  // 0 = ANGULO, 1 = NIVEL AGUA
+      uint16_t data;  // 0–180 o 0–4095 según type
+    } Message;
+    // ------------------- UUIDs (MISMOS QUE EN CONTROL) -------------------
+    #define SERVICE_UUID           "6E400001-B5A3-F393-E0A9-E50E24DCCA9E"
+    #define CHARACTERISTIC_UUID_RX "6E400002-B5A3-F393-E0A9-E50E24DCCA9E" // cliente -> servidor (WRITE)
+    #define CHARACTERISTIC_UUID_TX "6E400003-B5A3-F393-E0A9-E50E24DCCA9E" // servidor -> cliente (NOTIFY)
+
+    // ------------------- VARIABLES BLE -------------------
+    static BLEAddress*          pServerAddress = nullptr;
+    static bool                 deviceConnected = false;
+    static bool                 doScan = true;
+
+    BLERemoteCharacteristic*    pRemoteTxCharacteristic = nullptr; // para NOTIFY (ángulo)
+    BLERemoteCharacteristic*    pRemoteRxCharacteristic = nullptr; // para WRITE (nivel)
+
+    //Frecuencia de comunicación
+    unsigned long lastSend = 0;
+    const unsigned long SEND_INTERVAL = 200; // ms
+
+    // ----------- CALLBACK: Notificación desde el servidor (ángulo) -----------
+    static void notifyCallback(
+      BLERemoteCharacteristic* pBLERemoteCharacteristic,
+      uint8_t* pData,
+      size_t length,
+      bool isNotify
+    ) {
+      if (length != sizeof(Message)) return;
+
+      Message msg;
+      memcpy(&msg, pData, sizeof(Message));
+
+      if (msg.type == 0) {  // ANGULO
+        int ang = msg.data;
+        if (ang < 0)   ang = 0;
+        if (ang > 180) ang = 180;
+        targetAngle = ang;
+        Serial.printf("Ángulo recibido (BLE): %d°\n", ang);
+      }
+    }
+
+    // ----------- CALLBACKS DEL CLIENTE (conexión / desconexión) -----------
+    class MyClientCallbacks : public BLEClientCallbacks {
+      void onConnect(BLEClient* pClient) override {
+        Serial.println("Conectado a VALVE_CONTROL");
+        deviceConnected = true;
+      }
+
+      void onDisconnect(BLEClient* pClient) override {
+        Serial.println("Desconectado de VALVE_CONTROL");
+        deviceConnected = false;
+        doScan = true;  // volver a escanear
+      }
+    };
+
+    // ----------- CALLBACK SCAN: Buscar "VALVE_CONTROL" -----------
+    class MyAdvertisedDeviceCallbacks : public BLEAdvertisedDeviceCallbacks {
+      void onResult(BLEAdvertisedDevice advertisedDevice) override {
+        // Buscamos por nombre, tal como se configuró en el servidor
+        String name = advertisedDevice.getName();
+        if (name == "VALVE_CONTROL") {
+          Serial.print("Encontrado servidor: ");
+          Serial.println(name.c_str());
+
+          // Guardamos la dirección y paramos el scan
+          pServerAddress = new BLEAddress(advertisedDevice.getAddress());
+          advertisedDevice.getScan()->stop();
+          doScan = false;
+        }
+      }
+    };
+
+    // ----------- CONECTAR AL SERVIDOR VALVE_CONTROL -----------
+    bool connectToServer() {
+      if (!pServerAddress) {
+        Serial.println("No tengo direccion del servidor aún");
+        return false;
+      }
+
+      Serial.print("Conectando a servidor BLE en: ");
+      Serial.println(pServerAddress->toString().c_str());
+
+      BLEClient* pClient = BLEDevice::createClient();
+      pClient->setClientCallbacks(new MyClientCallbacks());
+
+      if (!pClient->connect(*pServerAddress)) {
+        Serial.println("Fallo al conectar :(");
+        return false;
+      }
+
+      Serial.println("Conectado, buscando servicio...");
+
+      BLERemoteService* pRemoteService = pClient->getService(SERVICE_UUID);
+      if (pRemoteService == nullptr) {
+        Serial.println("No se encontró el servicio UART en el servidor");
+        pClient->disconnect();
+        return false;
+      }
+
+      // Característica TX (servidor -> cliente) : notify (ángulo)
+      pRemoteTxCharacteristic = pRemoteService->getCharacteristic(CHARACTERISTIC_UUID_TX);
+      if (pRemoteTxCharacteristic == nullptr) {
+        Serial.println("No se encontró la característica TX");
+        pClient->disconnect();
+        return false;
+      }
+
+      // Característica RX (cliente -> servidor) : write (nivel)
+      pRemoteRxCharacteristic = pRemoteService->getCharacteristic(CHARACTERISTIC_UUID_RX);
+      if (pRemoteRxCharacteristic == nullptr) {
+        Serial.println("No se encontró la característica RX");
+        pClient->disconnect();
+        return false;
+      }
+
+      // Activar notificaciones de TX (ángulo)
+      if (pRemoteTxCharacteristic->canNotify()) {
+        pRemoteTxCharacteristic->registerForNotify(notifyCallback);
+      }
+
+      Serial.println("Servicio y características configurados correctamente");
+      deviceConnected = true;
+      return true;
+    }
+
+    // ----------- ENVIAR NIVEL DEL AGUA AL CONTROL -----------
+    void sendWaterLevel() {
+      if (!deviceConnected || pRemoteRxCharacteristic == nullptr) return;
+
+      uint16_t raw = analogRead(LEVEL_PIN); // 0–4095
+
+      Message msg;
+      msg.type = 1;    // NIVEL AGUA
+      msg.data = raw;
+
+      pRemoteRxCharacteristic->writeValue((uint8_t*)&msg, sizeof(msg), false);
+      float pct = (raw / 4095.0f) * 100.0f;
+      Serial.printf("Nivel enviado: raw=%u (%.1f%%)\n", raw, pct);
+    }</code></pre>   
+    <h7 class="mb-3">Módulo de la válvula: servomotor y nivel del agua</h7>
+    <p class="text-justify">
+      En este módulo necesitamos controlar el servomotor, para usamos la librería ESP32Servo.h. El sensado del nivel del agua es igual al sensado de la posición del potenciómetro en el módulo de control, la perilla del potenciómetro iría conectada a una varilla con un flotador en la punta y a medida que el nivel del agua sube gira la perilla del potenciómetro
+      y con esto podemos estimar el nivel.
+    </p>
+    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+    <code class="language-arduino">#include &ltESP32Servo.h>
+    #define SERVO_PIN   6   // AJUSTAR PIN DEL SERVO
+    #define LEVEL_PIN   3   // AJUSTAR PIN ADC DEL SENSOR DE NIVEL</code></pre> 
+
+    <h7 class="mb-3">Módulo de la válvula: setup()</h7>
+    <p class="text-justify">
+      Una vez tenemos definidas todas las funciones y variables a utilizar pasamos inicializar el módulo en la función <i>setup()</i>
+    </p>
+
+    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+    <code class="language-arduino">void setup() {
+      Serial.begin(115200);
+      delay(1500);
+
+      // Servo
+      valveServo.attach(SERVO_PIN);
+      valveServo.write(0);
+
+      // ADC
+      analogReadResolution(12);
+
+      // BLE CLIENT
+      BLEDevice::init("VALVE_SERVO"); // nombre del cliente (solo informativo)
+      
+      BLEScan* pScan = BLEDevice::getScan();
+      pScan->setAdvertisedDeviceCallbacks(new MyAdvertisedDeviceCallbacks());
+      pScan->setInterval(1349);
+      pScan->setWindow(449);
+      pScan->setActiveScan(true);
+
+      Serial.println("Escaneando VALVE_CONTROL...");
+      pScan->start(5, false);  // 5 segundos, no continuar tras callback
+
+      // Si lo encuentra, doScan se pone en false y pServerAddress se setea
+      // Intentamos conectar
+      if (pServerAddress != nullptr) {
+        connectToServer();
+      } else {
+        Serial.println("No se encontró VALVE_CONTROL en el primer scan");
+      }
+    }</code></pre> 
+    <h7 class="mb-3">Módulo de la válvula: loop()</h7>
+    <p class="text-justify">
+      Finalmente pasamos a definir la rutina del loop del módulo dónde se busca activamente la conexión con le módulo de control, se controla el servomotor en función del ángulo recibido y se envía el nivel de agua sensado.
+    </p>
+    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+    <code class="language-arduino">void loop() {
+      // Si no estamos conectados y necesitamos escanear de nuevo
+      if (!deviceConnected && doScan) {
+        BLEScan* pScan = BLEDevice::getScan();
+        Serial.println("Re-escanenando VALVE_CONTROL...");
+        pScan->start(5, false);
+
+        if (pServerAddress != nullptr) {
+          connectToServer();
+        }
+      }
+
+      // Mover servo hacia el último ángulo recibido
+      valveServo.write(targetAngle);
+
+      // Enviar periódicamente el nivel del agua al control
+      unsigned long now = millis();
+      if (deviceConnected && (now - lastSend >= SEND_INTERVAL)) {
+        lastSend = now;
+        sendWaterLevel();
+      }
+
+      delay(10);
+    }</code></pre>
+
+    <p class="text-justify">
+      Con esto tenemos implementados tanto el firmware del módulo de control cómo el de la válvula, el cual nos permite establecer una comunicación entre los módulos y controlar el servomotor de forma remota. El siguiente paso es el diseño de la transmisión del servomotor a la llave de paso, para eso utilizaremos las herramientas de diseño 3D vistas en módulos anteriores.
+    </p>
+    
+    <h6 class="mb-3">Diseño 3D del acople entre el servomotor y la llave de paso</h6>
+    <p class="tex">
+      Para el diseño 3D del acople la idea es generar una estructura que contenga tanto al servomotor como a la llave de paso y nos permita ensamblar engranajes en los ejes de ambos para transmitir el movimiento del servomotor a la llave de paso. El software que se utilizó fue Fusion 360. Lo ideal para este caso sería tener un modelo 3D de los dos objetos que se quieren acoplar y sobre estos dibujar al estructura de acople, del servomotor se consiguió del siguiente enlace <a href="https://grabcad.com/library/servo-mg996r-3">Servomotor modelo 3D</a>. Para la llave de paso se tuvo
+      relevar las medidas y hacer un bosquejo en 3D con un formato aproximado. En la Figura 9 se puede observar el diseño realizado de la llave de paso y una foto de la llave real.
+    </p>
+    <figure class="figure">
+      <img src="img/MT04/valvula.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 9: diseño aproximado de la llave de paso y foto de la real.</figcaption>
+    </figure>
+    <p class="text-justify">
+      Ahora que tenemos tanto un modelo 3D del servomotor cómo una aproximación de la válvula procedemos al diseño del acople, para esto es importante considerar que la rotación del servomotor es de 180° y la de la válvula es de 90° lo cual es muy favorable ya que nos permite duplicar la fuerza del servomotor haciendo una relación de 2:1 en los engranajes siendo el de la llave de paso el más grande.
+      Ahora que sabemos al relación que vana  tener los engranajes para generar el modelo 3D de los mismos se utilizó la herramienta <a href="https://www.mcmaster.com/">McMaster-CARR</a> integrada en Fusión 360 que posee modelos de piezas mecánicas ya implementadas entre ellas engranajes de muchas medidas. Buscando entre los engranajes disponibles se busca alguno que tenga los dientes suficiente mente grandes cómo para que resista la fuerza aplicada considerando que será impreso en 3D con PLA. EL modelo elegido es el <b>6325k134 y el 6325k86</b>. Con los engranajes elegidos se posiciona el servomotor y la llave de paso para que quede el contacto perfecto entre los engranajes y se diseña la estructura de acople. EN la Figura 10 se puede observar la estructura de acople a la derecha y todo el modelado completo a la izquierda.
+    </p>
+    <figure class="figure">
+      <img src="img/MT04/acople.png" class="img-fluid me-2" alt="Imagen 1" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 10: diseño del acople.</figcaption>
+    </figure>
+    <h6 class="mb-3">Demostración del sistema funcionando</h6>
+    <p class="text-justify">
+      Para demostrar en funcionamiento del sistema se registró un video demostrativo.
+    </p>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/iFup-J87-vw?si=jk8DuKjLrC4Bfqfu" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    
+    <h5 class="mb-3">Conclusiones</h5>
+    <p class="text-justify">
+      Se logró implementar un sistema capaz de controlar una llave de paso de agua como una solución a un problema real.
+    </p>
   </div>
 </section>
 <script>
