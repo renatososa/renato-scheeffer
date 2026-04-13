@@ -108,23 +108,30 @@ function observeActiveHeadings(headings) {
   
     // Carpeta donde están los fragmentos HTML (ajustá si es necesario)
     const BASE = 'efdi/';
+    const pageMap = {
+      PI: 'PI.html'
+    };
   
     function setActive(h) {
       document.querySelectorAll('.toc-link')
         .forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + h));
     }
     function syncAccordion(h) {
-      // Inferir prefijo (MT/MD) y componer IDs
-      const pref = h.slice(0, 2); // 'MT', 'MD' o 'MI'
-      const accId = '#acc'+pref;
-      const targetCollapse = '#c' + h; // ej: #cMT01
+      const pref = h.startsWith('PI') ? 'PI' : h.slice(0, 2);
+      const collapseMap = {
+        MT: '#collapseMT',
+        MD: '#collapseMD',
+        MI: '#collapseMI',
+        PI: '#collapsePI'
+      };
+      const targetCollapse = collapseMap[pref];
 
       // Cerrar todos en ambos accordions
       document.querySelectorAll('.accordion-collapse.show')
         .forEach(el => bootstrap.Collapse.getOrCreateInstance(el).hide());
 
       // Abrir el que corresponde si existe
-      const el = document.querySelector(targetCollapse);
+      const el = targetCollapse ? document.querySelector(targetCollapse) : null;
       if (el) bootstrap.Collapse.getOrCreateInstance(el).show();
 
       // Marcar botón activo visualmente
@@ -137,9 +144,10 @@ function observeActiveHeadings(headings) {
       const h = location.hash.slice(1) || 'MT01'; // default
       setActive(h);
       syncAccordion(h);
-      const path = `${BASE}${h}.html`;
+      const filename = pageMap[h] || `${h}.html`;
+      const path = `${BASE}${filename}`;
       try {
-        const url = new URL(path, window.location); // relativo a efdi.html
+        const url = new URL(`./${path}`, window.location.href);
         const res = await fetch(url, { cache: 'no-store' });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         area.innerHTML = await res.text();

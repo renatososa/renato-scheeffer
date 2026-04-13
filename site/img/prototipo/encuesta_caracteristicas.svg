@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="560" viewBox="0 0 980 560">
+<rect width="100%" height="100%" fill="#fcfbf8"/>
+<text x="48" y="48" fill="#1f2937" font-size="28" font-family="Segoe UI, Arial, sans-serif" font-weight="700">Caracteristicas mas valoradas</text>
+<text x="48" y="78" fill="#4b5563" font-size="16" font-family="Segoe UI, Arial, sans-serif">Frecuencia de seleccion en la encuesta</text>
+<text x="48" y="102" fill="#374151" font-size="16" font-family="Segoe UI, Arial, sans-serif">Guías de aplicación y ejemplos</text>
+<text x="48" y="121" fill="#374151" font-size="16" font-family="Segoe UI, Arial, sans-serif">de experimentos resueltos</text>
+<rect x="390" y="86" width="420" height="22" rx="6" fill="#e7e5e4"/>
+<rect x="390" y="86" width="420" height="22" rx="8" fill="#1f4e79"/>
+<text x="826" y="106" fill="#111827" font-size="17" font-family="Segoe UI, Arial, sans-serif" font-weight="700">10</text>
+<text x="48" y="170" fill="#374151" font-size="16" font-family="Segoe UI, Arial, sans-serif">Diseño apto para el traslado y</text>
+<text x="48" y="189" fill="#374151" font-size="16" font-family="Segoe UI, Arial, sans-serif">uso intensivo en laboratorios</text>
+<rect x="390" y="154" width="420" height="22" rx="6" fill="#e7e5e4"/>
+<rect x="390" y="154" width="378" height="22" rx="8" fill="#256d5a"/>
+<text x="826" y="174" fill="#111827" font-size="17" font-family="Segoe UI, Arial, sans-serif" font-weight="700">9</text>
+<text x="48" y="238" fill="#374151" font-size="16" font-family="Segoe UI, Arial, sans-serif">Registro de biopotenciales sin</text>
+<text x="48" y="257" fill="#374151" font-size="16" font-family="Segoe UI, Arial, sans-serif">restricciones de cables hacia la</text>
+<text x="48" y="276" fill="#374151" font-size="16" font-family="Segoe UI, Arial, sans-serif">PC</text>
+<rect x="390" y="222" width="420" height="22" rx="6" fill="#e7e5e4"/>
+<rect x="390" y="222" width="294" height="22" rx="8" fill="#8a5a14"/>
+<text x="826" y="242" fill="#111827" font-size="17" font-family="Segoe UI, Arial, sans-serif" font-weight="700">7</text>
+<text x="48" y="306" fill="#374151" font-size="16" font-family="Segoe UI, Arial, sans-serif">Capacidad de exportar registros</text>
+<text x="48" y="325" fill="#374151" font-size="16" font-family="Segoe UI, Arial, sans-serif">en formatos estándar (CSV, TXT)</text>
+<text x="48" y="344" fill="#374151" font-size="16" font-family="Segoe UI, Arial, sans-serif">para análisis</text>
+<rect x="390" y="290" width="420" height="22" rx="6" fill="#e7e5e4"/>
+<rect x="390" y="290" width="252" height="22" rx="8" fill="#6b4fa3"/>
+<text x="826" y="310" fill="#111827" font-size="17" font-family="Segoe UI, Arial, sans-serif" font-weight="700">6</text>
+<text x="48" y="374" fill="#374151" font-size="16" font-family="Segoe UI, Arial, sans-serif">Que el software funcione en</text>
+<text x="48" y="393" fill="#374151" font-size="16" font-family="Segoe UI, Arial, sans-serif">distintos sistemas operativos o</text>
+<text x="48" y="412" fill="#374151" font-size="16" font-family="Segoe UI, Arial, sans-serif">tablets</text>
+<rect x="390" y="358" width="420" height="22" rx="6" fill="#e7e5e4"/>
+<rect x="390" y="358" width="252" height="22" rx="8" fill="#8b3d5c"/>
+<text x="826" y="378" fill="#111827" font-size="17" font-family="Segoe UI, Arial, sans-serif" font-weight="700">6</text>
+<text x="48" y="442" fill="#374151" font-size="16" font-family="Segoe UI, Arial, sans-serif">Configuración rápida para</text>
+<text x="48" y="461" fill="#374151" font-size="16" font-family="Segoe UI, Arial, sans-serif">maximizar el tiempo de práctica</text>
+<rect x="390" y="426" width="420" height="22" rx="6" fill="#e7e5e4"/>
+<rect x="390" y="426" width="168" height="22" rx="8" fill="#475569"/>
+<text x="826" y="446" fill="#111827" font-size="17" font-family="Segoe UI, Arial, sans-serif" font-weight="700">4</text>
+</svg>
