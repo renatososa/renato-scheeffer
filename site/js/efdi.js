@@ -1,5 +1,11 @@
 // js/efdi.js
 // Genera IDs únicos tipo slug si el heading no tiene id
+function getScrollOffset() {
+  const navbar = document.querySelector('.navbar.fixed-top');
+  const navbarHeight = navbar ? navbar.getBoundingClientRect().height : 0;
+  return Math.ceil(navbarHeight + 20);
+}
+
 function slugify(text) {
   return text.toString().toLowerCase()
     .trim()
@@ -56,7 +62,7 @@ function buildTOC() {
       const target = document.getElementById(h.id);
       if (target) {
         history.pushState(null, '', `#${h.id}`);
-        const y = target.getBoundingClientRect().top + window.pageYOffset - 80; // offset por navbar
+        const y = target.getBoundingClientRect().top + window.pageYOffset - getScrollOffset();
         window.scrollTo({ top: y, behavior: 'smooth' });
       }
     });
@@ -111,6 +117,12 @@ function observeActiveHeadings(headings) {
     const pageMap = {
       PI: 'PI.html'
     };
+
+    function scrollToEFDITop(smooth = false) {
+      // Volvemos al tope real de la página. Si bajamos hasta <main>,
+      // las columnas sticky quedan "pegadas" y se desalinean del contenido central.
+      window.scrollTo({ top: 0, behavior: smooth ? 'smooth' : 'auto' });
+    }
   
     function setActive(h) {
       document.querySelectorAll('.toc-link')
@@ -140,7 +152,7 @@ function observeActiveHeadings(headings) {
       });
     }
   
-    async function loadFromHash() {
+    async function loadFromHash(scrollOnLoad = false) {
       const h = location.hash.slice(1) || 'MT01'; // default
       setActive(h);
       syncAccordion(h);
@@ -152,8 +164,8 @@ function observeActiveHeadings(headings) {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         area.innerHTML = await res.text();
         buildTOC();
-        // desplazamiento suave al inicio del contenido cargado
-        area.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Al cambiar de módulo volvemos al inicio de EFDI para alinear las 3 columnas.
+        if (scrollOnLoad) scrollToEFDITop(true);
       } catch (err) {
         area.innerHTML = `
           <div class="alert alert-danger">
@@ -164,7 +176,7 @@ function observeActiveHeadings(headings) {
     
 
     }
-    window.addEventListener('hashchange', loadFromHash);
-    window.addEventListener('DOMContentLoaded', loadFromHash);
+    window.addEventListener('hashchange', () => loadFromHash(true));
+    window.addEventListener('DOMContentLoaded', () => loadFromHash(true));
   })();
   

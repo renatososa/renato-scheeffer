@@ -1,28 +1,40 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm site-navbar">
     <div class="container-fluid">
-        <a href="https://github.com/renatososa/renato-scheeffer" target="_blank" class="btn btn-dark btn-lg rounded-circle me-2">
+        <a href="https://github.com/renatososa/renato-scheeffer" target="_blank" rel="noopener noreferrer" class="btn btn-dark btn-lg rounded-circle me-2">
             <i class="bi bi-github"></i>
         </a>
-          
-        <a href="https://linkedin.com/in/renato-sosa-machado-scheeffer" target="_blank" class="btn btn-primary btn-lg rounded-circle me-2">
+
+        <a href="https://linkedin.com/in/renato-sosa-machado-scheeffer" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg rounded-circle me-2">
             <i class="bi bi-linkedin"></i>
         </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-        <ul class="navbar-nav me-3">
-        <li class="nav-item"><a class="nav-link" href="index.html">INICIO</a></li>
-        <li class="nav-item"><a class="nav-link" href="about.html">SOBRE MÍ</a></li>
-        <li class="nav-item"><a class="nav-link" href="efdi.html">EFDI</a></li>
-        <li class="nav-item"><a class="nav-link" href="projects.html">PROYECTOS</a></li>
-        <li class="nav-item"><a class="nav-link" href="contact.html">CONCACTO</a></li>
-        </ul>
-        <!-- Formulario de búsqueda -->
-        <form class="d-flex" id="searchForm">
-        <input class="form-control me-2" type="search" placeholder="Buscar..." aria-label="Buscar" id="searchInput">
-        <button class="btn btn-outline-primary" type="submit">Buscar</button>
-        </form>
-    </div>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Abrir navegación">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav me-3">
+                <li class="nav-item"><a class="nav-link" href="index.html">INICIO</a></li>
+                <li class="nav-item"><a class="nav-link" href="about.html">SOBRE MÍ</a></li>
+                <li class="nav-item"><a class="nav-link" href="efdi.html">EFDI</a></li>
+                <li class="nav-item"><a class="nav-link" href="projects.html">PROYECTOS</a></li>
+                <li class="nav-item"><a class="nav-link" href="contact.html">CONTACTO</a></li>
+            </ul>
+
+            <button class="btn search-toggle-btn" type="button" id="searchToggle" aria-expanded="false" aria-controls="searchPanel" aria-label="Abrir buscador">
+                <i class="bi bi-search" id="searchToggleIcon"></i>
+            </button>
+        </div>
     </div>
 </nav>
+
+<div class="search-panel" id="searchPanel" hidden>
+    <div class="search-panel-shell">
+        <form class="search-panel-form" id="searchForm">
+            <input class="form-control search-panel-input" type="search" placeholder="Buscar en esta página..." aria-label="Buscar" id="searchInput">
+            <button class="btn search-submit-btn" type="submit" aria-label="Buscar">
+                <i class="bi bi-search"></i>
+            </button>
+        </form>
+    </div>
+</div>
