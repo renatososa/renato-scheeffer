@@ -1,0 +1,184 @@
+<!-- Content -->
+<section class="col-12 col-lg-12">
+  <div class="border rounded-3 bg-white p-3">
+    <h4 class="mb-3">Módulo Técnico 8: mecanizado computarizado</h4>
+    <p class="text-justify">
+      En este módulo trabajamos sobre el mecanizado computarizado y sobre la generación de trayectorias CAM a partir de un
+      modelo 3D. La práctica estuvo orientada a comprender cómo definir en <i>Fusion 360</i> distintas operaciones de
+      mecanizado, configurando correctamente alturas, profundidades de pasada y parámetros generales para obtener una pieza
+      a partir de un bloque de material.
+    </p>
+    <p class="text-justify">
+      La tarea de este módulo consistió en implementar en el software <i>Fusion 360</i> las distintas operaciones de
+      mecanizado necesarias para obtener el objeto de la Figura 1. Las operaciones solicitadas fueron <b>Cajeras 2D</b>,
+      <b>Taladrado</b> y <b>Contorneado 2D</b>. Una vez verificadas las trayectorias mediante simulación, el objetivo final
+      fue posprocesar el trabajo para obtener un archivo <i>.nc</i> listo para ser interpretado por una máquina CNC.
+    </p>
+
+    <figure class="figure">
+      <img src="img/MT08/modelo_original.png" class="img-fluid me-2" alt="Modelo original MT08" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 1: modelo original sobre el cual se definieron las operaciones de mecanizado.</figcaption>
+    </figure>
+
+    <h5 class="mb-3">Implementación en Fusion 360</h5>
+    <h6 class="mb-3">Cajeras 2D</h6>
+    <p class="text-justify">
+      La primera operación implementada fue <i>Cajeras 2D</i>. Para ello se seleccionaron las superficies internas que se
+      querían mecanizar y luego se configuraron las alturas de la operación, como se puede observar en la Figura 2. En esta
+      instancia es importante definir correctamente desde dónde comienza a trabajar la herramienta y hasta qué profundidad
+      debe bajar para generar las cavidades deseadas.
+    </p>
+
+    <figure class="figure">
+      <img src="img/MT08/cajeras2D_configuracion.png" class="img-fluid me-2" alt="Configuración Cajeras 2D" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 2: configuración de la operación de Cajeras 2D.</figcaption>
+    </figure>
+
+    <p class="text-justify">
+      Otra configuración no menos importante es la de las pasadas. Como se buscó que el mecanizado se realizara en
+      profundidades de <b>1 mm</b>, fue necesario activar la opción de varias profundidades y configurar ese valor como se
+      muestra en la Figura 3. De esta manera la herramienta no remueve todo el material de una sola vez, sino que lo hace
+      en varias etapas sucesivas, lo que reduce la exigencia mecánica sobre la fresa y hace más controlado el proceso.
+    </p>
+
+    <figure class="figure">
+      <img src="img/MT08/pasadas.png" class="img-fluid me-2" alt="Configuración de pasadas" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 3: configuración de las pasadas de 1 mm de profundidad.</figcaption>
+    </figure>
+
+    <p class="text-justify">
+      Finalmente se verificó la trayectoria mediante la simulación de <i>Fusion 360</i>, obteniendo el resultado que se
+      muestra en la Figura 4. Allí se puede observar cómo la herramienta recorre el interior de las cavidades y va
+      removiendo material de manera progresiva.
+    </p>
+
+    <figure class="figure">
+      <img src="img/MT08/cajeras2D_simulacion.png" class="img-fluid me-2" alt="Simulación Cajeras 2D" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 4: simulación de la operación de Cajeras 2D.</figcaption>
+    </figure>
+
+    <p class="text-justify">
+      Al utilizar la opción de simulación con la máquina apareció un error de incidencia, visible en la Figura 5. No se
+      logró resolver completamente este problema, pero se estima que está asociado a alguna limitación de la máquina al
+      moverse en el espacio o a una interferencia geométrica del conjunto herramienta-portaherramienta durante ciertos
+      desplazamientos.
+    </p>
+
+    <figure class="figure">
+      <img src="img/MT08/error_incidencia.png" class="img-fluid me-2" alt="Error de incidencia" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 5: error de incidencia detectado al simular con la máquina.</figcaption>
+    </figure>
+
+    <h6 class="mb-3">Taladrado</h6>
+    <p class="text-justify">
+      La siguiente operación implementada fue <i>Taladrado</i>. Para ello se utilizó la herramienta específica de taladros
+      de <i>Fusion 360</i> y se seleccionaron los puntos correspondientes a cada perforación. En una primera instancia se
+      cometió un error en la selección, ya que no se eligió el centro del orificio sino un punto ubicado sobre la
+      circunferencia, como se puede ver en la Figura 6.
+    </p>
+
+    <figure class="figure">
+      <img src="img/MT08/puntos_taladro_mal.png" class="img-fluid me-2" alt="Selección incorrecta de puntos de taladro" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 6: selección incorrecta de los puntos de taladrado sobre la circunferencia.</figcaption>
+    </figure>
+
+    <p class="text-justify">
+      Luego de corregir esta selección se obtuvo la configuración correcta mostrada en la Figura 7. Allí también se puede
+      observar la configuración de alturas de esta operación, que a diferencia de <i>Cajeras 2D</i> va desde la superficie
+      del material hasta el fondo del agujero.
+    </p>
+
+    <figure class="figure">
+      <img src="img/MT08/taladro_configuracion_correcta.png" class="img-fluid me-2" alt="Configuración correcta de taladros" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 7: configuración correcta de la operación de Taladrado.</figcaption>
+    </figure>
+
+    <p class="text-justify">
+      La simulación final del taladrado se puede observar en la Figura 8. Se puede notar que el diámetro de los orificios
+      obtenidos no coincide exactamente con el diámetro presente en la pieza modelada. Esto se debe a que en una operación
+      de taladrado el diámetro queda limitado por el diámetro de la mecha o herramienta utilizada. En este caso la mecha
+      era más pequeña, por lo que para obtener el agujero exacto se debería haber utilizado una herramienta del diámetro
+      correspondiente.
+    </p>
+
+    <figure class="figure">
+      <img src="img/MT08/taladro_simulacion_bien.png" class="img-fluid me-2" alt="Simulación correcta de taladros" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 8: simulación de la operación de Taladrado luego de corregir la selección.</figcaption>
+    </figure>
+
+    <h6 class="mb-3">Contorneado 2D</h6>
+    <p class="text-justify">
+      La última operación implementada fue <i>Contorneado 2D</i>. En este caso se seleccionó el contorno exterior de la
+      pieza y también el círculo central, como se muestra en la Figura 9. Allí se puede observar además la configuración de
+      alturas, que al igual que en el taladrado va desde la superficie superior del material hasta el fondo.
+    </p>
+    <p class="text-justify">
+      Del mismo modo que en <i>Cajeras 2D</i>, también se configuraron pasadas de <b>1 mm</b> de profundidad. Esto permite
+      que el corte perimetral se realice de forma progresiva y reduce el esfuerzo sobre la herramienta durante el mecanizado.
+    </p>
+
+    <figure class="figure">
+      <img src="img/MT08/contorno_configuracion.png" class="img-fluid me-2" alt="Configuración contorneado 2D" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 9: selección de geometrías y configuración de alturas para el Contorneado 2D.</figcaption>
+    </figure>
+
+    <p class="text-justify">
+      Otra configuración importante en esta operación es la de los apoyos o pestañas. Estos apoyos son necesarios para que
+      el material no quede completamente suelto luego de realizar los contornos, manteniendo pequeñas uniones con el bloque
+      base que posteriormente se retiran manualmente. En la Figura 10 se puede observar cómo quedaron definidos estos apoyos.
+    </p>
+
+    <figure class="figure">
+      <img src="img/MT08/apoyos.png" class="img-fluid me-2" alt="Configuración de apoyos" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 10: configuración de los apoyos o pestañas para sostener la pieza durante el corte.</figcaption>
+    </figure>
+
+    <p class="text-justify">
+      La simulación del contorneado se presenta en la Figura 11. En esta instancia ya se puede observar el conjunto de
+      operaciones aplicado sobre la pieza y una aproximación bastante clara del resultado final esperado.
+    </p>
+
+    <figure class="figure">
+      <img src="img/MT08/contorno_simulacion.png" class="img-fluid me-2" alt="Simulación de contorneado 2D" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 11: simulación de la operación de Contorneado 2D.</figcaption>
+    </figure>
+
+    <h5 class="mb-3">Posprocesado y verificación del archivo NC</h5>
+    <p class="text-justify">
+      Una vez verificado que todas las operaciones se simulaban correctamente en <i>Fusion 360</i>, se procedió al
+      posprocesado para generar el archivo <i>.nc</i>. La configuración utilizada se puede observar en la Figura 12. A
+      partir de esta etapa se obtuvo el archivo final de mecanizado, que puede descargarse desde el siguiente
+      <a href="https://github.com/renatososa/renato-scheeffer/blob/main/site/archivos/MT08/renato_sosa.nc">enlace</a>.
+    </p>
+
+    <figure class="figure">
+      <img src="img/MT08/posprocesado.png" class="img-fluid me-2" alt="Posprocesado archivo NC" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 12: configuración utilizada para posprocesar y generar el archivo NC.</figcaption>
+    </figure>
+
+    <p class="text-justify">
+      Como verificación adicional, el archivo generado se importó en <i>Easel</i> para comprobar que el G-code se hubiera
+      exportado correctamente. El resultado puede verse en la Figura 13. Si bien no se logró representar el material en
+      madera para hacer la simulación más fiel, se pueden observar correctamente todas las trayectorias y cómo quedaría la
+      pieza finalmente luego del mecanizado.
+    </p>
+
+    <figure class="figure">
+      <img src="img/MT08/easel_simulacion.png" class="img-fluid me-2" alt="Simulación en Easel" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 13: verificación del archivo NC importándolo en Easel.</figcaption>
+    </figure>
+
+    <h5 class="mb-3">Conclusiones</h5>
+    <p class="text-justify">
+      Este módulo me permitió comprender mejor la lógica de trabajo CAM dentro de <i>Fusion 360</i>, especialmente la
+      diferencia entre operaciones como cajeras, taladros y contornos, y la importancia de configurar correctamente alturas,
+      profundidades de pasada y apoyos para obtener un resultado coherente.
+    </p>
+    <p class="text-justify">
+      También resultó evidente que pequeños errores de selección, como ocurrió inicialmente en la operación de taladrado,
+      pueden modificar por completo el resultado final. En conjunto, esta práctica fue una buena introducción al flujo
+      completo de mecanizado computarizado: preparación de trayectorias, simulación, corrección de errores, posprocesado y
+      validación final del archivo generado.
+    </p>
+  </div>
+</section>
