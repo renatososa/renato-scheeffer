@@ -1,0 +1,510 @@
+<!-- Content -->
+<section class="col-12 col-lg-12">
+  <div class="border rounded-3 bg-white p-3">
+    <h4 class="mb-3">Módulo Técnico 6: networking</h4>
+    <p class="text-justify">
+      En este módulo trabajamos sobre distintas estrategias de comunicación entre dispositivos, abordando tanto mecanismos
+      cableados como <i>Serial</i> y <i>SPI</i>, como alternativas inalámbricas como <i>BLE</i> y <i>WiFi</i> utilizando
+      el protocolo <i>MQTT</i>. La idea general fue entender cómo desacoplar tareas entre distintos nodos y permitir que
+      cada dispositivo resuelva una parte del sistema intercambiando únicamente la información necesaria.
+    </p>
+    <p class="text-justify">
+      La tarea de este módulo consistió en comunicar dos <b>ESP32</b>. El <b>ESP32 A</b> fue definido como nodo sensor y se
+      encargó de medir distancia con un <b>HC-SR04</b>, evaluar si una puerta debía abrirse o cerrarse a partir de un umbral
+      y permitir además la conmutación manual mediante un pulsador. Ese nodo publica en un tópico MQTT el estado actual de
+      la puerta. Por otro lado, el <b>ESP32 B</b> fue implementado como nodo actuador: se suscribe al mismo tópico, interpreta
+      el estado deseado, enciende un <b>LED verde</b> o un <b>LED rojo</b> según si la puerta está abierta o cerrada y mueve
+      un servomotor que representa el mecanismo de apertura y cierre.
+    </p>
+
+    <h5 class="mb-3">Materiales y servicios utilizados</h5>
+    <h6 class="mb-3">Materiales</h6>
+    <ul>
+      <li>2 ESP32.</li>
+      <li>1 sensor ultrasónico HC-SR04.</li>
+      <li>1 pulsador.</li>
+      <li>1 servomotor.</li>
+      <li>2 LEDs.</li>
+      <li>Resistencias para los LEDs.</li>
+    </ul>
+
+    <h6 class="mb-3">Servicios y plataforma</h6>
+    <ul>
+      <li>Broker MQTT: <code>broker.hivemq.com</code>.</li>
+      <li>Puerto MQTT: <code>1883</code>.</li>
+      <li>Tópico utilizado: <code>EFDI/networking</code>.</li>
+      <li>Plataforma de simulación: <i>Wokwi</i>, primero en su versión web y luego integrada en <i>Visual Studio Code</i>.</li>
+    </ul>
+
+    <h5 class="mb-3">Implementación del nodo sensor</h5>
+    <p class="text-justify">
+      El nodo sensor fue el encargado de decidir cuándo la puerta debía abrirse o cerrarse. Para ello se utilizaron dos
+      criterios: la distancia medida por el <b>HC-SR04</b> y el estado de un pulsador que permite alternar manualmente la
+      condición de apertura. Si cualquiera de estos dos mecanismos indica apertura, el nodo publica el mensaje
+      <code>ABIERTO</code>; en caso contrario publica <code>CERRADO</code>.
+    </p>
+
+    <h6 class="mb-3">Configuración de WiFi y MQTT</h6>
+    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+<code class="language-arduino">#include &lt;WiFi.h&gt;
+#include &lt;PubSubClient.h&gt;
+
+const char* WIFI_SSID = "Wokwi-GUEST";
+const char* WIFI_PASSWORD = "";
+
+const char* MQTT_SERVER = "broker.hivemq.com";
+const uint16_t MQTT_PORT = 1883;
+const char* MQTT_TOPIC = "EFDI/networking";
+
+WiFiClient wifiClient;
+PubSubClient mqttClient(wifiClient);
+
+void connectWiFi() {
+  if (WiFi.status() == WL_CONNECTED) {
+    return;
+  }
+
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+
+  Serial.print("Conectando WiFi");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println();
+  Serial.print("WiFi conectado. IP: ");
+  Serial.println(WiFi.localIP());
+}
+
+void connectMQTT() {
+  while (!mqttClient.connected()) {
+    String clientId = "ESP32_SENSOR_";
+    clientId += String((uint32_t)(ESP.getEfuseMac() & 0xFFFFFFFF), HEX);
+
+    Serial.print("Conectando a MQTT...");
+    if (mqttClient.connect(clientId.c_str())) {
+      Serial.println(" conectado");
+    } else {
+      Serial.print(" fallo, rc=");
+      Serial.print(mqttClient.state());
+      Serial.println(". Reintentando en 2 s");
+      delay(2000);
+    }
+  }
+}</code></pre>
+    <p class="text-justify">
+      En este primer bloque se incorporan las librerías necesarias para conectividad y se definen el <b>SSID</b>, la
+      dirección del broker, el puerto y el tópico a utilizar. Luego se implementan dos funciones: <i>connectWiFi()</i>,
+      que conecta el ESP32 a la red inalámbrica, y <i>connectMQTT()</i>, que establece la conexión con el broker MQTT.
+      Para identificar al nodo dentro del broker se genera un <i>clientId</i> único a partir de la dirección del chip.
+    </p>
+
+    <h6 class="mb-3">Sensado de distancia y lectura del pulsador</h6>
+    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+<code class="language-arduino">#define TRIG_PIN 5
+#define ECHO_PIN 18
+#define BOTON_PIN 19
+
+#define REBOTE_BOTON_MS 60
+#define ECHO_TIMEOUT_US 30000
+#define OPEN_DISTANCE_THRESHOLD_CM 15.0f
+
+bool estadoBotonEstable = HIGH;
+bool ultimaLecturaBoton = HIGH;
+unsigned long ultimoTiempoRebote = 0;
+bool puertaAbiertaPorBoton = false;
+
+float readDistanceCm() {
+  digitalWrite(TRIG_PIN, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIG_PIN, LOW);
+
+  unsigned long duracion = pulseIn(ECHO_PIN, HIGH, ECHO_TIMEOUT_US);
+  if (duracion == 0) {
+    return -1.0f;
+  }
+
+  return duracion * 0.0343f * 0.5f;
+}
+
+void manejarBoton() {
+  bool lectura = digitalRead(BOTON_PIN);
+
+  if (lectura != ultimaLecturaBoton) {
+    ultimoTiempoRebote = millis();
+    ultimaLecturaBoton = lectura;
+  }
+
+  if ((millis() - ultimoTiempoRebote) &gt; REBOTE_BOTON_MS &amp;&amp; lectura != estadoBotonEstable) {
+    estadoBotonEstable = lectura;
+
+    if (estadoBotonEstable == LOW) {
+      puertaAbiertaPorBoton = !puertaAbiertaPorBoton;
+    }
+  }
+}</code></pre>
+    <p class="text-justify">
+      Aquí se definen los pines del sensor ultrasónico y del pulsador, junto con el tiempo de rebote y el umbral de
+      apertura fijado en <b>15 cm</b>. La función <i>readDistanceCm()</i> genera el pulso de disparo del <b>HC-SR04</b>,
+      mide el tiempo del eco y lo convierte a centímetros. Por otro lado, <i>manejarBoton()</i> implementa una lógica de
+      antirrebote para que cada pulsación cambie de forma estable el estado manual de la puerta.
+    </p>
+
+    <h6 class="mb-3">Lógica de decisión y publicación del estado</h6>
+    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+<code class="language-arduino">#define PUBLISH_INTERVAL_MS 250
+
+unsigned long ultimoTiempoPublicacion = 0;
+bool lastPublishedPuertaAbierta = false;
+
+bool debePublicar(bool puertaAbierta) {
+  if (millis() - ultimoTiempoPublicacion &gt;= PUBLISH_INTERVAL_MS) {
+    return true;
+  }
+
+  if (puertaAbierta != lastPublishedPuertaAbierta) {
+    return true;
+  }
+
+  return false;
+}
+
+void publicarEstado() {
+  float distanciaCm = readDistanceCm();
+  bool puertaAbiertaPorDistancia = distanciaCm &gt; 0.0f &amp;&amp;
+                                   distanciaCm &lt;= OPEN_DISTANCE_THRESHOLD_CM;
+  bool puertaAbierta = puertaAbiertaPorDistancia || puertaAbiertaPorBoton;
+
+  if (!debePublicar(puertaAbierta)) {
+    return;
+  }
+
+  const char* payload = puertaAbierta ? "ABIERTO" : "CERRADO";
+
+  bool ok = mqttClient.publish(MQTT_TOPIC, payload, true);
+  if (ok) {
+    ultimoTiempoPublicacion = millis();
+    lastPublishedPuertaAbierta = puertaAbierta;
+  }
+}</code></pre>
+    <p class="text-justify">
+      En este bloque se concentra la lógica principal del nodo sensor. Primero se determina si la puerta debe abrirse por
+      proximidad o por pulsación manual. Luego se construye el mensaje a publicar en el tópico MQTT. La función
+      <i>debePublicar()</i> evita enviar mensajes innecesarios en cada ciclo del programa, permitiendo publicar únicamente
+      cuando cambió el estado de la puerta o cuando pasó un intervalo máximo de tiempo sin actualizar.
+    </p>
+
+    <h6 class="mb-3">Inicialización y rutina principal</h6>
+    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+<code class="language-arduino">void setup() {
+  Serial.begin(115200);
+
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+  pinMode(BOTON_PIN, INPUT_PULLUP);
+
+  connectWiFi();
+  mqttClient.setServer(MQTT_SERVER, MQTT_PORT);
+}
+
+void loop() {
+  if (WiFi.status() != WL_CONNECTED) {
+    connectWiFi();
+  }
+
+  if (!mqttClient.connected()) {
+    connectMQTT();
+  }
+
+  mqttClient.loop();
+  manejarBoton();
+  publicarEstado();
+}</code></pre>
+    <p class="text-justify">
+      Finalmente, en <i>setup()</i> se inicializan el puerto serial, los pines y la configuración básica del cliente MQTT.
+      En el <i>loop()</i> se supervisa permanentemente el estado de la conexión WiFi y MQTT, se actualiza la lectura del
+      pulsador y se publica el estado de la puerta cuando corresponde.
+    </p>
+
+    <h6 class="mb-3">Conexiones del nodo sensor</h6>
+    <p class="text-justify">
+      En la Figura 1 se puede observar la conexión del <b>ESP32 A</b> con el sensor ultrasónico y el pulsador dentro de la
+      simulación. Allí se distinguen los pines de disparo y eco del <b>HC-SR04</b>, así como la entrada digital utilizada
+      para sensar el botón.
+    </p>
+    <figure class="figure">
+      <img src="img/MT06/conexiones_sensor.png" class="img-fluid me-2" alt="Conexiones del nodo sensor" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 1: conexiones del nodo sensor en la simulación.</figcaption>
+    </figure>
+
+    <h6 class="mb-3">Error encontrado en la simulación web de Wokwi</h6>
+    <p class="text-justify">
+      Luego de implementar esta primera parte del sistema intenté realizar la simulación directamente en la versión web de
+      <i>Wokwi</i>. Sin embargo, al trabajar con dos proyectos separados que debían compartir red mediante MQTT aparecieron
+      problemas para sostener correctamente la simulación del sistema completo dentro de ese entorno. En la Figura 2 se
+      muestra la captura del error obtenido durante ese intento.
+    </p>
+    <figure class="figure">
+      <img src="img/MT06/error_wokwi.png" class="img-fluid me-2" alt="Error de Wokwi" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 2: error obtenido al intentar simular el sistema en la versión web de Wokwi.</figcaption>
+    </figure>
+    <p class="text-justify">
+      A partir de esta dificultad encontré la posibilidad de trabajar con <i>Wokwi</i> integrado dentro de
+      <i>Visual Studio Code</i>, lo que permitió compilar cada sketch localmente y lanzar la simulación desde carpetas
+      separadas preparadas específicamente para cada nodo. Para montar este entorno utilicé la IA <b>Codex</b>, que me ayudó
+      a estructurar las carpetas de simulación, configurar los archivos necesarios del proyecto y dejar operativo el flujo
+      de compilación y ejecución dentro de <i>VS Code</i>. De esta forma fue posible simular correctamente los dos nodos y
+      verificar el intercambio de mensajes por MQTT.
+    </p>
+
+    <p class="text-justify">
+      A continuación se presenta un video de la simulación del nodo sensor funcionando.
+    </p>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/YQ4kcUyajrw?si=1Xh1ybnYzv3r6t1J" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+    <h5 class="mb-3">Implementación del nodo actuador</h5>
+    <p class="text-justify">
+      El nodo actuador fue diseñado para recibir el estado publicado por el nodo sensor y traducir esa información en una
+      acción física. Para ello se suscribe al tópico <code>EFDI/networking</code>, interpreta los mensajes recibidos y en
+      función de su contenido mueve el servomotor y actualiza la señalización luminosa con dos LEDs.
+    </p>
+
+    <h6 class="mb-3">Configuración de WiFi y suscripción MQTT</h6>
+    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+<code class="language-arduino">#include &lt;WiFi.h&gt;
+#include &lt;PubSubClient.h&gt;
+#include &lt;ESP32Servo.h&gt;
+
+const char* WIFI_SSID = "Wokwi-GUEST";
+const char* WIFI_PASSWORD = "";
+
+const char* MQTT_SERVER = "broker.hivemq.com";
+const uint16_t MQTT_PORT = 1883;
+const char* MQTT_TOPIC = "EFDI/networking";
+
+WiFiClient wifiClient;
+PubSubClient mqttClient(wifiClient);
+Servo barrierServo;
+
+void connectWiFi() {
+  if (WiFi.status() == WL_CONNECTED) {
+    return;
+  }
+
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+
+  Serial.print("Conectando WiFi");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println();
+  Serial.print("WiFi conectado. IP: ");
+  Serial.println(WiFi.localIP());
+}
+
+void connectMQTT() {
+  while (!mqttClient.connected()) {
+    String clientId = "ESP32_ACTUATOR_";
+    clientId += String((uint32_t)(ESP.getEfuseMac() &amp; 0xFFFFFFFF), HEX);
+
+    Serial.print("Conectando a MQTT...");
+    if (mqttClient.connect(clientId.c_str())) {
+      Serial.println(" conectado");
+      mqttClient.subscribe(MQTT_TOPIC);
+    } else {
+      Serial.print(" fallo, rc=");
+      Serial.print(mqttClient.state());
+      Serial.println(". Reintentando en 2 s");
+      delay(2000);
+    }
+  }
+}</code></pre>
+    <p class="text-justify">
+      El nodo actuador utiliza la misma infraestructura de red que el nodo sensor, pero en este caso el objetivo es
+      suscribirse al tópico en lugar de publicar. Por eso, dentro de <i>connectMQTT()</i> además de establecer la conexión
+      con el broker se ejecuta <i>mqttClient.subscribe(MQTT_TOPIC)</i>, habilitando la recepción de mensajes.
+    </p>
+
+    <h6 class="mb-3">Interpretación de mensajes recibidos</h6>
+    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+<code class="language-arduino">bool puertaAbierta = false;
+unsigned long ultimoTiempoMensaje = 0;
+
+bool parsePayload(const char* payload, bool&amp; abrirPuerta) {
+  if (strcmp(payload, "ABIERTO") == 0) {
+    abrirPuerta = true;
+    return true;
+  }
+
+  if (strcmp(payload, "CERRADO") == 0) {
+    abrirPuerta = false;
+    return true;
+  }
+
+  return false;
+}
+
+void mqttCallback(char* topic, byte* payload, unsigned int length) {
+  char message[80];
+
+  if (length &gt;= sizeof(message)) {
+    length = sizeof(message) - 1;
+  }
+
+  memcpy(message, payload, length);
+  message[length] = '\0';
+
+  bool nuevoEstadoPuerta = false;
+
+  if (!parsePayload(message, nuevoEstadoPuerta)) {
+    Serial.print("Payload invalido recibido en ");
+    Serial.print(topic);
+    Serial.print(": ");
+    Serial.println(message);
+    return;
+  }
+
+  puertaAbierta = nuevoEstadoPuerta;
+  ultimoTiempoMensaje = millis();
+}</code></pre>
+    <p class="text-justify">
+      Este bloque se encarga de interpretar el contenido de cada mensaje recibido. La función <i>parsePayload()</i> verifica
+      si el texto recibido es <code>ABIERTO</code> o <code>CERRADO</code> y lo transforma en una variable booleana. Luego,
+      el <i>callback</i> MQTT copia el mensaje recibido, valida su contenido y actualiza el estado de la puerta.
+    </p>
+
+    <h6 class="mb-3">Control del servomotor y de los LEDs</h6>
+    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+<code class="language-arduino">#define SERVO_PIN 18
+#define LED_OPEN_PIN 4
+#define LED_CLOSED_PIN 5
+
+#define SERVO_OPEN_ANGLE 90
+#define SERVO_CLOSED_ANGLE 0
+#define MESSAGE_TIMEOUT_MS 2000
+
+void writePinIfValid(int pin, bool estado) {
+  if (pin &gt;= 0) {
+    digitalWrite(pin, estado ? HIGH : LOW);
+  }
+}
+
+void aplicarSalidas() {
+  bool mensajeActivo = ultimoTiempoMensaje &gt; 0 &amp;&amp; (millis() - ultimoTiempoMensaje) &lt;= MESSAGE_TIMEOUT_MS;
+  bool puertaAbiertaEfectiva = mensajeActivo &amp;&amp; puertaAbierta;
+
+  barrierServo.write(puertaAbiertaEfectiva ? SERVO_OPEN_ANGLE : SERVO_CLOSED_ANGLE);
+  writePinIfValid(LED_OPEN_PIN, puertaAbiertaEfectiva);
+  writePinIfValid(LED_CLOSED_PIN, !puertaAbiertaEfectiva);
+}</code></pre>
+    <p class="text-justify">
+      Una vez que el mensaje fue interpretado, la función <i>aplicarSalidas()</i> transforma esa información en acciones
+      concretas. Si el último mensaje recibido sigue siendo reciente, el sistema considera válido su contenido y posiciona
+      el servomotor en <b>90°</b> para abrir o en <b>0°</b> para cerrar. Al mismo tiempo enciende el <b>LED verde</b> cuando
+      la puerta está abierta y el <b>LED rojo</b> cuando está cerrada.
+    </p>
+
+    <h6 class="mb-3">Inicialización y rutina principal</h6>
+    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+<code class="language-arduino">void setup() {
+  Serial.begin(115200);
+
+  pinMode(LED_OPEN_PIN, OUTPUT);
+  pinMode(LED_CLOSED_PIN, OUTPUT);
+
+  barrierServo.setPeriodHertz(50);
+  barrierServo.attach(SERVO_PIN, 500, 2400);
+  barrierServo.write(SERVO_CLOSED_ANGLE);
+
+  connectWiFi();
+
+  mqttClient.setServer(MQTT_SERVER, MQTT_PORT);
+  mqttClient.setCallback(mqttCallback);
+
+  aplicarSalidas();
+}
+
+void loop() {
+  if (WiFi.status() != WL_CONNECTED) {
+    connectWiFi();
+  }
+
+  if (!mqttClient.connected()) {
+    connectMQTT();
+  }
+
+  mqttClient.loop();
+  aplicarSalidas();
+}</code></pre>
+    <p class="text-justify">
+      En <i>setup()</i> se inicializan los pines de salida, se configura el servomotor y se registra el <i>callback</i> que
+      se ejecutará cada vez que llegue un mensaje del broker. Luego, en el <i>loop()</i>, se mantiene viva la conexión MQTT
+      y se actualizan permanentemente las salidas para reflejar el último estado recibido.
+    </p>
+
+    <h6 class="mb-3">Conexiones del nodo actuador</h6>
+    <p class="text-justify">
+      En la Figura 3 se presenta la conexión del <b>ESP32 B</b> con el servomotor y los dos LEDs utilizados para representar
+      el estado de la puerta. El LED verde indica apertura, el LED rojo indica cierre y el servomotor materializa el
+      movimiento del mecanismo.
+    </p>
+    <figure class="figure">
+      <img src="img/MT06/conexiones_actuador.png" class="img-fluid me-2" alt="Conexiones del nodo actuador" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 3: conexiones del nodo actuador en la simulación.</figcaption>
+    </figure>
+
+    <p class="text-justify">
+      A continuación se presenta un video de la simulación del sistema completo, donde se puede observar la interacción entre
+      el nodo sensor y el nodo actuador a través de MQTT.
+    </p>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/rGQAu7sGe0s?si=6pS0pjVhAL86zc2H" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+    <h5 class="mb-3">Demostración del sistema real</h5>
+    <p class="text-justify">
+      Una vez validado el comportamiento general del sistema en simulación se realizó la implementación sobre hardware real,
+      manteniendo la misma lógica de comunicación entre el nodo sensor y el nodo actuador mediante MQTT. Esta etapa permitió
+      comprobar que la arquitectura propuesta efectivamente funcionaba fuera del entorno simulado y que el sistema podía
+      resolver tanto el sensado como la actuación en una configuración física concreta. Para ello también fue necesario
+      ajustar la configuración de red, reemplazando el <b>SSID</b> utilizado en la simulación de <code>Wokwi-GUEST</code>
+      por la red local de mi casa, que fue la empleada durante las pruebas reales de comunicación.
+    </p>
+    <p class="text-justify">
+      Durante estas pruebas apareció una dificultad que no se había manifestado de forma clara en la simulación. A medida que
+      el objeto se acercaba al campo de medición del <b>HC-SR04</b>, la lectura de distancia comenzaba a ajustarse de forma
+      inestable, generando oscilaciones cerca del umbral y provocando aperturas o cierres erróneos. Para corregir este
+      comportamiento fue necesario modificar el código del nodo sensor incorporando un filtrado simple sobre las mediciones
+      consecutivas, de modo de suavizar la lectura antes de tomar la decisión de apertura. Esta corrección permitió lograr
+      una respuesta más estable en la implementación real sin alterar la estructura general del sistema.
+    </p>
+    <p class="text-justify">
+      A continuación se presenta un video demostrativo del sistema implementado en hardware real, donde se puede observar el
+      funcionamiento integrado de ambos nodos y el comportamiento obtenido luego de aplicar el ajuste sobre la lectura del
+      sensor ultrasónico.
+    </p>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/xbO-LvtKPmU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+    <h5 class="mb-3">Conclusiones</h5>
+    <p class="text-justify">
+      Esta práctica permitió implementar una arquitectura simple pero muy representativa de un sistema distribuido, donde un
+      nodo se encarga del sensado y de la toma de decisión, mientras que otro resuelve la actuación física a partir de los
+      mensajes intercambiados. El uso de <i>MQTT</i> resultó especialmente útil para desacoplar ambas tareas y mantener la
+      comunicación entre dispositivos de forma clara y escalable.
+    </p>
+    <p class="text-justify">
+      Además, la dificultad encontrada al intentar simular el sistema completo en la versión web de <i>Wokwi</i> llevó a
+      explorar una alternativa más robusta dentro de <i>Visual Studio Code</i>. Esa transición no solo permitió completar la
+      simulación correctamente, sino también entender mejor cómo preparar un entorno de trabajo más flexible para proyectos
+      con varios nodos que comparten servicios de red.
+    </p>
+    <p class="text-justify">
+      Los códigos correspondientes a estas implementaciones se pueden encontrar en los enlaces del repositorio: por un lado
+      el sketch del nodo sensor en <a href="https://github.com/renatososa/renato-scheeffer/blob/main/site/archivos/MT06/sensor/sensor.ino">sensor.ino</a>
+      y por otro el del nodo actuador en <a href="https://github.com/renatososa/renato-scheeffer/blob/main/site/archivos/MT06/actuador/actuador.ino">actuador.ino</a>.
+    </p>
+  </div>
+</section>

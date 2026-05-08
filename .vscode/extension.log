@@ -1,0 +1,220 @@
+
+======================================================================
+[2026-05-06 10:59:43.812] Arduino Extension 启动 (v0.2.1)
+  平台: win32 x64
+  VS Code: 1.106.3
+  Node: v22.20.0
+======================================================================
+[2026-05-06 10:59:43.812][INFO] 板卡缓存目录: c:\Users\Renato\AppData\Roaming\Code\User\globalStorage\oakiot.vscode-arduino-cli
+[2026-05-06 10:59:43.813][INFO] [BoardListHistory] 已初始化，加载了 0 个板卡记录，0 个端口记录
+[2026-05-06 10:59:43.813][INFO] [BuildOutputWebview] 编译日志缓存路径: d:\Usuario\Documents\repos\renato-scheeffer\.vscode\build-output.log
+[2026-05-06 10:59:43.813][INFO] 刷新板卡列表...
+[2026-05-06 10:59:43.813][INFO] 获取板卡列表...
+[2026-05-06 10:59:43.814][INFO] 验证 Arduino CLI 路径: arduino-cli
+[2026-05-06 10:59:43.821][INFO] 刷新板卡管理器...
+[2026-05-06 10:59:43.822][INFO] 创建板卡缓存目录: c:\Users\Renato\AppData\Roaming\Code\User\globalStorage\oakiot.vscode-arduino-cli
+[2026-05-06 10:59:43.822][INFO] 获取已安装的平台列表...
+[2026-05-06 10:59:43.822][INFO] 验证 Arduino CLI 路径: arduino-cli
+[2026-05-06 10:59:43.825][INFO] 获取已安装库列表...
+[2026-05-06 10:59:43.826][INFO] 验证 Arduino CLI 路径: arduino-cli
+[2026-05-06 10:59:43.833][ERROR] [Extension Activation] [Extension Activation] command 'arduino.upload' already exists
+  Stack: Error: command 'arduino.upload' already exists
+	at Zy.registerCommand (file:///c:/Users/Renato/AppData/Local/Programs/Microsoft%20VS%20Code/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:114:40347)
+	at Object.registerCommand (file:///c:/Users/Renato/AppData/Local/Programs/Microsoft%20VS%20Code/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:210:100241)
+	at Vr (c:\Users\Renato\.vscode\extensions\oakiot.vscode-arduino-cli-0.2.1\out\extension.js:249:893)
+	at ul (c:\Users\Renato\.vscode\extensions\oakiot.vscode-arduino-cli-0.2.1\out\extension.js:265:20352)
+	at gl (c:\Users\Renato\.vscode\extensions\oakiot.vscode-arduino-cli-0.2.1\out\extension.js:265:20645)
+	at async Uy.n (file:///c:/Users/Renato/AppData/Local/Programs/Microsoft%20VS%20Code/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:114:13382)
+	at async Uy.m (file:///c:/Users/Renato/AppData/Local/Programs/Microsoft%20VS%20Code/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:114:13345)
+	at async Uy.l (file:///c:/Users/Renato/AppData/Local/Programs/Microsoft%20VS%20Code/resources/app/out/vs/workbench/api/node/extensionHostProcess.js:114:12801)
+[2026-05-06 10:59:43.846][WARN] Arduino CLI 路径无效: arduino-cli, 错误: 命令执行失败 (退出码: 1): "arduino-cli" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+
+[2026-05-06 10:59:43.846][INFO] 开始自动检测 Arduino CLI...
+[2026-05-06 10:59:43.846][INFO] 验证 Arduino CLI 路径: arduino-cli
+[2026-05-06 10:59:43.863][WARN] Arduino CLI 路径无效: arduino-cli, 错误: 命令执行失败 (退出码: 1): "arduino-cli" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+
+[2026-05-06 10:59:43.863][INFO] 开始自动检测 Arduino CLI...
+[2026-05-06 10:59:43.864][INFO] 验证 Arduino CLI 路径: arduino-cli
+[2026-05-06 10:59:43.868][WARN] Arduino CLI 路径无效: arduino-cli, 错误: 命令执行失败 (退出码: 1): "arduino-cli" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+
+[2026-05-06 10:59:43.868][INFO] 开始自动检测 Arduino CLI...
+[2026-05-06 10:59:43.868][INFO] 验证 Arduino CLI 路径: arduino-cli
+[2026-05-06 10:59:43.885][WARN] Arduino CLI 路径无效: arduino-cli, 错误: 命令执行失败 (退出码: 1): "arduino-cli" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+
+[2026-05-06 10:59:43.886][WARN] 未能自动检测到 Arduino CLI
+[2026-05-06 10:59:43.886][ERROR] 获取板卡列表失败: CliNotReadyError: Arduino CLI 未配置或路径无效，请先执行 "Arduino: Configure CLI Path"
+[2026-05-06 10:59:43.886][INFO] 获取所有已安装的板卡...
+[2026-05-06 10:59:43.886][INFO] 验证 Arduino CLI 路径: arduino-cli
+[2026-05-06 10:59:43.891][WARN] Arduino CLI 路径无效: arduino-cli, 错误: 命令执行失败 (退出码: 1): "arduino-cli" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+
+[2026-05-06 10:59:43.892][WARN] 未能自动检测到 Arduino CLI
+[2026-05-06 10:59:43.892][ERROR] 获取已安装库列表失败: CliNotReadyError: Arduino CLI 未配置或路径无效，请先执行 "Arduino: Configure CLI Path"
+[2026-05-06 10:59:43.893][WARN] Arduino CLI 路径无效: arduino-cli, 错误: 命令执行失败 (退出码: 1): "arduino-cli" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+
+[2026-05-06 10:59:43.893][WARN] 未能自动检测到 Arduino CLI
+[2026-05-06 10:59:43.893][ERROR] 获取平台列表失败: CliNotReadyError: Arduino CLI 未配置或路径无效，请先执行 "Arduino: Configure CLI Path"
+[2026-05-06 10:59:43.909][WARN] Arduino CLI 路径无效: arduino-cli, 错误: 命令执行失败 (退出码: 1): "arduino-cli" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+
+[2026-05-06 10:59:43.910][INFO] 开始自动检测 Arduino CLI...
+[2026-05-06 10:59:43.910][INFO] 验证 Arduino CLI 路径: arduino-cli
+[2026-05-06 10:59:43.943][WARN] Arduino CLI 路径无效: arduino-cli, 错误: 命令执行失败 (退出码: 1): "arduino-cli" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+
+[2026-05-06 10:59:43.943][WARN] 未能自动检测到 Arduino CLI
+[2026-05-06 10:59:43.943][ERROR] 获取板卡列表失败: CliNotReadyError: Arduino CLI 未配置或路径无效，请先执行 "Arduino: Configure CLI Path"
+[2026-05-06 10:59:43.943][INFO] 加载了 0 个平台，共 0 个板卡
+[2026-05-06 10:59:58.873][INFO] 验证 Arduino CLI 路径: arduino-cli
+[2026-05-06 10:59:58.900][WARN] Arduino CLI 路径无效: arduino-cli, 错误: 命令执行失败 (退出码: 1): "arduino-cli" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+
+[2026-05-06 10:59:58.901][INFO] 开始自动检测 Arduino CLI...
+[2026-05-06 10:59:58.901][INFO] 验证 Arduino CLI 路径: arduino-cli
+[2026-05-06 10:59:58.938][WARN] Arduino CLI 路径无效: arduino-cli, 错误: 命令执行失败 (退出码: 1): "arduino-cli" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+
+[2026-05-06 10:59:58.938][WARN] 未能自动检测到 Arduino CLI
+[2026-05-06 10:59:58.940][INFO] 获取板卡列表...
+[2026-05-06 10:59:58.940][INFO] 验证 Arduino CLI 路径: arduino-cli
+[2026-05-06 10:59:58.944][INFO] 获取已安装的平台列表...
+[2026-05-06 10:59:58.945][INFO] 验证 Arduino CLI 路径: arduino-cli
+[2026-05-06 10:59:58.949][INFO] 获取已安装库列表...
+[2026-05-06 10:59:58.950][INFO] 验证 Arduino CLI 路径: arduino-cli
+[2026-05-06 10:59:58.968][WARN] Arduino CLI 路径无效: arduino-cli, 错误: 命令执行失败 (退出码: 1): "arduino-cli" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+
+[2026-05-06 10:59:58.969][INFO] 开始自动检测 Arduino CLI...
+[2026-05-06 10:59:58.969][INFO] 验证 Arduino CLI 路径: arduino-cli
+[2026-05-06 10:59:58.984][WARN] Arduino CLI 路径无效: arduino-cli, 错误: 命令执行失败 (退出码: 1): "arduino-cli" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+
+[2026-05-06 10:59:58.985][INFO] 开始自动检测 Arduino CLI...
+[2026-05-06 10:59:58.985][INFO] 验证 Arduino CLI 路径: arduino-cli
+[2026-05-06 10:59:58.999][WARN] Arduino CLI 路径无效: arduino-cli, 错误: 命令执行失败 (退出码: 1): "arduino-cli" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+
+[2026-05-06 10:59:58.999][INFO] 开始自动检测 Arduino CLI...
+[2026-05-06 10:59:59.000][INFO] 验证 Arduino CLI 路径: arduino-cli
+[2026-05-06 10:59:59.018][WARN] Arduino CLI 路径无效: arduino-cli, 错误: 命令执行失败 (退出码: 1): "arduino-cli" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+
+[2026-05-06 10:59:59.018][WARN] 未能自动检测到 Arduino CLI
+[2026-05-06 10:59:59.018][ERROR] 获取板卡列表失败: CliNotReadyError: Arduino CLI 未配置或路径无效，请先执行 "Arduino: Configure CLI Path"
+[2026-05-06 10:59:59.019][INFO] 获取所有已安装的板卡...
+[2026-05-06 10:59:59.019][INFO] 验证 Arduino CLI 路径: arduino-cli
+[2026-05-06 10:59:59.046][WARN] Arduino CLI 路径无效: arduino-cli, 错误: 命令执行失败 (退出码: 1): "arduino-cli" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+
+[2026-05-06 10:59:59.047][WARN] 未能自动检测到 Arduino CLI
+[2026-05-06 10:59:59.047][ERROR] 获取平台列表失败: CliNotReadyError: Arduino CLI 未配置或路径无效，请先执行 "Arduino: Configure CLI Path"
+[2026-05-06 10:59:59.048][INFO] 搜索平台（全部）...
+[2026-05-06 10:59:59.048][INFO] 验证 Arduino CLI 路径: arduino-cli
+[2026-05-06 10:59:59.064][WARN] Arduino CLI 路径无效: arduino-cli, 错误: 命令执行失败 (退出码: 1): "arduino-cli" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+
+[2026-05-06 10:59:59.064][WARN] 未能自动检测到 Arduino CLI
+[2026-05-06 10:59:59.064][ERROR] 获取已安装库列表失败: CliNotReadyError: Arduino CLI 未配置或路径无效，请先执行 "Arduino: Configure CLI Path"
+[2026-05-06 10:59:59.065][INFO] 搜索库: (全部)...
+[2026-05-06 10:59:59.065][INFO] 验证 Arduino CLI 路径: arduino-cli
+[2026-05-06 10:59:59.081][WARN] Arduino CLI 路径无效: arduino-cli, 错误: 命令执行失败 (退出码: 1): "arduino-cli" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+
+[2026-05-06 10:59:59.081][INFO] 开始自动检测 Arduino CLI...
+[2026-05-06 10:59:59.081][INFO] 验证 Arduino CLI 路径: arduino-cli
+[2026-05-06 10:59:59.096][WARN] Arduino CLI 路径无效: arduino-cli, 错误: 命令执行失败 (退出码: 1): "arduino-cli" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+
+[2026-05-06 10:59:59.096][INFO] 开始自动检测 Arduino CLI...
+[2026-05-06 10:59:59.096][INFO] 验证 Arduino CLI 路径: arduino-cli
+[2026-05-06 10:59:59.110][WARN] Arduino CLI 路径无效: arduino-cli, 错误: 命令执行失败 (退出码: 1): "arduino-cli" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+
+[2026-05-06 10:59:59.111][INFO] 开始自动检测 Arduino CLI...
+[2026-05-06 10:59:59.111][INFO] 验证 Arduino CLI 路径: arduino-cli
+[2026-05-06 10:59:59.132][WARN] Arduino CLI 路径无效: arduino-cli, 错误: 命令执行失败 (退出码: 1): "arduino-cli" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+
+[2026-05-06 10:59:59.132][WARN] 未能自动检测到 Arduino CLI
+[2026-05-06 10:59:59.132][ERROR] 获取板卡列表失败: CliNotReadyError: Arduino CLI 未配置或路径无效，请先执行 "Arduino: Configure CLI Path"
+[2026-05-06 10:59:59.133][INFO] 加载了 0 个平台，0 个端口
+[2026-05-06 10:59:59.139][WARN] Arduino CLI 路径无效: arduino-cli, 错误: 命令执行失败 (退出码: 1): "arduino-cli" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+
+[2026-05-06 10:59:59.139][WARN] 未能自动检测到 Arduino CLI
+[2026-05-06 10:59:59.140][ERROR] 搜索平台失败: CliNotReadyError: Arduino CLI 未配置或路径无效，请先执行 "Arduino: Configure CLI Path"
+[2026-05-06 10:59:59.140][INFO] 加载了 0 个平台
+[2026-05-06 10:59:59.153][WARN] Arduino CLI 路径无效: arduino-cli, 错误: 命令执行失败 (退出码: 1): "arduino-cli" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+
+[2026-05-06 10:59:59.154][WARN] 未能自动检测到 Arduino CLI
+[2026-05-06 10:59:59.154][ERROR] 搜索库失败: CliNotReadyError: Arduino CLI 未配置或路径无效，请先执行 "Arduino: Configure CLI Path"
+[2026-05-06 10:59:59.154][INFO] 加载了 0 个库
+[2026-05-06 11:07:33.466][INFO] 验证 Arduino CLI 路径: arduino-cli
+[2026-05-06 11:07:33.517][WARN] Arduino CLI 路径无效: arduino-cli, 错误: 命令执行失败 (退出码: 1): "arduino-cli" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+
+[2026-05-06 11:07:33.518][INFO] 开始自动检测 Arduino CLI...
+[2026-05-06 11:07:33.518][INFO] 验证 Arduino CLI 路径: arduino-cli
+[2026-05-06 11:07:33.555][WARN] Arduino CLI 路径无效: arduino-cli, 错误: 命令执行失败 (退出码: 1): "arduino-cli" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+
+[2026-05-06 11:07:33.556][INFO] 验证 Arduino CLI 路径: C:\Program Files\Arduino CLI\arduino-cli.exe
+[2026-05-06 11:07:33.620][INFO] 验证 Arduino CLI 路径: arduino-cli
+[2026-05-06 11:07:33.677][WARN] Arduino CLI 路径无效: arduino-cli, 错误: 命令执行失败 (退出码: 1): "arduino-cli" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+
+[2026-05-06 11:07:33.678][INFO] 开始自动检测 Arduino CLI...
+[2026-05-06 11:07:33.678][INFO] 验证 Arduino CLI 路径: arduino-cli
+[2026-05-06 11:07:33.728][WARN] Arduino CLI 路径无效: arduino-cli, 错误: 命令执行失败 (退出码: 1): "arduino-cli" no se reconoce como un comando interno o externo,
+programa o archivo por lotes ejecutable.
+
+[2026-05-06 11:07:33.728][INFO] 验证 Arduino CLI 路径: C:\Program Files\Arduino CLI\arduino-cli.exe
+[2026-05-06 11:07:33.735][INFO] Arduino CLI 验证成功: v1.5.0-rc.1
+[2026-05-06 11:07:33.735][INFO] 在路径中找到 Arduino CLI: C:\Program Files\Arduino CLI\arduino-cli.exe
+[2026-05-06 11:07:33.831][INFO] Arduino CLI 验证成功: v1.5.0-rc.1
+[2026-05-06 11:07:33.831][INFO] 在路径中找到 Arduino CLI: C:\Program Files\Arduino CLI\arduino-cli.exe
+[2026-05-06 11:07:33.832][INFO] 获取板卡列表...
+[2026-05-06 11:07:33.832][INFO] 获取已安装的平台列表...
+[2026-05-06 11:07:33.833][INFO] 获取已安装库列表...
+[2026-05-06 11:07:33.834][INFO] 已创建项目本地 Arduino CLI 配置目录: d:\Usuario\Documents\repos\renato-scheeffer\.arduino-cli
+[2026-05-06 11:07:33.834][INFO] 使用全局共享下载目录: C:\Users\Renato\.arduino-cli-shared\downloads
+[2026-05-06 11:07:33.838][INFO] 已创建/更新项目本地 Arduino CLI 配置: d:\Usuario\Documents\repos\renato-scheeffer\.arduino-cli\arduino-cli.yaml
+[2026-05-06 11:07:33.838][INFO] 库目录: d:\Usuario\Documents\repos\renato-scheeffer\.arduino-cli\user\libraries
+[2026-05-06 11:07:33.838][INFO] 下载目录: C:\Users\Renato\.arduino-cli-shared\downloads
+[2026-05-06 11:07:33.839][INFO] 执行命令: ""C:\Program Files\Arduino CLI\arduino-cli.exe"" --config-dir d:\Usuario\Documents\repos\renato-scheeffer\.arduino-cli board list --format json
+[2026-05-06 11:07:33.849][INFO] 执行命令: ""C:\Program Files\Arduino CLI\arduino-cli.exe"" --config-dir d:\Usuario\Documents\repos\renato-scheeffer\.arduino-cli core list --format json
+[2026-05-06 11:07:33.861][INFO] 执行命令: ""C:\Program Files\Arduino CLI\arduino-cli.exe"" --config-dir d:\Usuario\Documents\repos\renato-scheeffer\.arduino-cli lib list --format json
+[2026-05-06 11:07:44.024][INFO] 找到 0 个已安装的平台
+[2026-05-06 11:07:44.025][INFO] 搜索平台（全部）...
+[2026-05-06 11:07:44.025][INFO] 执行命令: ""C:\Program Files\Arduino CLI\arduino-cli.exe"" --config-dir d:\Usuario\Documents\repos\renato-scheeffer\.arduino-cli core search --format json
+[2026-05-06 11:07:44.041][INFO] 找到 0 个已安装的库
+[2026-05-06 11:07:44.041][INFO] 搜索库: (全部)...
+[2026-05-06 11:07:44.041][INFO] 执行命令: ""C:\Program Files\Arduino CLI\arduino-cli.exe"" --config-dir d:\Usuario\Documents\repos\renato-scheeffer\.arduino-cli lib search --format json
+[2026-05-06 11:07:45.027][INFO] 找到 0 个端口
+[2026-05-06 11:07:45.027][INFO] 获取所有已安装的板卡...
+[2026-05-06 11:07:45.027][INFO] 执行命令: ""C:\Program Files\Arduino CLI\arduino-cli.exe"" --config-dir d:\Usuario\Documents\repos\renato-scheeffer\.arduino-cli board listall --format json
+[2026-05-06 11:08:03.127][INFO] 获取已安装的平台列表...
+[2026-05-06 11:08:03.128][INFO] 执行命令: ""C:\Program Files\Arduino CLI\arduino-cli.exe"" --config-dir d:\Usuario\Documents\repos\renato-scheeffer\.arduino-cli core list --format json
+[2026-05-06 11:08:03.432][INFO] 找到 0 个已安装的板卡
+[2026-05-06 11:08:03.433][INFO] 加载了 0 个平台，0 个端口
+[2026-05-06 11:08:03.566][INFO] 找到 0 个已安装的平台
+[2026-05-06 11:08:03.568][INFO] 找到 36 个可用平台
+[2026-05-06 11:08:03.568][INFO] 加载了 36 个平台
+[2026-05-06 11:08:05.887][INFO] 获取已安装库列表...
+[2026-05-06 11:08:05.887][INFO] 执行命令: ""C:\Program Files\Arduino CLI\arduino-cli.exe"" --config-dir d:\Usuario\Documents\repos\renato-scheeffer\.arduino-cli lib list --format json
+[2026-05-06 11:08:06.245][INFO] 找到 0 个已安装的库
+[2026-05-06 11:08:06.285][INFO] 搜索到 9337 个库
+[2026-05-06 11:08:06.293][INFO] 加载了 9337 个库
+[2026-05-06 11:44:43.977][INFO] Arduino CLI 插件正在停用...
+[2026-05-06 11:44:43.978][INFO] 串口监视器(Terminal)已释放
+[2026-05-06 11:44:43.978][INFO] 串口监视器(WebView)已释放
+[2026-05-06 11:44:43.978][INFO] [BoardDiscovery] 释放资源...
+[2026-05-06 11:44:43.978][INFO] [BoardDiscovery] 资源已释放
+[2026-05-06 11:44:43.978][INFO] Arduino Extension 关闭
+──────────────────────────────────────────────────────────────────────

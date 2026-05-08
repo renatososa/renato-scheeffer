@@ -3,3 +3,8 @@ TO-DO.md
 venv
 aux/
 proyecto_final
+*.code
+site/archivos/MT06/simulacion
+site/archivos/MT07/simulacion
+*.arduino-cli
+*.build

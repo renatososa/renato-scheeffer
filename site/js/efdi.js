@@ -75,6 +75,42 @@ function buildTOC() {
   observeActiveHeadings(headings);
 }
 
+function activatePrismIn(root) {
+  if (!root) return;
+
+  const highlight = () => {
+    if (typeof Prism === 'undefined') {
+      return false;
+    }
+
+    if (typeof Prism.highlightAllUnder === 'function') {
+      Prism.highlightAllUnder(root);
+    } else {
+      Prism.highlightAll();
+    }
+
+    return true;
+  };
+
+  if (highlight()) {
+    return;
+  }
+
+  let retries = 0;
+  const maxRetries = 20;
+  const retryDelayMs = 100;
+
+  const retry = () => {
+    if (highlight() || retries >= maxRetries) {
+      return;
+    }
+    retries += 1;
+    setTimeout(retry, retryDelayMs);
+  };
+
+  retry();
+}
+
 let headingObserver;
 function observeActiveHeadings(headings) {
   // Desconectar observer previo
@@ -164,6 +200,7 @@ function observeActiveHeadings(headings) {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         area.innerHTML = await res.text();
         buildTOC();
+        activatePrismIn(area);
         // Al cambiar de módulo volvemos al inicio de EFDI para alinear las 3 columnas.
         if (scrollOnLoad) scrollToEFDITop(true);
       } catch (err) {
