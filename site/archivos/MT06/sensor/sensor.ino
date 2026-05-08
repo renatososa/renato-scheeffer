@@ -1,9 +1,5 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
-// Libraries needed in Arduino IDE:
-// - WiFi (bundled with ESP32 core)
-// - PubSubClient by Nick O'Leary
-
 const char* WIFI_SSID = "nombre_wifi";
 const char* WIFI_PASSWORD = "contraseña_wifi";
 

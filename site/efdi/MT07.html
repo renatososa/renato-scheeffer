@@ -1,0 +1,438 @@
+<!-- Content -->
+<section class="col-12 col-lg-12">
+  <div class="border rounded-3 bg-white p-3">
+    <h4 class="mb-3">Módulo Técnico 7: interfaces</h4>
+    <p class="text-justify">
+      En este módulo trabajamos sobre interfaces de control para sistemas embebidos y sobre la relación entre el usuario, el
+      hardware y la lógica interna del microcontrolador. La idea general fue entender que una interfaz no es solamente una
+      capa visual, sino una mediación concreta entre las acciones del usuario y el comportamiento del sistema físico. En ese
+      sentido, también resultó importante pensar qué información conviene mostrar, qué controles tienen más sentido para cada
+      actuador y cuál es el modelo mental más claro para operar el dispositivo sin perderse en su complejidad interna.
+    </p>
+    <p class="text-justify">
+      La tarea propuesta para este módulo consistió en diseñar e implementar una interfaz de control para operar uno o más
+      actuadores conectados a un <b>ESP32</b>. 
+    </p>
+
+    <h5 class="mb-3">Propuesta implementada</h5>
+    <p class="text-justify">
+      Para resolver esta consigna decidí implementar una interfaz web servida directamente por el <b>ESP32</b>, siguiendo una
+      lógica bastante cercana a la utilizada en el módulo anterior pero aplicada ahora al control de actuadores mediante una
+      página accesible desde el navegador. Los actuadores elegidos fueron un <b>motor paso a paso NEMA 17</b> controlado a
+      través de un <b>A4988</b> y un <b>LED RGB</b>. Desde la interfaz el usuario puede indicar velocidad, cantidad de
+      rotaciones y sentido de giro del motor, y además modificar el color y el brillo del LED o apagarlo por completo.
+    </p>
+    <p class="text-justify">
+      La comunicación entre la interfaz y el ESP32 se resuelve mediante un <b>servidor HTTP</b> embebido. La propia placa
+      sirve la página web y recibe las órdenes a través de distintas rutas como <code>/motor</code>, <code>/rgb</code> y
+      <code>/off</code>. De esta manera el navegador actúa como cliente y el ESP32 como servidor, sin necesidad de software
+      adicional en la computadora para operar el sistema.
+    </p>
+
+    <h5 class="mb-3">Materiales y plataforma utilizados</h5>
+    <h6 class="mb-3">Materiales</h6>
+    <ul>
+      <li>1 ESP32.</li>
+      <li>1 driver A4988 para el motor paso a paso.</li>
+      <li>1 motor paso a paso tipo NEMA 17.</li>
+      <li>1 LED RGB.</li>
+      <li>3 resistencias de 220 ohm para el LED RGB.</li>
+      <li>Cables de conexión.</li>
+      <li>Fuente de alimentación de 24 V y 2 A para la implementación real.</li>
+    </ul>
+
+    <h6 class="mb-3">Plataforma y herramientas</h6>
+    <ul>
+      <li>Plataforma de simulación: <i>Wokwi</i> integrado en <i>Visual Studio Code</i>.</li>
+      <li>Interfaz implementada: <b>HTML + JavaScript</b> servido desde el ESP32.</li>
+      <li>Acceso a la simulación desde la PC mediante bridge de red <code>localhost:8180 -&gt; target:80</code>.</li>
+      <li>Firmware real servido por el propio ESP32 como punto de acceso <code>MT07</code>.</li>
+    </ul>
+
+    <h5 class="mb-3">Implementación del sistema en simulación</h5>
+    <p class="text-justify">
+      La primera etapa del trabajo consistió en implementar el sistema completo en simulación. En este caso se montó un
+      <b>ESP32</b> conectado a un <b>A4988</b>, un motor paso a paso y un <b>LED RGB</b>. La idea fue validar primero la
+      lógica general de la interfaz y del control de actuadores antes de pasar al hardware real. A diferencia del módulo 6,
+      aquí no se trató de comunicar dos nodos por red, sino de hacer que un mismo ESP32 recibiera órdenes desde una interfaz
+      web y las transformara en acciones físicas sobre el motor y el LED.
+    </p>
+
+    <h6 class="mb-3">Configuración general y selección de actuadores</h6>
+    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+<code class="language-arduino">#include &lt;WiFi.h&gt;
+#include &lt;WebServer.h&gt;
+
+const char* WIFI_SSID = "Wokwi-GUEST";
+const char* WIFI_PASSWORD = "";
+
+constexpr uint8_t DIR_PIN = 5;
+constexpr uint8_t STEP_PIN = 18;
+constexpr uint8_t ENABLE_PIN = 19;
+
+constexpr uint8_t LED_B_PIN = 25;
+constexpr uint8_t LED_G_PIN = 26;
+constexpr uint8_t LED_R_PIN = 27;
+
+WebServer server(80);</code></pre>
+    <p class="text-justify">
+      En este primer bloque se incorporan las librerías necesarias para conectividad y servidor web, se define la conexión a
+      la red de <i>Wokwi</i> y se establecen los pines utilizados para cada actuador. El motor paso a paso se controla con
+      tres señales del driver <b>A4988</b>: dirección, paso y habilitación. Por otro lado, el LED RGB utiliza tres salidas
+      independientes para controlar sus canales rojo, verde y azul.
+    </p>
+
+    <h6 class="mb-3">Control del motor paso a paso</h6>
+    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+<code class="language-arduino">float currentPositionRotations() {
+  return static_cast&lt;float&gt;(motorPositionSteps) / STEPS_PER_REV;
+}
+
+uint16_t rpmToStepsPerSec(uint16_t rpm) {
+  return static_cast&lt;uint16_t&gt;((static_cast&lt;uint32_t&gt;(rpm) * STEPS_PER_REV) / 60.0f);
+}
+
+void setMotorDirection(bool clockwise) {
+  motorDirectionCw = clockwise;
+  digitalWrite(DIR_PIN, clockwise ? HIGH : LOW);
+}
+
+void enableDriver() {
+  digitalWrite(ENABLE_PIN, LOW);
+}
+
+void pulseStep(uint32_t halfPeriodUs) {
+  digitalWrite(STEP_PIN, HIGH);
+  delayMicroseconds(halfPeriodUs);
+  digitalWrite(STEP_PIN, LOW);
+  delayMicroseconds(halfPeriodUs);
+}
+
+void moveMotorRotations(float rotations, bool clockwise, uint16_t speedRpm) {
+  const long steps = lroundf(rotations * STEPS_PER_REV);
+  const uint16_t speedStepsPerSec = rpmToStepsPerSec(speedRpm);
+  const uint32_t halfPeriodUs = max&lt;uint32_t&gt;(150, 500000UL / speedStepsPerSec);
+
+  setMotorDirection(clockwise);
+  enableDriver();
+
+  for (long i = 0; i &lt; steps; ++i) {
+    pulseStep(halfPeriodUs);
+  }
+
+  motorPositionSteps += clockwise ? steps : -steps;
+}</code></pre>
+    <p class="text-justify">
+      Este bloque concentra la lógica principal del motor. Primero se convierten las revoluciones por minuto a pasos por
+      segundo y luego se calcula el período necesario entre pulsos para obtener la velocidad deseada. La función
+      <i>moveMotorRotations()</i> es la encargada de fijar el sentido de giro, habilitar el driver y generar la cantidad de
+      pulsos correspondiente a las rotaciones solicitadas por el usuario. Además, se mantiene una variable interna con la
+      posición acumulada del motor expresada en pasos para poder mostrar esa información en la interfaz.
+    </p>
+
+    <h6 class="mb-3">Control del LED RGB</h6>
+    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+<code class="language-arduino">String rgbToHex(uint8_t red, uint8_t green, uint8_t blue) {
+  char buffer[8];
+  snprintf(buffer, sizeof(buffer), "#%02X%02X%02X", red, green, blue);
+  return String(buffer);
+}
+
+void applyLedFromSelection() {
+  currentRed = static_cast&lt;uint8_t&gt;((static_cast&lt;uint16_t&gt;(baseRed) * currentBrightnessPct) / 100);
+  currentGreen = static_cast&lt;uint8_t&gt;((static_cast&lt;uint16_t&gt;(baseGreen) * currentBrightnessPct) / 100);
+  currentBlue = static_cast&lt;uint8_t&gt;((static_cast&lt;uint16_t&gt;(baseBlue) * currentBrightnessPct) / 100);
+
+  ledcWrite(LED_R_PIN, currentRed);
+  ledcWrite(LED_G_PIN, currentGreen);
+  ledcWrite(LED_B_PIN, currentBlue);
+}
+
+void setLedOff() {
+  currentBrightnessPct = 0;
+  applyLedFromSelection();
+}
+
+bool parseHexColor(const String& value, uint8_t& red, uint8_t& green, uint8_t& blue) {
+  String hex = value;
+  if (hex.startsWith("#")) {
+    hex.remove(0, 1);
+  }
+
+  if (hex.length() != 6) {
+    return false;
+  }
+
+  const long number = strtol(hex.c_str(), nullptr, 16);
+  red = static_cast&lt;uint8_t&gt;((number &gt;&gt; 16) &amp; 0xFF);
+  green = static_cast&lt;uint8_t&gt;((number &gt;&gt; 8) &amp; 0xFF);
+  blue = static_cast&lt;uint8_t&gt;(number &amp; 0xFF);
+  return true;
+}</code></pre>
+    <p class="text-justify">
+      Para el LED RGB se implementó una lógica sencilla pero bastante flexible. La interfaz le permite al usuario elegir un
+      color en formato hexadecimal y un porcentaje de brillo. La función <i>parseHexColor()</i> convierte el valor elegido a
+      sus componentes rojo, verde y azul, mientras que <i>applyLedFromSelection()</i> aplica además el brillo seleccionado y
+      actualiza los tres canales mediante PWM. La función <i>setLedOff()</i> permite apagar el LED sin perder el color base
+      previamente seleccionado.
+    </p>
+
+    <h6 class="mb-3">Interfaz web y recepción de órdenes</h6>
+    <p class="text-justify">
+      Uno de los aspectos más importantes de esta práctica fue la propia interfaz. La página servida por el ESP32 muestra al
+      usuario el estado actual del sistema y ofrece controles claros para actuar sobre cada uno de los actuadores. En la
+      parte superior se presenta la posición actual del motor en rotaciones y el color que está mostrando el LED. Luego la
+      interfaz se divide en dos áreas principales: una dedicada al motor y otra al LED RGB.
+    </p>
+    <p class="text-justify">
+      En la sección del motor el usuario puede modificar la <b>velocidad</b> mediante un control deslizante, indicar la
+      cantidad de <b>rotaciones</b> y elegir el <b>sentido de giro</b> entre horario y antihorario. En la sección del LED el
+      usuario puede elegir un <b>color</b>, ajustar el <b>brillo</b> y apagar completamente el actuador. De esta forma la
+      interfaz no solo permite mandar órdenes, sino también mantener una referencia bastante clara del estado del sistema.
+    </p>
+    <figure class="figure">
+      <img src="img/MT07/interfaz.png" class="img-fluid me-2" alt="Interfaz web del sistema MT07" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 1: interfaz web implementada para controlar el motor paso a paso y el LED RGB.</figcaption>
+    </figure>
+    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+<code class="language-arduino">page += F(
+  "&lt;div class='card'&gt;&lt;h2&gt;Estado actual&lt;/h2&gt;&lt;div class='status'&gt;"
+  "&lt;div class='pill'&gt;&lt;strong&gt;Posicion actual&lt;/strong&gt;&lt;br&gt;");
+page += String(currentPositionRotations(), 2);
+page += F(" rotaciones&lt;/div&gt;&lt;div class='pill'&gt;&lt;strong&gt;Color actual&lt;/strong&gt;&lt;br&gt;");
+page += currentHex;
+page += F("&lt;div class='preview' style='margin-top:10px;background:");
+page += currentHex;
+page += F(";'&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;"
+  "&lt;div class='grid'&gt;"
+  "&lt;div class='card'&gt;&lt;h2&gt;Motor&lt;/h2&gt;"
+  "&lt;form action='/motor' method='get'&gt;"
+  "&lt;input id='speed' name='speed' type='range' min='15' max='360' step='5'&gt;"
+  "&lt;input id='rotations' name='rotations' type='number' min='0.1' max='20' step='0.1'&gt;"
+  "&lt;select id='dir' name='dir'&gt;"
+  "&lt;option value='cw'&gt;Horario&lt;/option&gt;"
+  "&lt;option value='ccw'&gt;Antihorario&lt;/option&gt;"
+  "&lt;/select&gt;"
+  "&lt;button type='submit'&gt;Mover&lt;/button&gt;"
+  "&lt;/form&gt;&lt;/div&gt;"
+  "&lt;div class='card'&gt;&lt;h2&gt;LED RGB&lt;/h2&gt;"
+  "&lt;form action='/rgb' method='get'&gt;"
+  "&lt;input id='color' name='color' type='color'&gt;"
+  "&lt;input id='brightness' name='brightness' type='range' min='0' max='100'&gt;");</code></pre>
+    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+<code class="language-arduino">void handleMotor() {
+  const uint16_t speedRpm = static_cast&lt;uint16_t&gt;(
+    readIntArg("speed", DEFAULT_SPEED_RPM, MIN_SPEED_RPM, MAX_SPEED_RPM)
+  );
+  const float rotations = readFloatArg("rotations", DEFAULT_ROTATIONS, MIN_ROTATIONS, MAX_ROTATIONS);
+  const bool clockwise = server.arg("dir") != "ccw";
+
+  moveMotorRotations(rotations, clockwise, speedRpm);
+  currentSpeedRpm = speedRpm;
+  redirectHome();
+}
+
+void handleRgb() {
+  uint8_t selectedRed = baseRed;
+  uint8_t selectedGreen = baseGreen;
+  uint8_t selectedBlue = baseBlue;
+
+  if (server.hasArg("color")) {
+    parseHexColor(server.arg("color"), selectedRed, selectedGreen, selectedBlue);
+  }
+
+  baseRed = selectedRed;
+  baseGreen = selectedGreen;
+  baseBlue = selectedBlue;
+  currentBrightnessPct = static_cast&lt;uint8_t&gt;(readIntArg("brightness", currentBrightnessPct, 0, 100));
+  applyLedFromSelection();
+  redirectHome();
+}</code></pre>
+    <p class="text-justify">
+      En este caso la propia página HTML contiene formularios que envían datos al ESP32 mediante peticiones HTTP. Cuando el
+      usuario presiona los botones de la interfaz, el servidor recibe los parámetros correspondientes y ejecuta la función
+      asociada a cada ruta. De esta forma, la interfaz y la lógica de control quedan estrechamente integradas dentro del
+      mismo firmware.
+    </p>
+
+    <h6 class="mb-3">Inicialización del servidor y rutina principal</h6>
+    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+<code class="language-arduino">void connectWiFi() {
+  if (WiFi.status() == WL_CONNECTED) {
+    return;
+  }
+
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(250);
+  }
+}
+
+void setupServer() {
+  server.on("/", handleRoot);
+  server.on("/motor", handleMotor);
+  server.on("/rgb", handleRgb);
+  server.on("/off", handleOff);
+  server.on("/status", handleStatus);
+  server.onNotFound(handleRoot);
+  server.begin();
+}
+
+void setup() {
+  Serial.begin(115200);
+  setupStepper();
+  setupRgb();
+  connectWiFi();
+  setupServer();
+}
+
+void loop() {
+  if (WiFi.status() != WL_CONNECTED) {
+    connectWiFi();
+  }
+
+  server.handleClient();
+  delay(2);
+}</code></pre>
+    <p class="text-justify">
+      Finalmente se inicializan el motor, el LED y la conexión de red, para luego poner en marcha el servidor HTTP. Dentro
+      del <i>loop()</i> el ESP32 queda atendiendo continuamente al navegador y procesando las órdenes que llegan desde la
+      interfaz. En este caso no se necesita un protocolo adicional como MQTT, ya que toda la interacción ocurre de forma
+      directa entre el navegador y el microcontrolador.
+    </p>
+
+    <h6 class="mb-3">Conexiones del sistema en simulación</h6>
+    <p class="text-justify">
+      En la Figura 2 se presenta el diagrama de conexiones utilizado en la simulación. Allí se puede observar el
+      <b>ESP32</b>, el <b>driver A4988</b>, el motor paso a paso y el LED RGB con sus resistencias. El driver recibe las
+      señales de <b>DIR</b>, <b>STEP</b> y <b>ENABLE</b> desde el microcontrolador, mientras que el LED se controla mediante
+      tres salidas PWM independientes.
+    </p>
+    <figure class="figure">
+      <img src="img/MT07/diagrama.png" class="img-fluid me-2" alt="Diagrama de conexiones MT07" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 2: diagrama de conexiones del sistema en simulación.</figcaption>
+    </figure>
+
+    <h6 class="mb-3">Acceso al servidor simulado desde la PC</h6>
+    <p class="text-justify">
+      Para la simulación del sistema se utilizó la misma plataforma embebida en <i>Visual Studio Code</i> que en el módulo 6.
+      Sin embargo, en este caso apareció un requerimiento adicional: como el objetivo era probar una interfaz web servida por
+      el propio ESP32, fue necesario implementar un <b>bridge de red</b> que permitiera acceder desde la computadora al
+      servidor HTTP que corría dentro del entorno simulado.
+    </p>
+    <p class="text-justify">
+      Esta configuración se resolvió mediante el archivo <code>wokwi.toml</code>, que redirige el puerto local
+      <code>8180</code> hacia el puerto <code>80</code> del ESP32 simulado. De esta forma, la interfaz se puede abrir desde
+      el navegador de la PC utilizando la dirección <code>http://localhost:8180</code>.
+    </p>
+    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+<code class="language-toml">[wokwi]
+version = 1
+firmware = ".build/server.ino.bin"
+elf = ".build/server.ino.elf"
+rfc2217ServerPort = 4000
+
+[[net.forward]]
+from = "localhost:8180"
+to = "target:80"</code></pre>
+    <p class="text-justify">
+      A continuación se presenta un video de la simulación del sistema funcionando, donde se puede observar tanto la
+      respuesta de los actuadores como la operación de la interfaz desde el navegador.
+    </p>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/EDKNacZHLp4" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+    <h5 class="mb-3">Implementación real</h5>
+    <p class="text-justify">
+      Una vez validada la lógica general del sistema en simulación se realizó la implementación sobre hardware real. En esta
+      etapa se mantuvo el mismo enfoque general: un único <b>ESP32</b> sirviendo una interfaz web y controlando un motor paso
+      a paso junto con un LED RGB. Sin embargo, aparecieron varias diferencias prácticas vinculadas al montaje físico, la
+      alimentación del driver y el cableado real del motor.
+    </p>
+
+    <h6 class="mb-3">Configuración real del servidor y de los pines</h6>
+    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+<code class="language-arduino">#include &lt;WiFi.h&gt;
+#include &lt;WebServer.h&gt;
+
+const char* AP_SSID = "MT07";
+
+constexpr uint8_t DIR_PIN = 26;
+constexpr uint8_t STEP_PIN = 27;
+constexpr uint8_t ENABLE_PIN = 14;
+
+constexpr uint8_t LED_B_PIN = 25;
+constexpr uint8_t LED_G_PIN = 33;
+constexpr uint8_t LED_R_PIN = 32;
+
+WebServer server(80);</code></pre>
+    <p class="text-justify">
+      En la implementación real se modificó la configuración de red respecto a la simulación para que el propio ESP32
+      funcionara como <b>punto de acceso</b>. De esta manera la interfaz puede abrirse conectándose directamente a la red
+      generada por la placa, sin depender de la red local de la casa ni de un bridge adicional. También se ajustó la
+      asignación de pines para acomodarla al montaje físico definitivo del sistema.
+    </p>
+    <pre class="line-numbers" data-prismjs-copy="Copiar" data-prismjs-copy-success="¡Copiado!">
+<code class="language-arduino">void setupAccessPoint() {
+  WiFi.mode(WIFI_AP);
+  if (!WiFi.softAP(AP_SSID)) {
+    Serial.println("No se pudo iniciar el punto de acceso");
+    return;
+  }
+
+  Serial.println();
+  Serial.print("WiFi: ");
+  Serial.println(AP_SSID);
+  Serial.print("IP: ");
+  Serial.println(WiFi.softAPIP());
+}</code></pre>
+    <p class="text-justify">
+      Esta modificación permite acceder a la interfaz conectándose al WiFi generado por el ESP32 y entrando luego a la
+      dirección que informa el propio sistema por el puerto serial. En este caso la lógica de control de actuadores no cambia,
+      pero sí la forma en que el usuario establece la conexión inicial con el servidor.
+    </p>
+
+    <h6 class="mb-3">Alimentación del driver y conexiones del motor real</h6>
+    <p class="text-justify">
+      Una diferencia importante entre simulación e implementación real es que en <i>Wokwi</i> no fue necesario alimentar al
+      driver del motor con una fuente de potencia externa. En la práctica real esto sí resultó indispensable. Para poder
+      mover el motor paso a paso se utilizó una <b>fuente de 24 V y 2 A</b> conectada al <b>A4988</b>, ya que la alimentación
+      lógica del ESP32 no es suficiente para resolver por sí sola la etapa de potencia del actuador.
+    </p>
+    <p class="text-justify">
+      Además, durante el montaje apareció otra dificultad concreta: el motor utilizado en la implementación real fue un
+      <b>NEMA17HS</b> de <b>6 pines</b>, mientras que en la simulación se trabajó con una representación simplificada de
+      cuatro terminales. Por este motivo la correspondencia de conexiones no fue exactamente la misma. En la simulación las
+      bobinas aparecen directamente como <code>A1 A2 B1 B2</code>, mientras que en el motor real la disposición observada fue
+      <code>B1 X A1 B2 X A2</code>, donde <code>X</code> representa terminales sin conexión en este montaje. Esto obligó a
+      identificar correctamente cada bobina antes de conectarla al driver para evitar un comportamiento errático del motor.
+    </p>
+
+    <h6 class="mb-3">Funcionamiento general del sistema real</h6>
+    <p class="text-justify">
+      Más allá de estas adaptaciones, el comportamiento general del sistema se mantuvo coherente con lo validado previamente
+      en simulación. La interfaz siguió permitiendo setear la velocidad, las rotaciones y el sentido de giro del motor, así
+      como cambiar el color y el brillo del LED RGB. Lo que cambió fue el contexto de implementación: la presencia de una
+      fuente externa para el driver, un cableado real del motor más complejo y la necesidad de ajustar la configuración de
+      red para que el sistema pudiera operar de forma autónoma.
+    </p>
+
+    <h5 class="mb-3">Conclusiones</h5>
+    <p class="text-justify">
+      Esta práctica permitió implementar una interfaz de control clara y funcional sobre un <b>ESP32</b>, integrando una capa
+      web con el accionamiento directo de un motor paso a paso y un LED RGB. El resultado fue interesante porque permitió
+      trabajar al mismo tiempo sobre la interfaz, la lógica embebida y el comportamiento físico de los actuadores.
+    </p>
+    <p class="text-justify">
+      También quedó bastante claro que el pasaje de simulación a hardware real introduce dificultades que no siempre se hacen
+      evidentes en el entorno virtual. En este caso eso se vio sobre todo en la alimentación del driver y en el cableado del
+      motor de 6 pines. Aun así, la simulación resultó muy útil para validar la arquitectura general del sistema y la lógica
+      de interacción antes de enfrentar esas complejidades en el montaje físico.
+    </p>
+    <p class="text-justify">
+      El código correspondiente a la implementación real de este sistema se puede encontrar en el repositorio, en el archivo
+      <a href="https://github.com/renatososa/renato-scheeffer/blob/main/site/archivos/MT07/server/server/server.ino">server.ino</a>.
+    </p>
+  </div>
+</section>

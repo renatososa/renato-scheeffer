@@ -1,16 +1,15 @@
 #include <WiFi.h>
 #include <WebServer.h>
 
-const char* WIFI_SSID = "Wokwi-GUEST";
-const char* WIFI_PASSWORD = "";
+const char* AP_SSID = "MT07";
 
-constexpr uint8_t DIR_PIN = 5;
-constexpr uint8_t STEP_PIN = 18;
-constexpr uint8_t ENABLE_PIN = 19;
+constexpr uint8_t DIR_PIN = 26;
+constexpr uint8_t STEP_PIN = 27;
+constexpr uint8_t ENABLE_PIN = 14;
 
 constexpr uint8_t LED_B_PIN = 25;
-constexpr uint8_t LED_G_PIN = 26;
-constexpr uint8_t LED_R_PIN = 27;
+constexpr uint8_t LED_G_PIN = 33;
+constexpr uint8_t LED_R_PIN = 32;
 
 constexpr uint32_t LED_PWM_FREQ = 5000;
 constexpr uint8_t LED_PWM_RESOLUTION = 8;
@@ -115,36 +114,6 @@ bool parseHexColor(const String& value, uint8_t& red, uint8_t& green, uint8_t& b
   return true;
 }
 
-int readIntArg(const char* name, int fallback, int minValue, int maxValue) {
-  if (!server.hasArg(name)) {
-    return fallback;
-  }
-
-  const long value = server.arg(name).toInt();
-  if (value < minValue) {
-    return minValue;
-  }
-  if (value > maxValue) {
-    return maxValue;
-  }
-  return static_cast<int>(value);
-}
-
-float readFloatArg(const char* name, float fallback, float minValue, float maxValue) {
-  if (!server.hasArg(name)) {
-    return fallback;
-  }
-
-  const float value = server.arg(name).toFloat();
-  if (value < minValue) {
-    return minValue;
-  }
-  if (value > maxValue) {
-    return maxValue;
-  }
-  return value;
-}
-
 void redirectHome() {
   server.sendHeader("Location", "/", true);
   server.send(303, "text/plain", "");
@@ -152,22 +121,20 @@ void redirectHome() {
 
 String buildPage() {
   String page;
-  page.reserve(4200);
+  page.reserve(5000);
 
   const String pickerHex = rgbToHex(baseRed, baseGreen, baseBlue);
   const String currentHex = rgbToHex(currentRed, currentGreen, currentBlue);
+  const String currentIp = WiFi.softAPIP().toString();
 
   page += F(
     "<!doctype html><html lang='es'><head><meta charset='utf-8'>"
     "<meta name='viewport' content='width=device-width, initial-scale=1'>"
-    "<link rel='preconnect' href='https://fonts.googleapis.com'>"
-    "<link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>"
-    "<link href='https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&family=Space+Grotesk:wght@500;700&display=swap' rel='stylesheet'>"
     "<title>MT07 - Interfaz ESP32</title>"
     "<style>"
     ":root{--bg:#f4f1ea;--surface:rgba(255,252,246,.92);--surface-strong:#fffdf8;--surface-tint:#f7f3ec;--text:#1f2f37;--muted:#5d6d74;--accent:#0f766e;--accent-strong:#0a5c56;--accent-soft:#dbece7;--border:#d7ddd6;--shadow-soft:0 16px 40px rgba(24,38,44,.08);--shadow-card:0 18px 40px rgba(18,31,35,.10);}"
     "*{box-sizing:border-box;}"
-    "body{font-family:'Source Sans 3',sans-serif;line-height:1.7;background:radial-gradient(circle at top left,rgba(15,118,110,.09),transparent 28%),radial-gradient(circle at top right,rgba(170,140,72,.08),transparent 26%),linear-gradient(180deg,#f7f3ec 0%,var(--bg) 32%,#f2eee7 100%);color:var(--text);margin:0;padding:24px;}"
+    "body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;line-height:1.7;background:radial-gradient(circle at top left,rgba(15,118,110,.09),transparent 28%),radial-gradient(circle at top right,rgba(170,140,72,.08),transparent 26%),linear-gradient(180deg,#f7f3ec 0%,var(--bg) 32%,#f2eee7 100%);color:var(--text);margin:0;padding:24px;}"
     "body:before{content:'';position:fixed;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.12) 1px,transparent 1px);background-size:32px 32px;mask-image:linear-gradient(180deg,rgba(0,0,0,.2),transparent 70%);z-index:-1;}"
     ".shell{max-width:980px;margin:0 auto;display:grid;gap:18px;}"
     ".card{background:var(--surface);border:1px solid rgba(205,213,208,.92);border-radius:24px;padding:22px;box-shadow:var(--shadow-soft);backdrop-filter:blur(10px);}"
@@ -178,7 +145,7 @@ String buildPage() {
     ".preview{width:72px;height:72px;border-radius:20px;border:1px solid rgba(206,214,209,.92);box-shadow:inset 0 0 24px rgba(255,255,255,.22),0 10px 24px rgba(24,38,44,.06);background:var(--surface-strong);}"
     "form{display:grid;gap:12px;}"
     "label{font-size:1rem;color:#24373e;font-weight:600;}"
-    "input,select,button{font-family:'Source Sans 3',sans-serif;font-size:1rem;}"
+    "input,select,button{font-family:inherit;font-size:1rem;}"
     "input,select{min-height:2.9rem;border-radius:14px;border:1px solid rgba(196,205,201,.92);background:rgba(255,252,248,.96);color:var(--text);padding:10px 12px;box-shadow:none;}"
     "input:focus,select:focus{outline:none;border-color:rgba(15,118,110,.55);box-shadow:0 0 0 .2rem rgba(15,118,110,.12);}"
     "input[type='color']{padding:6px;height:56px;background:var(--surface-strong);}"
@@ -187,15 +154,19 @@ String buildPage() {
     "button.warn{background:linear-gradient(135deg,#c98b19,#b96d0b);color:#fff8ea;box-shadow:0 12px 24px rgba(185,109,11,.16);}"
     "button:hover{transform:translateY(-1px);}"
     ".button-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:end;}"
-    "h1,h2{font-family:'Space Grotesk',sans-serif;letter-spacing:-.02em;color:#1c2c33;line-height:1.2;margin:0 0 .8rem;}"
+    "h1,h2{font-family:'Trebuchet MS','Segoe UI',sans-serif;letter-spacing:-.02em;color:#1c2c33;line-height:1.2;margin:0 0 .8rem;}"
     "h1{font-size:clamp(2rem,4vw,3rem);} h2{font-size:clamp(1.2rem,2vw,1.55rem);} p{margin:0;color:#30434a;} strong{color:#203039;} code{background:rgba(219,236,231,.7);color:#144743;padding:.12rem .38rem;border-radius:8px;}"
     "</style></head><body><div class='shell'>"
-    "<div class='card hero'><h1>MT07 - Control web sobre ESP32 simulada</h1>"
-    "<p>Interfaz simplificada para controlar el motor paso a paso y el LED RGB desde la web servida por la ESP32.</p></div>"
+    "<div class='card hero'><h1>MT07 - Control web sobre ESP32</h1>"
+    "<p>Control del motor paso a paso y del LED RGB desde la web servida por la ESP32.</p></div>"
     "<div class='card'><h2>Estado actual</h2><div class='status'>"
     "<div class='pill'><strong>Posicion actual</strong><br>");
   page += String(currentPositionRotations(), 2);
-  page += F(" rotaciones</div><div class='pill'><strong>Color actual</strong><br>");
+  page += F(" rotaciones</div><div class='pill'><strong>WiFi</strong><br><code>");
+  page += AP_SSID;
+  page += F("</code><br><code>http://");
+  page += currentIp;
+  page += F("/</code></div><div class='pill'><strong>Color actual</strong><br>");
   page += currentHex;
   page += F("<div class='preview' style='margin-top:10px;background:");
   page += currentHex;
@@ -248,10 +219,21 @@ void handleRoot() {
 }
 
 void handleMotor() {
-  const uint16_t speedRpm = static_cast<uint16_t>(
-    readIntArg("speed", DEFAULT_SPEED_RPM, MIN_SPEED_RPM, MAX_SPEED_RPM)
-  );
-  const float rotations = readFloatArg("rotations", DEFAULT_ROTATIONS, MIN_ROTATIONS, MAX_ROTATIONS);
+  uint16_t speedRpm = DEFAULT_SPEED_RPM;
+  if (server.hasArg("speed")) {
+    speedRpm = static_cast<uint16_t>(constrain(server.arg("speed").toInt(), MIN_SPEED_RPM, MAX_SPEED_RPM));
+  }
+
+  float rotations = DEFAULT_ROTATIONS;
+  if (server.hasArg("rotations")) {
+    rotations = server.arg("rotations").toFloat();
+    if (rotations < MIN_ROTATIONS) {
+      rotations = MIN_ROTATIONS;
+    } else if (rotations > MAX_ROTATIONS) {
+      rotations = MAX_ROTATIONS;
+    }
+  }
+
   const bool clockwise = server.arg("dir") != "ccw";
 
   moveMotorRotations(rotations, clockwise, speedRpm);
@@ -282,7 +264,9 @@ void handleRgb() {
   baseRed = selectedRed;
   baseGreen = selectedGreen;
   baseBlue = selectedBlue;
-  currentBrightnessPct = static_cast<uint8_t>(readIntArg("brightness", currentBrightnessPct, 0, 100));
+  if (server.hasArg("brightness")) {
+    currentBrightnessPct = static_cast<uint8_t>(constrain(server.arg("brightness").toInt(), 0, 100));
+  }
   applyLedFromSelection();
 
   Serial.print("RGB aplicado -> color base ");
@@ -309,23 +293,18 @@ void handleStatus() {
   server.send(200, "application/json", json);
 }
 
-void connectWiFi() {
-  if (WiFi.status() == WL_CONNECTED) {
+void setupAccessPoint() {
+  WiFi.mode(WIFI_AP);
+  if (!WiFi.softAP(AP_SSID)) {
+    Serial.println("No se pudo iniciar el punto de acceso");
     return;
   }
 
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-
-  Serial.print("Conectando a WiFi");
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(250);
-    Serial.print(".");
-  }
-
   Serial.println();
-  Serial.print("WiFi conectado. IP local: ");
-  Serial.println(WiFi.localIP());
+  Serial.print("WiFi: ");
+  Serial.println(AP_SSID);
+  Serial.print("IP: ");
+  Serial.println(WiFi.softAPIP());
 }
 
 void setupRgb() {
@@ -361,7 +340,7 @@ void setup() {
 
   setupStepper();
   setupRgb();
-  connectWiFi();
+  setupAccessPoint();
   setupServer();
 
   Serial.println("Servidor HTTP listo");
@@ -369,10 +348,6 @@ void setup() {
 }
 
 void loop() {
-  if (WiFi.status() != WL_CONNECTED) {
-    connectWiFi();
-  }
-
   server.handleClient();
   delay(2);
 }
