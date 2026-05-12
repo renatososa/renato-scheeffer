@@ -6,5 +6,6 @@ proyecto_final
 *.code
 site/archivos/MT06/simulacion
 site/archivos/MT07/simulacion
+site/archivos/MD03
 *.arduino-cli
 *.build
