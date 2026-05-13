@@ -9,3 +9,4 @@ site/archivos/MT07/simulacion
 site/archivos/MD03
 *.arduino-cli
 *.build
+.tmpdeps/
