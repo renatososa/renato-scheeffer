@@ -10,3 +10,4 @@ site/archivos/MD03
 *.arduino-cli
 *.build
 .tmpdeps/
+.vscode
