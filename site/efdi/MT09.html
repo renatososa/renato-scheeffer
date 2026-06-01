@@ -1,0 +1,143 @@
+<!-- Content -->
+<section class="col-12 col-lg-12">
+  <div class="border rounded-3 bg-white p-3">
+    <h4 class="mb-3">Módulo Técnico 9: moldes</h4>
+
+    <p class="text-justify">
+      En este módulo trabajamos sobre el diseño de moldes.
+      Para realizar el ejercicio de este módulo no se consideró unicamente el diseño 3D del molde, también se pensó el sistema completo: material final,
+      material del molde, orientación de llenado, división de piezas, cierre, tolerancias y fabricación de las partes
+      necesarias para producir el molde.
+    </p>
+    <p class="text-justify">
+      La consigna del módulo ofrecía dos caminos posibles. La primera opción estaba orientada al diseño de un molde para
+      biomateriales y la segunda proponía desarrollar un molde vinculado al proyecto final. En mi caso elegí la
+      <strong>opción 2</strong>, ya que me interesaba avanzar en una pieza directamente relacionada con <strong>Neurion LAB</strong>
+      y con el tipo de herramientas que podrían acompañar al dispositivo dentro de una práctica educativa.
+    </p>
+
+    <h5 class="mb-3">Propuesta elegida</h5>
+    <p class="text-justify">
+      La idea que decidí desarrollar para este módulo fue la de una <strong>cabeza 3D con disposición de electrodos para
+      EEG</strong>, pensada como una herramienta de trabajo complementaria al dispositivo de adquisición de biopotenciales del
+      proyecto final. El objetivo es generar una pieza útil para mostrar la
+      ubicación de electrodos y trabajar en contextos educativos o de laboratorio con una referencia física más clara.
+    </p>
+    <p class="text-justify">
+      Para construir esta propuesta partí de un modelo de cabeza obtenido de internet, específicamente desde
+      <a href="https://assets.clip-studio.com/es-es/detail?id=1988731">este recurso de Clip Studio Assets</a>, que luego
+      modifiqué para adaptarlo al objetivo del ejercicio. Sobre esa base incorporé la disposición de los electrodos y agregué
+      los canales necesarios para la colada del material y para la salida del aire. De esta manera, el modelo final ya incluía la geometría preparada para ser reproducida mediante un
+      sistema de moldeo.
+    </p>
+
+    <figure class="figure">
+      <img src="img/MT09/cabeza.png" class="img-fluid me-2" alt="Modelo final de la cabeza con disposición de electrodos EEG" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 1: modelo de la cabeza final, modificado para incorporar la disposición de electrodos y los canales de colada y ventilación.</figcaption>
+    </figure>
+
+    <h5 class="mb-3">Diseño del sistema de moldeo</h5>
+    <p class="text-justify">
+      Una vez definida la pieza final, el siguiente paso fue diseñar el sistema de moldeo. Para ello dividí la cabeza en dos
+      partes, una <strong>frontal</strong> y otra <strong>trasera</strong>. Esta decisión permite fabricar dos mitades de molde
+      que luego se unen para reproducir la pieza completa. La separación en dos partes también facilita tanto la fabricación
+      del molde como el futuro desmolde de la pieza terminada.
+    </p>
+    <p class="text-justify">
+      En esta etapa no diseñé directamente el molde flexible definitivo, sino primero la <strong>matriz rígida impresa en
+      3D</strong> que serviría para fabricar cada mitad del molde de silicona. Esta matriz rígida funciona como una especie de
+      “molde del molde”, ya que permite obtener posteriormente las dos piezas flexibles que contendrán la forma final de la
+      cabeza.
+    </p>
+
+    <figure class="figure">
+      <img src="img/MT09/mitad_frontal.png" class="img-fluid me-2" alt="Matriz rígida frontal para fabricar la mitad del molde de silicona" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 2: mitad frontal de la matriz rígida utilizada para fabricar el molde flexible.</figcaption>
+    </figure>
+
+    <figure class="figure">
+      <img src="img/MT09/mitad_trasera.png" class="img-fluid me-2" alt="Matriz rígida trasera para fabricar la mitad del molde de silicona" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 3: mitad trasera de la matriz rígida que completa el sistema de fabricación del molde.</figcaption>
+    </figure>
+
+    <h5 class="mb-3">Selección de materiales y tecnologías</h5>
+    <p class="text-justify">
+      La selección de materiales estuvo condicionada por el uso que imagino para la pieza final. Como quiero que la cabeza
+      resultante funcione como una herramienta de trabajo junto con el dispositivo del proyecto final, me interesaba que fuera
+      un objeto <strong>rígido, resistente y apropiado para un laboratorio de secundaria</strong>. Por esa razón evalué dos
+      posibilidades principales para la pieza final: <strong>yeso</strong> y <strong>resina epoxi</strong>.
+    </p>
+    <p class="text-justify">
+      Finalmente me incliné por la <strong>resina epoxi</strong>, ya que ofrece una mejor resistencia mecánica y una mayor
+      durabilidad para un uso repetido. Esta decisión afecta directamente el diseño del sistema de moldeo, porque al tratarse
+      de una pieza final rígida conviene que el molde sea flexible para facilitar el desmolde sin comprometer la forma ni
+      generar daños en la pieza.
+    </p>
+    <p class="text-justify">
+      Por esa razón decidí utilizar <strong>caucho de silicona</strong> para fabricar el molde final. La silicona tiene la
+      flexibilidad necesaria para extraer una pieza rígida con una forma relativamente compleja. A su vez, para fabricar
+      la matriz rígida que da forma al molde de silicona opté por la <strong>impresión 3D</strong>, ya que permite producir
+      con precisión ambas mitades y controlar bien los detalles de encastre, canales y superficies.
+    </p>
+
+    <figure class="figure">
+      <img src="img/MT09/model_silicona.png" class="img-fluid me-2" alt="Modelo del molde flexible de silicona" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 4: modelo del molde flexible de silicona a partir de las matrices rígidas impresas en 3D.</figcaption>
+    </figure>
+
+    <h5 class="mb-3">Criterios de diseño del molde</h5>
+    <p class="text-justify">
+      Para definir la forma del sistema de moldes se consideró que la <strong>colada</strong> del material se realizaría con la
+      cabeza en <strong>posición vertical</strong>. A partir de esta decisión, los orificios de entrada del material y los
+      respiraderos para la salida del aire se ubicaron en la parte superior de la cabeza. Esta disposición busca favorecer un
+      llenado más controlado del volumen y reducir la posibilidad de que queden burbujas atrapadas en sectores críticos de la
+      pieza.
+    </p>
+    <p class="text-justify">
+      Además de los canales de colada y ventilación, en el diseño incorporé otros elementos para mejorar el cierre y alineación
+      del conjunto. Se generaron pequeñas <strong>guías esféricas de registro</strong> para posicionar correctamente ambas
+      mitades del molde, y también un <strong>borde saliente</strong> en la parte trasera para ayudar al sellado y al encastre
+      entre piezas. Estos detalles son importantes porque un pequeño desalineado entre las mitades puede generar que la
+      pieza final forme de rebabas, escalones o pérdidas de material.
+    </p>
+
+    <figure class="figure">
+      <img src="img/MT09/analisis_seccion_silicona.png" class="img-fluid me-2" alt="Sección del sistema de molde mostrando ambas mitades unidas" style="max-width:100%;">
+      <figcaption class="figure-caption text-center">Figura 5: análisis en sección del sistema de moldeo, mostrando las dos mitades unidas, los canales y los elementos de alineación.</figcaption>
+    </figure>
+
+    <h5 class="mb-3">Resultados y observaciones</h5>
+    <p class="text-justify">
+      El principal resultado de este módulo fue la definición completa de un sistema de moldeo coherente con el objetivo del
+      proyecto. A diferencia de una pieza decorativa o de un ejercicio abstracto, en este caso el molde se pensó desde una
+      posible aplicación concreta: producir una cabeza resistente que pueda utilizarse como apoyo físico para explicar la
+      disposición de electrodos EEG junto con el dispositivo de adquisición de biopotenciales.
+    </p>
+    <p class="text-justify">
+      También me resultó especialmente valioso tener que justificar la relación entre la pieza final, el material elegido y
+      la tecnología de fabricación del molde. El ejercicio hizo evidente que diseñar un molde no implica solamente generar
+      un negativo con la forma deseada, sino pensar cómo entra el material, cómo sale el aire, cómo se alinean las piezas, qué
+      flexibilidad necesita el molde y qué exigencias tendrá el objeto final durante su uso.
+    </p>
+
+    <h5 class="mb-3">Archivos generados</h5>
+    <p class="text-justify">
+      Como parte del desarrollo de este módulo quedaron generados los archivos digitales correspondientes a la pieza final, las
+      matrices rígidas impresas en 3D, los moldes de silicona modelados y algunos componentes auxiliares del sistema. A
+      continuación dejo los enlaces de descarga suponiendo su disponibilidad dentro del repositorio en GitHub:
+    </p>
+    <ul>
+      <li>Pieza final: <a href="https://github.com/renatososa/renato-scheeffer/blob/main/site/archivos/MT09/cabeza.stl">cabeza.stl</a></li>
+      <li>Matriz rígida frontal: <a href="https://github.com/renatososa/renato-scheeffer/blob/main/site/archivos/MT09/molde_PLA_frontal.stl">molde_PLA_frontal.stl</a></li>
+      <li>Matriz rígida trasera: <a href="https://github.com/renatososa/renato-scheeffer/blob/main/site/archivos/MT09/molde_PLA_trasera.stl">molde_PLA_trasera.stl</a></li>
+      <li>Molde de silicona frontal: <a href="https://github.com/renatososa/renato-scheeffer/blob/main/site/archivos/MT09/molde_silicona_frontal.stl">molde_silicona_frontal.stl</a></li>
+      <li>Molde de silicona trasero: <a href="https://github.com/renatososa/renato-scheeffer/blob/main/site/archivos/MT09/molde_silicona_trasera.stl">molde_silicona_trasera.stl</a></li>
+      <li>Parte trasera auxiliar: <a href="https://github.com/renatososa/renato-scheeffer/blob/main/site/archivos/MT09/trasera_molde.stl">trasera_molde.stl</a></li>
+      <li>Laterales y componentes auxiliares: <a href="https://github.com/renatososa/renato-scheeffer/blob/main/site/archivos/MT09/lateral_D_frontal.stl">lateral_D_frontal.stl</a>,
+        <a href="https://github.com/renatososa/renato-scheeffer/blob/main/site/archivos/MT09/lateral_D_trasera.stl">lateral_D_trasera.stl</a>,
+        <a href="https://github.com/renatososa/renato-scheeffer/blob/main/site/archivos/MT09/lateral_I_frontal.stl">lateral_I_frontal.stl</a>,
+        <a href="https://github.com/renatososa/renato-scheeffer/blob/main/site/archivos/MT09/lateral_I_trasera.stl">lateral_I_trasera.stl</a> y
+        <a href="https://github.com/renatososa/renato-scheeffer/blob/main/site/archivos/MT09/clip_1.stl">clip_1.stl</a></li>
+    </ul>
+  </div>
+</section>
