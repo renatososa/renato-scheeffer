@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1200" viewBox="0 0 1400 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Flujo principal de uso de la GUI</title>
+  <desc id="desc">Flujo de uso principal de la GUI desde la puesta en marcha, conectividad y discovery, hasta la adquisición, visualización y registro de datos.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fbff"/>
+      <stop offset="100%" stop-color="#eef2ff"/>
+    </linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+    <style>
+      .title { font: 700 28px 'Segoe UI', Arial, sans-serif; fill: #0f172a; }
+      .subtitle { font: 500 15px 'Segoe UI', Arial, sans-serif; fill: #475569; }
+      .label { font: 700 17px 'Segoe UI', Arial, sans-serif; fill: #0f172a; }
+      .text { font: 500 14px 'Segoe UI', Arial, sans-serif; fill: #334155; }
+      .note { font: 600 13px 'Segoe UI', Arial, sans-serif; fill: #475569; }
+      .step { stroke: #cbd5e1; stroke-width: 2; rx: 22; ry: 22; }
+      .line { stroke: #475569; stroke-width: 3.5; fill: none; marker-end: url(#arrow); }
+      .line-dashed { stroke: #475569; stroke-width: 3; fill: none; stroke-dasharray: 8 8; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <rect width="1400" height="1200" fill="url(#bg)"/>
+
+  <text x="700" y="54" text-anchor="middle" class="title">Figura 11. Flujo de uso principal de la GUI</text>
+  <text x="700" y="84" text-anchor="middle" class="subtitle">Desde la puesta en marcha del dispositivo hasta la adquisición, visualización y registro de datos</text>
+
+  <rect x="530" y="120" width="340" height="86" rx="42" ry="42" fill="#dbeafe" stroke="#93c5fd" stroke-width="2"/>
+  <text x="700" y="156" text-anchor="middle" class="label">Inicio</text>
+  <text x="700" y="180" text-anchor="middle" class="text">Abrir GUI y encender dispositivo</text>
+
+  <rect x="510" y="250" width="380" height="96" class="step" fill="#eff6ff"/>
+  <text x="700" y="288" text-anchor="middle" class="label">Preparar conectividad inicial</text>
+  <text x="700" y="314" text-anchor="middle" class="text">Conexión serial disponible para setup</text>
+  <text x="700" y="336" text-anchor="middle" class="text">o verificación del estado del equipo</text>
+
+  <polygon points="700,392 860,472 700,552 540,472" fill="#fef3c7" stroke="#eab308" stroke-width="2"/>
+  <text x="700" y="460" text-anchor="middle" class="label">¿El equipo ya tiene</text>
+  <text x="700" y="484" text-anchor="middle" class="label">WiFi configurado?</text>
+
+  <rect x="120" y="420" width="300" height="92" class="step" fill="#fae8ff"/>
+  <text x="270" y="456" text-anchor="middle" class="label">Conectar por serial</text>
+  <text x="270" y="482" text-anchor="middle" class="text">Enviar credenciales WiFi</text>
+  <text x="270" y="504" text-anchor="middle" class="text">o activar modo AP</text>
+
+  <rect x="120" y="560" width="300" height="92" class="step" fill="#f5d0fe"/>
+  <text x="270" y="596" text-anchor="middle" class="label">Guardar configuración</text>
+  <text x="270" y="622" text-anchor="middle" class="text">y volver a preparar red</text>
+
+  <rect x="510" y="610" width="380" height="96" class="step" fill="#dcfce7"/>
+  <text x="700" y="648" text-anchor="middle" class="label">Iniciar discovery en red</text>
+  <text x="700" y="674" text-anchor="middle" class="text">Buscar dispositivo en modo STA o AP</text>
+  <text x="700" y="696" text-anchor="middle" class="text">sin depender de IP fija</text>
+
+  <polygon points="700,752 860,832 700,912 540,832" fill="#fde68a" stroke="#d97706" stroke-width="2"/>
+  <text x="700" y="820" text-anchor="middle" class="label">¿Dispositivo detectado</text>
+  <text x="700" y="844" text-anchor="middle" class="label">y enlazado?</text>
+
+  <rect x="1010" y="786" width="260" height="92" class="step" fill="#fee2e2"/>
+  <text x="1140" y="822" text-anchor="middle" class="label">Revisar red / reintentar</text>
+  <text x="1140" y="848" text-anchor="middle" class="text">Ajustar credenciales, modo o</text>
+  <text x="1140" y="870" text-anchor="middle" class="text">estado del dispositivo</text>
+
+  <rect x="510" y="956" width="380" height="96" class="step" fill="#e0f2fe"/>
+  <text x="700" y="994" text-anchor="middle" class="label">Leer estado y configuración actual</text>
+  <text x="700" y="1020" text-anchor="middle" class="text">Consultar canales, ganancia, bias</text>
+  <text x="700" y="1042" text-anchor="middle" class="text">y parámetros activos</text>
+
+  <rect x="960" y="956" width="300" height="96" class="step" fill="#ecfccb"/>
+  <text x="1110" y="994" text-anchor="middle" class="label">Configurar adquisición</text>
+  <text x="1110" y="1020" text-anchor="middle" class="text">Canales, ganancia, test, bias</text>
+  <text x="1110" y="1042" text-anchor="middle" class="text">y otros parámetros</text>
+
+  <rect x="510" y="1090" width="380" height="90" class="step" fill="#bbf7d0"/>
+  <text x="700" y="1126" text-anchor="middle" class="label">Iniciar adquisición</text>
+  <text x="700" y="1152" text-anchor="middle" class="text">Recibir datos UDP y mostrar señales en tiempo real</text>
+
+  <rect x="960" y="1090" width="300" height="90" class="step" fill="#d1fae5"/>
+  <text x="1110" y="1120" text-anchor="middle" class="label">Logging y seguimiento</text>
+  <text x="1110" y="1144" text-anchor="middle" class="text">Guardar CSV, consola y estados</text>
+  <text x="1110" y="1166" text-anchor="middle" class="text">para análisis posterior</text>
+
+  <line x1="700" y1="206" x2="700" y2="250" class="line"/>
+  <line x1="700" y1="346" x2="700" y2="392" class="line"/>
+
+  <line x1="540" y1="472" x2="420" y2="472" class="line"/>
+  <text x="475" y="458" text-anchor="middle" class="note">No</text>
+  <line x1="270" y1="512" x2="270" y2="560" class="line"/>
+  <line x1="420" y1="606" x2="510" y2="658" class="line"/>
+
+  <line x1="700" y1="552" x2="700" y2="610" class="line"/>
+  <text x="724" y="582" class="note">Sí</text>
+
+  <line x1="700" y1="706" x2="700" y2="752" class="line"/>
+  <line x1="860" y1="832" x2="1010" y2="832" class="line"/>
+  <text x="930" y="818" text-anchor="middle" class="note">No</text>
+  <line x1="1140" y1="786" x2="1140" y2="706" class="line-dashed"/>
+  <line x1="1140" y1="706" x2="860" y2="706" class="line-dashed"/>
+  <text x="1004" y="690" text-anchor="middle" class="note">Corregir y volver a buscar</text>
+
+  <line x1="700" y1="912" x2="700" y2="956" class="line"/>
+  <text x="724" y="936" class="note">Sí</text>
+
+  <line x1="890" y1="1004" x2="960" y2="1004" class="line"/>
+  <text x="926" y="990" text-anchor="middle" class="note">Ajustar si hace falta</text>
+  <line x1="700" y1="1052" x2="700" y2="1090" class="line"/>
+  <line x1="1110" y1="1052" x2="1110" y2="1090" class="line"/>
+  <line x1="890" y1="1135" x2="960" y2="1135" class="line"/>
+  <text x="925" y="1121" text-anchor="middle" class="note">Operación en paralelo</text>
+
+  <rect x="90" y="950" width="320" height="180" class="step" fill="#ffffff"/>
+  <text x="250" y="986" text-anchor="middle" class="label">Lectura del flujo</text>
+  <text x="250" y="1014" text-anchor="middle" class="text">1. Preparar conectividad</text>
+  <text x="250" y="1038" text-anchor="middle" class="text">2. Detectar el dispositivo</text>
+  <text x="250" y="1062" text-anchor="middle" class="text">3. Leer y ajustar configuración</text>
+  <text x="250" y="1086" text-anchor="middle" class="text">4. Iniciar adquisición</text>
+  <text x="250" y="1110" text-anchor="middle" class="text">5. Visualizar y registrar datos</text>
+</svg>

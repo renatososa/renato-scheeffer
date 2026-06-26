@@ -319,6 +319,10 @@ aside {
     color: #ffffff !important;
 }
 
+.pi-pdf-frame {
+    height: clamp(36rem, 85vh, 72rem);
+}
+
 footer.site-footer {
     background: rgba(250, 247, 240, 0.92) !important;
     backdrop-filter: blur(18px);
@@ -675,5 +679,100 @@ pre[class*="language-"] {
     #content-area > section > div,
     main form {
         border-radius: 20px !important;
+    }
+}
+
+@media print {
+    @page {
+        margin: 12mm;
+        size: auto;
+    }
+
+    body {
+        padding: 0 !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+    }
+
+    body::before {
+        display: none !important;
+    }
+
+    #navbar-container,
+    #footer-container,
+    aside,
+    #toc-right,
+    .search-panel,
+    .search-toggle-btn,
+    .navbar,
+    footer.site-footer {
+        display: none !important;
+    }
+
+    main.container-fluid,
+    .row,
+    .col-12.col-lg-6,
+    #content-area,
+    #content-area > section,
+    #content-area > section > div {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
+        margin: 0 !important;
+    }
+
+    main.container-fluid {
+        padding-top: 0 !important;
+    }
+
+    .row {
+        display: block !important;
+    }
+
+    .col-12.col-lg-6,
+    #content-area {
+        padding: 0 !important;
+    }
+
+    #content-area > section > div,
+    .card,
+    .sidebar-sticky {
+        padding: 0 !important;
+        background: #ffffff !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    #content-area img,
+    .figure img {
+        max-width: 100% !important;
+        height: auto !important;
+        max-height: none !important;
+        box-shadow: none !important;
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    .figure,
+    p,
+    ul,
+    ol,
+    table,
+    pre,
+    blockquote,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    a,
+    a:visited {
+        color: inherit !important;
+        text-decoration: none !important;
     }
 }

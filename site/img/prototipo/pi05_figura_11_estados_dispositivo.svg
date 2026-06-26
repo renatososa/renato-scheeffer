@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="860" viewBox="0 0 1400 860" role="img" aria-labelledby="title desc">
+  <title id="title">Diagrama de estados principales del dispositivo</title>
+  <desc id="desc">Estados de funcionamiento del dispositivo Neurion LAB: arranque, espera, conexión, streaming, test, calibración, batería baja y error.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fbff"/>
+      <stop offset="100%" stop-color="#eff6ff"/>
+    </linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+    <style>
+      .title { font: 700 28px 'Segoe UI', Arial, sans-serif; fill: #0f172a; }
+      .subtitle { font: 500 15px 'Segoe UI', Arial, sans-serif; fill: #475569; }
+      .label { font: 700 18px 'Segoe UI', Arial, sans-serif; fill: #0f172a; }
+      .text { font: 500 14px 'Segoe UI', Arial, sans-serif; fill: #334155; }
+      .note { font: 600 13px 'Segoe UI', Arial, sans-serif; fill: #475569; }
+      .state { stroke: #cbd5e1; stroke-width: 2; rx: 24; ry: 24; }
+      .line { stroke: #475569; stroke-width: 3.5; fill: none; marker-end: url(#arrow); }
+      .line-dashed { stroke: #475569; stroke-width: 3; fill: none; stroke-dasharray: 8 8; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <rect width="1400" height="860" fill="url(#bg)"/>
+
+  <text x="700" y="56" text-anchor="middle" class="title">Figura 10. Diagrama de estados principales del dispositivo</text>
+  <text x="700" y="86" text-anchor="middle" class="subtitle">Organización lógica del firmware durante el uso operativo del prototipo</text>
+
+  <rect x="120" y="170" width="1160" height="420" class="state" fill="#ffffff"/>
+  <text x="700" y="204" text-anchor="middle" class="subtitle">Estados operativos principales</text>
+
+  <rect x="170" y="310" width="180" height="110" class="state" fill="#dbeafe"/>
+  <text x="260" y="350" text-anchor="middle" class="label">Boot</text>
+  <text x="260" y="378" text-anchor="middle" class="text">Encendido y arranque</text>
+  <text x="260" y="400" text-anchor="middle" class="text">del dispositivo</text>
+
+  <rect x="410" y="310" width="220" height="110" class="state" fill="#e0f2fe"/>
+  <text x="520" y="350" text-anchor="middle" class="label">Inicialización</text>
+  <text x="520" y="378" text-anchor="middle" class="text">Serial, LED, ADS1299</text>
+  <text x="520" y="400" text-anchor="middle" class="text">configuración y batería</text>
+
+  <rect x="690" y="310" width="240" height="110" class="state" fill="#ecfccb"/>
+  <text x="810" y="350" text-anchor="middle" class="label">Espera / conectividad</text>
+  <text x="810" y="378" text-anchor="middle" class="text">Sistema listo para discovery</text>
+  <text x="810" y="400" text-anchor="middle" class="text">y enlace con la PC</text>
+
+  <rect x="990" y="310" width="180" height="110" class="state" fill="#dcfce7"/>
+  <text x="1080" y="350" text-anchor="middle" class="label">Conectado</text>
+  <text x="1080" y="378" text-anchor="middle" class="text">Configuración activa</text>
+  <text x="1080" y="400" text-anchor="middle" class="text">y enlace estable</text>
+
+  <rect x="1080" y="470" width="160" height="90" class="state" fill="#bbf7d0"/>
+  <text x="1160" y="505" text-anchor="middle" class="label">Streaming</text>
+  <text x="1160" y="530" text-anchor="middle" class="text">Adquisición y envío</text>
+  <text x="1160" y="550" text-anchor="middle" class="text">de muestras</text>
+
+  <rect x="760" y="470" width="170" height="90" class="state" fill="#fef3c7"/>
+  <text x="845" y="505" text-anchor="middle" class="label">Modo test</text>
+  <text x="845" y="530" text-anchor="middle" class="text">Señales internas</text>
+  <text x="845" y="550" text-anchor="middle" class="text">y verificación</text>
+
+  <rect x="540" y="470" width="170" height="90" class="state" fill="#fde68a"/>
+  <text x="625" y="505" text-anchor="middle" class="label">Calibración</text>
+  <text x="625" y="530" text-anchor="middle" class="text">Ajustes de prueba</text>
+  <text x="625" y="550" text-anchor="middle" class="text">y chequeos</text>
+
+  <line x1="350" y1="365" x2="410" y2="365" class="line"/>
+  <line x1="630" y1="365" x2="690" y2="365" class="line"/>
+  <line x1="930" y1="365" x2="990" y2="365" class="line"/>
+  <line x1="1080" y1="420" x2="1080" y2="470" class="line"/>
+
+  <line x1="1080" y1="420" x2="845" y2="470" class="line"/>
+  <text x="954" y="450" text-anchor="middle" class="note">Entrar en test</text>
+  <line x1="1080" y1="420" x2="625" y2="470" class="line"/>
+  <text x="792" y="438" text-anchor="middle" class="note">Entrar en calibración</text>
+
+  <line x1="625" y1="560" x2="625" y2="620" class="line"/>
+  <line x1="845" y1="560" x2="845" y2="620" class="line"/>
+  <line x1="1160" y1="560" x2="1160" y2="620" class="line"/>
+  <line x1="625" y1="620" x2="1080" y2="620" class="line"/>
+  <line x1="1080" y1="620" x2="1080" y2="420" class="line"/>
+  <text x="836" y="606" text-anchor="middle" class="note">Finalizar test, calibración o adquisición</text>
+
+  <rect x="170" y="650" width="260" height="110" class="state" fill="#fee2e2"/>
+  <text x="300" y="692" text-anchor="middle" class="label">Error</text>
+  <text x="300" y="720" text-anchor="middle" class="text">Fallo crítico de comunicación,</text>
+  <text x="300" y="742" text-anchor="middle" class="text">configuración o adquisición</text>
+
+  <rect x="500" y="650" width="280" height="110" class="state" fill="#ffedd5"/>
+  <text x="640" y="692" text-anchor="middle" class="label">Batería baja</text>
+  <text x="640" y="720" text-anchor="middle" class="text">Se mantiene el monitoreo y se</text>
+  <text x="640" y="742" text-anchor="middle" class="text">prioriza un estado seguro</text>
+
+  <rect x="860" y="650" width="420" height="110" class="state" fill="#ffffff"/>
+  <text x="1070" y="688" text-anchor="middle" class="label">Eventos globales</text>
+  <text x="1070" y="716" text-anchor="middle" class="text">Cualquier estado puede derivar en batería baja o error.</text>
+  <text x="1070" y="738" text-anchor="middle" class="text">Si la condición se resuelve, el sistema vuelve a espera o conectado.</text>
+
+  <line x1="810" y1="420" x2="640" y2="650" class="line-dashed"/>
+  <line x1="1080" y1="420" x2="640" y2="650" class="line-dashed"/>
+  <line x1="1160" y1="560" x2="640" y2="650" class="line-dashed"/>
+
+  <line x1="810" y1="420" x2="430" y2="650" class="line-dashed"/>
+  <line x1="1080" y1="420" x2="430" y2="650" class="line-dashed"/>
+  <line x1="1160" y1="560" x2="430" y2="650" class="line-dashed"/>
+
+  <line x1="640" y1="650" x2="810" y2="420" class="line-dashed"/>
+  <text x="670" y="620" class="note">Condición recuperada</text>
+
+  <line x1="430" y1="705" x2="690" y2="365" class="line-dashed"/>
+  <text x="445" y="675" class="note">Reinicio o recuperación</text>
+
+  <text x="1080" y="296" text-anchor="middle" class="note">Si la GUI ya está enlazada, se puede pasar a streaming</text>
+  <text x="1162" y="455" text-anchor="middle" class="note">Iniciar adquisición</text>
+</svg>

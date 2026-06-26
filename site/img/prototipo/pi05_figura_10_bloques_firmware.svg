@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="820" viewBox="0 0 1400 820" role="img" aria-labelledby="title desc">
+  <title id="title">Diagrama de bloques del firmware y la comunicación del sistema</title>
+  <desc id="desc">Arquitectura general de Neurion LAB con tres bloques principales: AFE con ADS1299, módulo digital con ESP32-S3 y GUI con interfaz gráfica.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fbff"/>
+      <stop offset="100%" stop-color="#eef4f8"/>
+    </linearGradient>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#475569"/>
+    </marker>
+    <style>
+      .title { font: 700 28px 'Segoe UI', Arial, sans-serif; fill: #0f172a; }
+      .subtitle { font: 500 15px 'Segoe UI', Arial, sans-serif; fill: #475569; }
+      .label { font: 700 20px 'Segoe UI', Arial, sans-serif; fill: #0f172a; }
+      .text { font: 500 14px 'Segoe UI', Arial, sans-serif; fill: #334155; }
+      .note { font: 700 13px 'Segoe UI', Arial, sans-serif; fill: #475569; }
+      .card { stroke: #cbd5e1; stroke-width: 2; rx: 24; ry: 24; }
+      .subcard { stroke: #cbd5e1; stroke-width: 1.5; rx: 16; ry: 16; }
+      .line { stroke: #475569; stroke-width: 2; fill: none; marker-end: url(#arrow); marker-start: url(#arrow); }
+      .stack { stroke: #bfdbfe; stroke-width: 2; rx: 26; ry: 26; }
+    </style>
+  </defs>
+
+  <rect width="1400" height="820" fill="url(#bg)"/>
+
+  <text x="700" y="54" text-anchor="middle" class="title">Figura 9. Diagrama de bloques del firmware y la comunicación del sistema</text>
+  <text x="700" y="84" text-anchor="middle" class="subtitle">Tres capas principales del sistema: adquisición analógica, control embebido y operación desde GUI</text>
+
+  <rect x="88" y="138" width="330" height="620" class="stack" fill="#dbeafe" opacity="0.45"/>
+  <rect x="74" y="124" width="330" height="620" class="stack" fill="#bfdbfe" opacity="0.55"/>
+  <rect x="60" y="110" width="330" height="620" class="card" fill="#eff6ff"/>
+  <text x="225" y="152" text-anchor="middle" class="label">AFE / módulo analógico</text>
+  <text x="225" y="178" text-anchor="middle" class="subtitle">Módulo de adquisición</text>
+  <text x="225" y="198" text-anchor="middle" class="subtitle">basado en ADS1299</text>
+
+  <rect x="88" y="222" width="274" height="112" class="subcard" fill="#ffffff"/>
+  <text x="225" y="256" text-anchor="middle" class="label" style="font-size:17px;">Entradas</text>
+  <text x="225" y="276" text-anchor="middle" class="label" style="font-size:17px;">biopotenciales</text>
+  <text x="225" y="300" text-anchor="middle" class="text">Electrodos, referencias</text>
+  <text x="225" y="320" text-anchor="middle" class="text">y SRB</text>
+
+  <rect x="88" y="358" width="274" height="112" class="subcard" fill="#ffffff"/>
+  <text x="225" y="396" text-anchor="middle" class="label" style="font-size:17px;">Front-end analógico</text>
+  <text x="225" y="422" text-anchor="middle" class="text">Entradas diferenciales</text>
+  <text x="225" y="444" text-anchor="middle" class="text">bias / DRL</text>
+  <text x="225" y="464" text-anchor="middle" class="text">y filtrado mínimo</text>
+
+  <rect x="88" y="494" width="274" height="104" class="subcard" fill="#ffffff"/>
+  <text x="225" y="532" text-anchor="middle" class="label" style="font-size:17px;">ADS1299</text>
+  <text x="225" y="558" text-anchor="middle" class="text">AFE / ADC para</text>
+  <text x="225" y="580" text-anchor="middle" class="text">biopotenciales</text>
+
+  <rect x="88" y="622" width="274" height="56" class="subcard" fill="#ffffff"/>
+  <text x="225" y="646" text-anchor="middle" class="text">8 canales diferenciales</text>
+  <text x="225" y="666" text-anchor="middle" class="text">por módulo</text>
+
+  <rect x="500" y="110" width="400" height="620" class="card" fill="#ffffff"/>
+  <text x="700" y="152" text-anchor="middle" class="label">Módulo digital</text>
+  <text x="700" y="178" text-anchor="middle" class="subtitle">Placa principal con</text>
+  <text x="700" y="198" text-anchor="middle" class="subtitle">ESP32-S3 y firmware</text>
+
+  <rect x="530" y="222" width="160" height="104" class="subcard" fill="#ecfeff"/>
+  <text x="610" y="260" text-anchor="middle" class="label" style="font-size:17px;">ESP32-S3</text>
+  <text x="610" y="286" text-anchor="middle" class="text">Control principal</text>
+  <text x="610" y="308" text-anchor="middle" class="text">del sistema</text>
+
+  <rect x="710" y="222" width="160" height="112" class="subcard" fill="#ecfeff"/>
+  <text x="790" y="258" text-anchor="middle" class="label" style="font-size:17px;">Driver</text>
+  <text x="790" y="278" text-anchor="middle" class="label" style="font-size:17px;">ADS1299</text>
+  <text x="790" y="302" text-anchor="middle" class="text">SPI, registros,</text>
+  <text x="790" y="324" text-anchor="middle" class="text">ganancia y canales</text>
+
+  <rect x="530" y="370" width="160" height="104" class="subcard" fill="#f0fdf4"/>
+  <text x="610" y="408" text-anchor="middle" class="label" style="font-size:17px;">Estados</text>
+  <text x="610" y="434" text-anchor="middle" class="text">boot, espera,</text>
+  <text x="610" y="456" text-anchor="middle" class="text">streaming y error</text>
+
+  <rect x="710" y="370" width="160" height="104" class="subcard" fill="#f0fdf4"/>
+  <text x="790" y="408" text-anchor="middle" class="label" style="font-size:17px;">Procesamiento</text>
+  <text x="790" y="434" text-anchor="middle" class="text">HPF / LPF básicos</text>
+  <text x="790" y="456" text-anchor="middle" class="text">antes del envío</text>
+
+  <rect x="530" y="518" width="160" height="104" class="subcard" fill="#fff7ed"/>
+  <text x="610" y="556" text-anchor="middle" class="label" style="font-size:17px;">WiFi / UDP</text>
+  <text x="610" y="582" text-anchor="middle" class="text">discovery, comandos</text>
+  <text x="610" y="604" text-anchor="middle" class="text">y streaming</text>
+
+  <rect x="710" y="518" width="160" height="116" class="subcard" fill="#fff7ed"/>
+  <text x="790" y="554" text-anchor="middle" class="label" style="font-size:17px;">Servicios</text>
+  <text x="790" y="574" text-anchor="middle" class="label" style="font-size:17px;">auxiliares</text>
+  <text x="790" y="600" text-anchor="middle" class="text">batería, LED RGB</text>
+  <text x="790" y="622" text-anchor="middle" class="text">y persistencia</text>
+
+  <rect x="1010" y="110" width="330" height="620" class="card" fill="#ecfdf5"/>
+  <text x="1175" y="152" text-anchor="middle" class="label">GUI / interfaz gráfica</text>
+  <text x="1175" y="178" text-anchor="middle" class="subtitle">Aplicación de escritorio</text>
+  <text x="1175" y="198" text-anchor="middle" class="subtitle">para operar el sistema</text>
+
+  <rect x="1038" y="222" width="274" height="104" class="subcard" fill="#ffffff"/>
+  <text x="1175" y="260" text-anchor="middle" class="label" style="font-size:17px;">Conectividad</text>
+  <text x="1175" y="286" text-anchor="middle" class="text">descubrimiento del equipo</text>
+  <text x="1175" y="308" text-anchor="middle" class="text">y gestión de sesión</text>
+
+  <rect x="1038" y="370" width="274" height="112" class="subcard" fill="#ffffff"/>
+  <text x="1175" y="408" text-anchor="middle" class="label" style="font-size:17px;">Configuración</text>
+  <text x="1175" y="428" text-anchor="middle" class="label" style="font-size:17px;">remota</text>
+  <text x="1175" y="454" text-anchor="middle" class="text">lectura y escritura</text>
+  <text x="1175" y="476" text-anchor="middle" class="text">de parámetros</text>
+
+  <rect x="1038" y="518" width="274" height="116" class="subcard" fill="#ffffff"/>
+  <text x="1175" y="554" text-anchor="middle" class="label" style="font-size:17px;">Visualización</text>
+  <text x="1175" y="574" text-anchor="middle" class="label" style="font-size:17px;">y control</text>
+  <text x="1175" y="600" text-anchor="middle" class="text">senales en tiempo real</text>
+  <text x="1175" y="622" text-anchor="middle" class="text">inicio, detención y consola</text>
+
+  <rect x="1038" y="658" width="274" height="50" class="subcard" fill="#ffffff"/>
+  <text x="1175" y="680" text-anchor="middle" class="text">logging CSV</text>
+  <text x="1175" y="700" text-anchor="middle" class="text">y trazabilidad</text>
+
+  <line x1="390" y1="394" x2="500" y2="394" class="line"/>
+  <text x="445" y="330" text-anchor="middle" class="note">SPI</text>
+  <text x="445" y="350" text-anchor="middle" class="text">configuración</text>
+  <text x="445" y="372" text-anchor="middle" class="text">y datos</text>
+
+  <line x1="900" y1="394" x2="1010" y2="394" class="line"/>
+  <text x="955" y="330" text-anchor="middle" class="note">WiFi / UDP</text>
+  <text x="955" y="350" text-anchor="middle" class="text">comandos,</text>
+  <text x="955" y="372" text-anchor="middle" class="text">estados y streaming</text>
+</svg>

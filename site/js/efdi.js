@@ -111,6 +111,95 @@ function activatePrismIn(root) {
   retry();
 }
 
+function getYouTubeEmbedUrl(value) {
+  if (!value) return '';
+
+  try {
+    const url = new URL(value.trim());
+    const host = url.hostname.replace(/^www\./, '');
+    let videoId = '';
+
+    if (host === 'youtube.com' || host === 'm.youtube.com') {
+      if (url.pathname === '/watch') {
+        videoId = url.searchParams.get('v') || '';
+      } else if (url.pathname.startsWith('/embed/')) {
+        videoId = url.pathname.split('/embed/')[1] || '';
+      } else if (url.pathname.startsWith('/shorts/')) {
+        videoId = url.pathname.split('/shorts/')[1] || '';
+      }
+    }
+
+    if (host === 'youtu.be') {
+      videoId = url.pathname.replace(/^\/+/, '');
+    }
+
+    videoId = videoId.split(/[?&/]/)[0];
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : '';
+  } catch {
+    return '';
+  }
+}
+
+function initPresentationEmbeds(root) {
+  if (!root) return;
+
+  const pdfInput = root.querySelector('#pi-pdf-input');
+  const pdfFrame = root.querySelector('#pi-pdf-preview');
+  const pdfHelp = root.querySelector('#pi-pdf-help');
+  const youtubeInput = root.querySelector('#pi-youtube-url');
+  const youtubeFrame = root.querySelector('#pi-youtube-embed');
+  const youtubeHelp = root.querySelector('#pi-youtube-help');
+
+  if (pdfInput && pdfFrame && !pdfInput.dataset.bound) {
+    pdfInput.dataset.bound = 'true';
+    pdfInput.addEventListener('change', () => {
+      const [file] = pdfInput.files || [];
+
+      if (!file) {
+        pdfFrame.src = 'about:blank';
+        if (pdfHelp) {
+          pdfHelp.textContent = 'Seleccioná un archivo PDF para visualizarlo en esta sección.';
+        }
+        return;
+      }
+
+      if (file.type !== 'application/pdf') {
+        pdfInput.value = '';
+        pdfFrame.src = 'about:blank';
+        if (pdfHelp) {
+          pdfHelp.textContent = 'El archivo seleccionado no es un PDF válido.';
+        }
+        return;
+      }
+
+      pdfFrame.src = URL.createObjectURL(file);
+      if (pdfHelp) {
+        pdfHelp.textContent = `Mostrando: ${file.name}`;
+      }
+    });
+  }
+
+  if (youtubeInput && youtubeFrame && !youtubeInput.dataset.bound) {
+    youtubeInput.dataset.bound = 'true';
+    youtubeInput.addEventListener('change', () => {
+      const embedUrl = getYouTubeEmbedUrl(youtubeInput.value);
+
+      if (!embedUrl) {
+        youtubeFrame.src = 'about:blank';
+        if (youtubeHelp) {
+          youtubeHelp.textContent = 'Pegá un enlace válido de YouTube para cargar el video.';
+        }
+        return;
+      }
+
+      youtubeFrame.src = embedUrl;
+      if (youtubeHelp) {
+        youtubeHelp.textContent = 'Video cargado en el marco.';
+      }
+    });
+  }
+}
+
 let headingObserver;
 function observeActiveHeadings(headings) {
   // Desconectar observer previo
@@ -151,7 +240,8 @@ function observeActiveHeadings(headings) {
     // Carpeta donde están los fragmentos HTML (ajustá si es necesario)
     const BASE = 'efdi/';
     const pageMap = {
-      PI: 'PI.html'
+      PI: 'PI.html',
+      PIPRES: 'PI_PRESENTACION.html'
     };
 
     function scrollToEFDITop(smooth = false) {
@@ -201,6 +291,7 @@ function observeActiveHeadings(headings) {
         area.innerHTML = await res.text();
         buildTOC();
         activatePrismIn(area);
+        initPresentationEmbeds(area);
         // Al cambiar de módulo volvemos al inicio de EFDI para alinear las 3 columnas.
         if (scrollOnLoad) scrollToEFDITop(true);
       } catch (err) {

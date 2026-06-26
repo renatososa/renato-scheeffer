@@ -11,3 +11,4 @@ site/archivos/MD03
 *.build
 .tmpdeps/
 .vscode
+.agents

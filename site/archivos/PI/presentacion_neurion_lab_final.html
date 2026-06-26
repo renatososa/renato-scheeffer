@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Presentación final - Neurion LAB</title>
+  <style>
+    @page {
+      size: 13.333in 7.5in;
+      margin: 0;
+    }
+
+    :root {
+      --bg: #f7f3ec;
+      --bg-soft: #eef4f6;
+      --ink: #1f2f37;
+      --muted: #5b6d74;
+      --accent: #0f766e;
+      --accent-dark: #0b5d57;
+      --border: #cfd8d4;
+      --panel: rgba(255, 252, 247, 0.94);
+      --panel-soft: #edf4f2;
+      --warm: #efe5d6;
+      --shadow: 0 18px 40px rgba(23, 35, 38, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Segoe UI", "Aptos", Arial, sans-serif;
+    }
+
+    body {
+      counter-reset: slide;
+    }
+
+    .slide {
+      width: 13.333in;
+      height: 7.5in;
+      page-break-after: always;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top left, rgba(15, 118, 110, 0.1), transparent 24%),
+        radial-gradient(circle at top right, rgba(193, 156, 93, 0.12), transparent 22%),
+        linear-gradient(180deg, #fbf8f2 0%, var(--bg) 46%, #f3efe8 100%);
+    }
+
+    .slide:last-child {
+      page-break-after: auto;
+    }
+
+    .top-band {
+      height: 0.85in;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: #fff;
+      display: flex;
+      align-items: center;
+      padding: 0 0.75in;
+      font-size: 0.34in;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .body {
+      padding: 0.45in 0.72in 0.55in;
+      height: calc(100% - 0.85in);
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 0.38in;
+      align-items: start;
+    }
+
+    .body.single {
+      grid-template-columns: 1fr;
+    }
+
+    .title {
+      font-size: 0.42in;
+      line-height: 1.05;
+      margin: 0 0 0.14in;
+      letter-spacing: -0.03em;
+      color: #163038;
+    }
+
+    .subtitle {
+      font-size: 0.2in;
+      line-height: 1.35;
+      margin: 0 0 0.28in;
+      color: var(--muted);
+      max-width: 6.8in;
+    }
+
+    .lead {
+      font-size: 0.22in;
+      line-height: 1.5;
+      color: #2f4148;
+      margin: 0 0 0.26in;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 0.2in;
+      box-shadow: var(--shadow);
+      padding: 0.24in 0.28in;
+    }
+
+    .panel.soft {
+      background: var(--panel-soft);
+    }
+
+    .panel.warm {
+      background: var(--warm);
+    }
+
+    ul.clean {
+      margin: 0;
+      padding-left: 0.22in;
+      font-size: 0.2in;
+      line-height: 1.48;
+      color: #304248;
+    }
+
+    ul.clean li + li {
+      margin-top: 0.11in;
+    }
+
+    .metric-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.14in;
+      margin-top: 0.18in;
+    }
+
+    .metric {
+      background: rgba(255, 255, 255, 0.74);
+      border: 1px solid rgba(207, 216, 212, 0.9);
+      border-radius: 0.16in;
+      padding: 0.14in 0.16in;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 0.22in;
+      color: #16353b;
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 0.04in;
+      font-size: 0.16in;
+      color: #5a6b71;
+      line-height: 1.35;
+    }
+
+    .cover {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 0.36in;
+      height: 100%;
+      padding: 0.75in;
+      align-items: center;
+    }
+
+    .cover-title {
+      font-size: 0.62in;
+      line-height: 0.98;
+      margin: 0 0 0.16in;
+      letter-spacing: -0.03em;
+      color: #18343b;
+    }
+
+    .cover-subtitle {
+      font-size: 0.24in;
+      color: var(--muted);
+      margin: 0 0 0.3in;
+      line-height: 1.45;
+    }
+
+    .cover-meta {
+      font-size: 0.2in;
+      color: #32444a;
+      line-height: 1.6;
+    }
+
+    .visual {
+      width: 100%;
+      border-radius: 0.22in;
+      border: 1px solid rgba(203, 212, 208, 0.95);
+      box-shadow: var(--shadow);
+      background: #fff;
+      object-fit: cover;
+    }
+
+    .visual.tall {
+      height: 4.85in;
+    }
+
+    .visual.medium {
+      height: 4.25in;
+    }
+
+    .diagram-box {
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid rgba(203, 212, 208, 0.95);
+      border-radius: 0.22in;
+      padding: 0.24in 0.26in;
+      box-shadow: var(--shadow);
+    }
+
+    .diagram-box h3 {
+      margin: 0 0 0.18in;
+      font-size: 0.26in;
+      color: #17343a;
+    }
+
+    .diagram-flow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.08in;
+      margin-top: 0.22in;
+    }
+
+    .flow-node {
+      flex: 1 1 0;
+      min-height: 1.15in;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 0.18in;
+      padding: 0.16in;
+      text-align: center;
+    }
+
+    .flow-node strong {
+      display: block;
+      font-size: 0.2in;
+      margin-bottom: 0.06in;
+      color: #17353c;
+    }
+
+    .flow-node span {
+      display: block;
+      font-size: 0.15in;
+      line-height: 1.35;
+      color: #5b6c72;
+    }
+
+    .flow-arrow {
+      font-size: 0.32in;
+      color: var(--accent);
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .footer {
+      position: absolute;
+      right: 0.42in;
+      bottom: 0.22in;
+      font-size: 0.16in;
+      color: #66777d;
+    }
+
+    .closing {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.3in;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.06in 0.14in;
+      border-radius: 999px;
+      background: rgba(15, 118, 110, 0.12);
+      color: var(--accent-dark);
+      font-size: 0.15in;
+      font-weight: 700;
+      margin-bottom: 0.14in;
+    }
+  </style>
+</head>
+<body>
+  <section class="slide">
+    <div class="cover">
+      <div>
+        <div class="badge">Proyecto integrador final</div>
+        <h1 class="cover-title">Neurion LAB</h1>
+        <p class="cover-subtitle">
+          Plataforma educativa abierta para adquisición, visualización y configuración de biopotenciales.
+        </p>
+        <div class="cover-meta">
+          <strong>Renato Sosa Machado</strong><br />
+          Especialización en Fabricación Digital e Innovación<br />
+          Junio de 2026
+        </div>
+      </div>
+      <div>
+        <img class="visual tall" src="../../img/prototipo/render_completo.png" alt="Render general del dispositivo Neurion LAB" />
+      </div>
+    </div>
+    <div class="footer">1 / 6</div>
+  </section>
+
+  <section class="slide">
+    <div class="top-band">Problema y oportunidad</div>
+    <div class="body">
+      <div>
+        <h2 class="title">Acceso limitado a bioinstrumentación en educación</h2>
+        <p class="subtitle">
+          El proyecto surge frente a la dificultad real de trabajar con señales fisiológicas en contextos educativos por costo, complejidad y falta de herramientas accesibles.
+        </p>
+        <div class="panel">
+          <ul class="clean">
+            <li>Los equipos comerciales suelen ser costosos y poco apropiados para enseñanza.</li>
+            <li>Registrar ECG, EMG, EOG o EEG en aula sigue siendo difícil en secundaria y educación técnica.</li>
+            <li>La barrera no es solo económica: también importa la usabilidad y la documentación pedagógica.</li>
+            <li>Existe una oportunidad concreta para una plataforma abierta, modular y comprensible.</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="panel soft">
+          <h3 style="margin:0 0 0.12in; font-size:0.28in; color:#18353c;">Validación inicial</h3>
+          <div class="metric-list">
+            <div class="metric">
+              <strong>14</strong>
+              <span>respuestas totales en la encuesta</span>
+            </div>
+            <div class="metric">
+              <strong>12 / 14</strong>
+              <span>no cuentan con equipamiento para registrar biopotenciales</span>
+            </div>
+            <div class="metric">
+              <strong>10 / 14</strong>
+              <span>dejaron de hacer prácticas por falta de equipamiento</span>
+            </div>
+            <div class="metric">
+              <strong>13 / 14</strong>
+              <span>quisieran contar con un sistema así en su institución</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer">2 / 6</div>
+  </section>
+
+  <section class="slide">
+    <div class="top-band">Propuesta de valor</div>
+    <div class="body">
+      <div>
+        <h2 class="title">Qué aporta Neurion LAB</h2>
+        <p class="subtitle">
+          No se plantea como una réplica simplificada de un equipo comercial, sino como una plataforma educativa abierta para enseñar, experimentar y comprender el sistema completo.
+        </p>
+        <div class="panel">
+          <ul class="clean">
+            <li>Adquisición, visualización y configuración de biopotenciales en una misma plataforma.</li>
+            <li>Arquitectura modular, documentada y comprensible.</li>
+            <li>Interfaz propia orientada al uso en clase, laboratorio y prototipado.</li>
+            <li>Posicionamiento intermedio entre equipos profesionales y herramientas pedagógicas.</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <img class="visual medium" src="../../img/prototipo/render_completo.png" alt="Integración física propuesta para Neurion LAB" />
+      </div>
+    </div>
+    <div class="footer">3 / 6</div>
+  </section>
+
+  <section class="slide">
+    <div class="top-band">Arquitectura del sistema</div>
+    <div class="body single">
+      <h2 class="title">Tres capas principales e integración funcional</h2>
+      <p class="subtitle">
+        La propuesta se organiza como un sistema integrado entre adquisición analógica, control embebido y operación desde una GUI de escritorio.
+      </p>
+      <div class="diagram-box">
+        <h3>Cadena general del sistema</h3>
+        <div class="diagram-flow">
+          <div class="flow-node">
+            <strong>AFE con ADS1299</strong>
+            <span>Entradas diferenciales, bias/DRL y digitalización de biopotenciales.</span>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node">
+            <strong>Módulo digital</strong>
+            <span>ESP32-S3, estados, procesamiento básico y comunicación.</span>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-node">
+            <strong>GUI de escritorio</strong>
+            <span>Discovery, configuración remota, visualización y logging.</span>
+          </div>
+        </div>
+        <div class="panel warm" style="margin-top:0.28in;">
+          <ul class="clean">
+            <li>SPI entre AFE y módulo digital.</li>
+            <li>WiFi / UDP entre dispositivo y computadora.</li>
+            <li>Arquitectura escalable a múltiples módulos AFE.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer">4 / 6</div>
+  </section>
+
+  <section class="slide">
+    <div class="top-band">Estado actual y validación</div>
+    <div class="body">
+      <div>
+        <h2 class="title">Qué puedo afirmar hoy sobre el prototipo</h2>
+        <p class="subtitle">
+          El sistema ya dejó de ser una suma de módulos aislados: hoy existe una integración funcional entre electrónica, firmware y GUI.
+        </p>
+        <div class="panel">
+          <ul class="clean">
+            <li>Comunicación verificada entre ESP32-S3 y ADS1299.</li>
+            <li>Configuración remota de parámetros relevantes de adquisición.</li>
+            <li>Adquisición real de ECG observada en el prototipo actual.</li>
+            <li>Persisten ruido de 50 Hz y validación pendiente del DRL.</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <img class="visual medium" src="../../img/prototipo/diag_estados_principales.png" alt="Diagrama de estados principales del dispositivo" />
+      </div>
+    </div>
+    <div class="footer">5 / 6</div>
+  </section>
+
+  <section class="slide">
+    <div class="top-band">Próximos pasos y cierre</div>
+    <div class="body single">
+      <h2 class="title">Cómo sigue creciendo Neurion LAB</h2>
+      <p class="subtitle">
+        El valor del proyecto está en haber consolidado una base técnica real y, al mismo tiempo, dejar explícito un camino de mejora y validación futura.
+      </p>
+      <div class="closing">
+        <div class="panel">
+          <h3 style="margin:0 0 0.14in; font-size:0.28in; color:#17343a;">Próximos pasos técnicos</h3>
+          <ul class="clean">
+            <li>Mejorar calidad de señal y robustez de la etapa analógica.</li>
+            <li>Comparar el prototipo con un equipo de referencia.</li>
+            <li>Validar otros biopotenciales: EMG, EEG y EOG.</li>
+            <li>Fabricar carcasa y consolidar la resolución física.</li>
+          </ul>
+        </div>
+        <div class="panel soft">
+          <h3 style="margin:0 0 0.14in; font-size:0.28in; color:#17343a;">Cierre</h3>
+          <p class="lead" style="margin-bottom:0;">
+            Neurion LAB no se presenta como un producto cerrado, sino como una plataforma educativa abierta con identidad propia, resolución técnica concreta y un camino claro de evolución.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="footer">6 / 6</div>
+  </section>
+</body>
+</html>

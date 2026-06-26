@@ -467,7 +467,7 @@
     <p class="text-justify">La arquitectura actual del firmware fue apareciendo de manera bastante progresiva. En las primeras etapas me resultaba suficiente concentrar gran parte de la lógica en un archivo principal, pero a medida que aumentaron las funciones del sistema eso empezó a volverse cada vez menos práctico. El control del <strong>ADS1299</strong>, la conectividad por <strong>WiFi/UDP</strong>, la persistencia de configuraciones, el monitoreo de batería, la señalización por LED, los comandos seriales y el procesamiento básico de la señal terminaron exigiendo una separación más clara.</p>
     <p class="text-justify">Organizar el firmware por módulos me resultó útil por dos motivos. Por un lado, porque me permitió trabajar sobre problemas concretos sin convertir todo el sistema en un único bloque difícil de mantener. Por otro, porque esa estructura acompaña bastante bien la lógica general del proyecto, donde cada capa fue adquiriendo una identidad relativamente clara a medida que avanzaba el desarrollo.</p>
     <figure class="figure d-block text-center my-4">
-      <img src="img/prototipo/pi05_figura_10_bloques_firmware.png" class="img-fluid rounded border" alt="Figura 9. Diagrama de bloques del firmware y la comunicación del sistema." style="max-height:420px; width:auto;">
+      <img src="img/prototipo/pi05_figura_10_bloques_firmware.svg" class="img-fluid rounded border" alt="Figura 9. Diagrama de bloques del firmware y la comunicación del sistema." style="max-height:420px; width:auto;">
       <figcaption class="figure-caption text-center">Figura 9. Diagrama de bloques del firmware y de la comunicación entre el ESP32-S3, el ADS1299, la red WiFi/UDP y la GUI de escritorio.</figcaption>
     </figure>
     <h5 class="mt-4 mb-2 text-secondary-emphasis">Inicialización del sistema</h5>
@@ -483,7 +483,7 @@
     <p class="text-justify">Entre los estados definidos se encuentran el arranque del sistema, la espera o inactividad, la conectividad con la PC, el streaming de datos, el modo de test, el estado de batería baja, la calibración y el estado de error. Cada uno de estos modos no solo ordena la lógica interna del firmware, sino que también se vincula con la señalización visual mediante el LED de estado.</p>
     <p class="text-justify">Esta resolución me permitió hacer el comportamiento del prototipo bastante más legible, tanto para depurarlo como para usarlo. No se trata simplemente de un sistema que esta &quot;prendido&quot; o &quot;apagado&quot;, sino de un dispositivo que puede estar en situaciones operativas bien diferenciadas. En un proyecto con intención educativa, esta legibilidad también importa porque ayuda a entender que está haciendo el sistema en cada momento.</p>
     <figure class="figure d-block text-center my-4">
-      <img src="img/prototipo/pi05_figura_11_estados_dispositivo.png" class="img-fluid rounded border" alt="Figura 10. Diagrama de estados principales del dispositivo." style="max-height:420px; width:auto;">
+      <img src="img/prototipo/diag_estados_principales.png" class="img-fluid rounded border" alt="Figura 10. Diagrama de estados principales del dispositivo." style="max-height:420px; width:auto;">
       <figcaption class="figure-caption text-center">Figura 10. Diagrama de estados principales del dispositivo durante su funcionamiento.</figcaption>
     </figure>
     <h5 class="mt-4 mb-2 text-secondary-emphasis">Comunicación serial y comandos de control</h5>
@@ -536,7 +536,7 @@
     </ul>
     <p class="text-justify">En la práctica, esta organización me permitió concentrar en una sola aplicación la mayor parte del flujo de trabajo necesario para operar el prototipo.</p>
     <figure class="figure d-block text-center my-4">
-      <img src="img/prototipo/pi06_figura_12_flujo_gui.png" class="img-fluid rounded border" alt="Figura 11. Flujo de uso principal de la GUI." style="max-height:420px; width:auto;">
+      <img src="img/prototipo/pi06_figura_12_flujo_gui_v2.svg" class="img-fluid rounded border" alt="Figura 11. Flujo de uso principal de la GUI." style="max-height:420px; width:auto;">
       <figcaption class="figure-caption text-center">Figura 11. Flujo de uso principal de la GUI, desde la puesta en marcha del dispositivo hasta la adquisición y registro de datos.</figcaption>
     </figure>
     <figure class="figure d-block text-center my-4">
