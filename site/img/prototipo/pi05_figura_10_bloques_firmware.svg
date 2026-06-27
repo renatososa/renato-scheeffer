@@ -82,8 +82,8 @@
   <text x="790" y="456" text-anchor="middle" class="text">antes del envío</text>
 
   <rect x="530" y="518" width="160" height="104" class="subcard" fill="#fff7ed"/>
-  <text x="610" y="556" text-anchor="middle" class="label" style="font-size:17px;">WiFi / UDP</text>
-  <text x="610" y="582" text-anchor="middle" class="text">discovery, comandos</text>
+  <text x="610" y="556" text-anchor="middle" class="label" style="font-size:17px;">BLE / GATT</text>
+  <text x="610" y="582" text-anchor="middle" class="text">comandos, respuestas</text>
   <text x="610" y="604" text-anchor="middle" class="text">y streaming</text>
 
   <rect x="710" y="518" width="160" height="116" class="subcard" fill="#fff7ed"/>
@@ -124,7 +124,7 @@
   <text x="445" y="372" text-anchor="middle" class="text">y datos</text>
 
   <line x1="900" y1="394" x2="1010" y2="394" class="line"/>
-  <text x="955" y="330" text-anchor="middle" class="note">WiFi / UDP</text>
-  <text x="955" y="350" text-anchor="middle" class="text">comandos,</text>
-  <text x="955" y="372" text-anchor="middle" class="text">estados y streaming</text>
+  <text x="955" y="330" text-anchor="middle" class="note">BLE / GATT</text>
+  <text x="955" y="350" text-anchor="middle" class="text">comandos, estados</text>
+  <text x="955" y="372" text-anchor="middle" class="text">y streaming</text>
 </svg>
